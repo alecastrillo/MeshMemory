@@ -60,9 +60,9 @@ public class Server extends Thread {
                         String mensaje= entrada.readLine();
                         if (mensaje!=null) {
                             if(mensaje.contains("client")){
-                                read_client();
+                                //read_client()
                             }else if (mensaje.contains("node")){
-                                read_node();
+                                //read_node();
                             }
                             System.out.println("Recibido: " + mensaje);
                         }
