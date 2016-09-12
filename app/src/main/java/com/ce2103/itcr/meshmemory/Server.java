@@ -62,7 +62,7 @@ public class Server extends Thread {
                             if(mensaje.contains("client")){
                                 //read_client()
                             }else if (mensaje.contains("node")){
-                                //read_node();
+                                //read_node(); agregar este método
                             }
                             System.out.println("Recibido: " + mensaje);
                         }
