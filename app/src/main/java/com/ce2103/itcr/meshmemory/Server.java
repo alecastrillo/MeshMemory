@@ -75,6 +75,14 @@ public class Server extends Thread {
         leer_hilo.start();
     }
 
+    public void read_client(){
+
+    }
+
+    public void read_node(){
+
+    }
+
     public void codeEntry(String entry){
 
     }
