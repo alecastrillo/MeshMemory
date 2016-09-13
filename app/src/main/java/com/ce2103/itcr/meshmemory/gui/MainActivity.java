@@ -4,6 +4,7 @@ package com.ce2103.itcr.meshmemory.gui;
  * Created by estape11 on 12/09/16.
  */
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,10 +13,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.ce2103.itcr.meshmemory.*;
+import com.ce2103.itcr.meshmemory.server.Server;
 
 
 public class MainActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

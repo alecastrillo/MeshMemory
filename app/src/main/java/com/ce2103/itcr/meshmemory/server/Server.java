@@ -5,7 +5,6 @@ package com.ce2103.itcr.meshmemory.server;
  */
 
 import com.ce2103.itcr.meshmemory.datastructures.DoubleLinkedList;
-
 import java.io.*;
 import java.net.*;
 
@@ -15,7 +14,7 @@ public class Server extends Thread {
     private Socket socket;
     private BufferedReader entrada;
     private PrintWriter salida;
-    private static int puerto = 8080;
+    private static int puerto;
     private Thread hiloServer;
     private Thread hiloCliente;
     public static DoubleLinkedList listaSockets = new DoubleLinkedList();
@@ -29,7 +28,8 @@ public class Server extends Thread {
         this.hiloCliente = null;
     }
 
-    public void startServer() {
+    public void startServer(int puerto) {
+        this.puerto=puerto;
         try {
             servidor = new ServerSocket(puerto);
             System.out.println("Servidor iniciado");
@@ -41,7 +41,7 @@ public class Server extends Thread {
                             AgregarSocket(socket);
                             System.out.println("Nuevo cliente conectado: "+String.valueOf(socket));
                             leer(socket);
-                            escribir(socket,"Bienvenido ak7 ak7");
+                            escribir(socket,"Conexion establecida!");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -118,7 +118,20 @@ public class Server extends Thread {
         } catch (IOException ioe) {
         }
     }
-
+    public void close() throws IOException {
+        try {
+            this.servidor.close();
+            this.socket = null;
+            this.entrada = null;
+            this.salida = null;
+            this.servidor = null;
+            this.hiloServer = null;
+            this.hiloCliente = null;
+            this.listaSockets =new DoubleLinkedList();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void AgregarSocket(Socket socket1) {
         boolean result = false;
         if (this.listaSockets != null) {

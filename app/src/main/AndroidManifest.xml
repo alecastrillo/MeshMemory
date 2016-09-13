@@ -9,6 +9,28 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"></application>
+        android:theme="@style/AppTheme">
+        <activity android:name=".gui.MainActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
-</manifest>
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+        <activity android:name=".gui.Nodo" />
+        <activity android:name=".gui.Datos_nodo" />
+        <activity android:name=".gui.Manager" />
+        <activity android:name=".gui.MainManager" />
+        <activity android:name=".gui.Master" />
+        <activity android:name=".gui.Burping" />
+        <activity android:name=".gui.Memory" />
+        <activity android:name=".gui.Alerts" />
+        <activity android:name=".gui.GarbageCollection" />
+        <activity android:name=".gui.Node_data" />
+        <activity android:name=".gui.Memory_map" />
+        <activity android:name=".gui.Available_mem" />
+        <activity android:name=".gui.Sync_Satatus" />
+        <activity android:name=".gui.Error_logs"></activity>
+    </application>
+
+    </manifest>

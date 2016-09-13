@@ -5,15 +5,20 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
 import com.ce2103.itcr.meshmemory.*;
+import com.ce2103.itcr.meshmemory.server.Server;
 
 public class Master extends AppCompatActivity {
-
+    public Server cliente= new Server();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_master);
-
+        System.out.println("IP: "+Datos_nodo.ip+", Puerto: "+Datos_nodo.port);
+        Toast.makeText(Master.this, "Connecting to the manager...", Toast.LENGTH_SHORT).show();
+        cliente.startClient(Datos_nodo.ip,Datos_nodo.port );
         Button btnmemp=(Button)findViewById(R.id.btnmpmem);
         btnmemp.setOnClickListener(new View.OnClickListener() {
             @Override

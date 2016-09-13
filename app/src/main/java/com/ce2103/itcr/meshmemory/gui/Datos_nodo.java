@@ -9,9 +9,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.ce2103.itcr.meshmemory.*;
+import com.ce2103.itcr.meshmemory.server.Server;
 
 public class Datos_nodo extends AppCompatActivity {
-
+    public static String ip;
+    public static int port;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,11 +33,13 @@ public class Datos_nodo extends AppCompatActivity {
                 if(TextUtils.isEmpty(dtipmng)){
                     edtxtipmng.setError("Specify manager IP");
                 }
+                /*
                 EditText edtxtportnd=(EditText)findViewById(R.id.edtptond);
                 String dtportnd=edtxtportnd.getText().toString();
                 if(TextUtils.isEmpty(dtportnd)){
                     edtxtportnd.setError("Specify your port");
                 }
+                */
                 EditText edtxtmem=(EditText)findViewById(R.id.edtmem);
                 String dtmem=edtxtmem.getText().toString();
                 if(TextUtils.isEmpty(dtmem)){
@@ -46,6 +50,7 @@ public class Datos_nodo extends AppCompatActivity {
                 if(TextUtils.isEmpty(dtnum)){
                     edtnum.setError("Specify your cellphone number");
                 }
+                /*
                 else {
                     boolean h = Nodo.master;
                     if(dtportmng=="Something") {//something hay que cambiarlo por la lista de ale
@@ -79,6 +84,7 @@ public class Datos_nodo extends AppCompatActivity {
                                 startActivityForResult(slave,0);
                             }
                         }
+
                         else{
                             Toast.makeText(Datos_nodo.this, "IP didn't match", Toast.LENGTH_SHORT).show();
                         }
@@ -87,7 +93,16 @@ public class Datos_nodo extends AppCompatActivity {
                         Toast.makeText(Datos_nodo.this, "Port didn't match", Toast.LENGTH_SHORT).show();
                         return;
                     }
+                }*/
+                //Prueba cliente
+                else{
+                    ip=edtxtipmng.getText().toString();
+                    port=Integer.parseInt(edtxtportmng.getText().toString());
+                    Intent master= new Intent(v.getContext(),Master.class);
+                    startActivityForResult(master,0);
+
                 }
+
             }
         });
     }
