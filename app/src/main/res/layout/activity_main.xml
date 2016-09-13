@@ -19,9 +19,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/editText"
+        android:text="Ingrese el nuevo mensaje"
         android:layout_below="@+id/textView"
-        android:layout_alignParentStart="true"
-        android:text="Ingrese el nuevo mensaje" />
+        android:layout_centerHorizontal="true" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -30,6 +30,6 @@
         android:text="Enviar"
         android:id="@+id/button"
         android:layout_below="@+id/editText"
-        android:layout_alignParentStart="true" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
