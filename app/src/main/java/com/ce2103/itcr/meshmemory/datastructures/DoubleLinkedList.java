@@ -1,4 +1,4 @@
-package com.ce2103.itcr.meshmemory;
+package com.ce2103.itcr.meshmemory.datastructures;
 /**
  * Created by estape11 on 10/09/16.
  */

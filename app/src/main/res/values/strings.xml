@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">Mesh Memory</string>
+    <string name="btn_name">Manager</string>
+    <string name="btn2_name">Node</string>
+    <string name="txt">Choose your role:</string>
+    <string name="node">Node</string>
+    <string name="slave">Slave</string>
+    <string name="master">Master</string>
+    <string name="choose_your_role_as_node">Choose your role as node:</string>
+    <string name="insert_your_connection_data">Insert your connection data</string>
+    <string name="manager">Manager</string>
+    <string name="puerto">Port:</string>
+    <string name="ip">IP:</string>
+    <string name="nodo">Node</string>
+    <string name="pto">Port:</string>
+    <string name="memoria">Memory:</string>
+    <string name="ready">Ready</string>
+    <string name="manageract">Manager</string>
+    <string name="puertomng">Port</string>
+    <string name="ipmng">IP</string>
+    <string name="readymng">Ready</string>
+    <string name="burping">Burping</string>
+    <string name="memory">Memory</string>
+    <string name="alerts">Alerts</string>
+    <string name="node_data">Node Data</string>
+    <string name="garbage_collection">Garbage collection</string>
+    <string name="mapa_de_memoria">Memory Map</string>
+    <string name="available_memory">Available Memory</string>
+    <string name="sync_status">Sync Status</string>
+    <string name="error_logs">Error logs</string>
+    <string name="cellphone_number">Cellphone number:</string>
 </resources>

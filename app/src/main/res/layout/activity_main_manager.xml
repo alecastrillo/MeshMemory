@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.ce2103.itcr.meshmemory.gui.MainManager">
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/burping"
+        android:textStyle="italic"
+        android:textSize="20dp"
+        android:id="@+id/btnbrp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/memory"
+        android:textStyle="italic"
+        android:textSize="20dp"
+        android:id="@+id/btnmem"
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/btnbrp"
+        android:layout_alignStart="@+id/btnbrp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/alerts"
+        android:textStyle="italic"
+        android:textSize="20dp"
+        android:id="@+id/btnalt"
+        android:layout_below="@+id/btnmem"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        tools:ignore="UnknownId" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/node_data"
+        android:textStyle="italic"
+        android:textSize="20dp"
+        android:id="@+id/btndt"
+        android:layout_below="@+id/btnalt"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/garbage_collection"
+        android:textStyle="italic"
+        android:textSize="20dp"
+        android:id="@+id/btngc"
+        android:layout_below="@id/btndt"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"/>
+</RelativeLayout>

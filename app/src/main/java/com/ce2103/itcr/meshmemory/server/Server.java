@@ -1,8 +1,10 @@
-package com.ce2103.itcr.meshmemory;
+package com.ce2103.itcr.meshmemory.server;
 
 /**
  * Created by estape11 on 09/09/16.
  */
+
+import com.ce2103.itcr.meshmemory.datastructures.DoubleLinkedList;
 
 import java.io.*;
 import java.net.*;
