@@ -4,7 +4,6 @@ package com.ce2103.itcr.meshmemory;
  * Created by estape11 on 09/09/16.
  */
 
-import android.widget.Toast;
 import java.io.*;
 import java.net.*;
 
@@ -16,9 +15,10 @@ public class Server extends Thread {
     private PrintWriter salida;
     private static int puerto = 8080;
     private Thread hiloServer;
+    private Thread hiloCliente;
     public static DoubleLinkedList listaSockets = new DoubleLinkedList();
 
-    public void Server() {
+    public Server() {
         this.socket = null;
         this.entrada = null;
         this.salida = null;
@@ -75,18 +75,6 @@ public class Server extends Thread {
         leer_hilo.start();
     }
 
-    public void read_client(){
-
-    }
-
-    public void read_node(){
-
-    }
-
-    public void codeEntry(String entry){
-
-    }
-
     public void escribir(final Socket socket, final String dato){
         Thread escribir_hilo=new Thread(new Runnable(){
             public void run(){
@@ -104,22 +92,24 @@ public class Server extends Thread {
         escribir_hilo.start();
     }
 
-    public void startClient() {
-        try {
-            //Creamos nuestro socket
-            socket = new Socket(host, puerto);
-            this.entrada = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-            //send("HELLO MOTO");
-        } catch (UnknownHostException e) {
-            System.out.println("El host no existe o no está activo.");
-        } catch (IOException e) {
-            System.out.println("Error de entrada/salida.");
-        }
+    public void startClient(final String host, final int puerto) {
+        this.host=host;
+        this.puerto=puerto;
+        this.hiloCliente=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    socket = new Socket(host, puerto);
+                    leer(socket);
+                } catch (UnknownHostException e) {} catch (IOException e) {}
+            }
+        });
     }
 
-    public void close() {
+    //Cierra un socket de comunicacion
+    public void close(Socket socket) {
         try {
-            this.socket.close();
+            socket.close();
         } catch (IOException ioe) {
         }
     }
@@ -141,5 +131,17 @@ public class Server extends Thread {
         } else {
             this.listaSockets.add(socket1);
         }
+    }
+
+    public void read_client(){
+
+    }
+
+    public void read_node(){
+
+    }
+
+    public void codeEntry(String entry){
+
     }
 }
