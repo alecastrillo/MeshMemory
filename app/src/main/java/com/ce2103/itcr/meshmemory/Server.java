@@ -10,7 +10,7 @@ import java.net.*;
 
 public class Server extends Thread {
     private ServerSocket servidor;
-    private static String host = "192.168.100.3";
+    private static String host;
     private Socket socket;
     private BufferedReader entrada;
     private PrintWriter salida;
