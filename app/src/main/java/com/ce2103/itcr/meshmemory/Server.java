@@ -24,6 +24,7 @@ public class Server extends Thread {
         this.salida = null;
         this.servidor = null;
         this.hiloServer = null;
+        this.hiloCliente = null;
     }
 
     public void startServer() {
@@ -101,7 +102,7 @@ public class Server extends Thread {
                 try {
                     socket = new Socket(host, puerto);
                     leer(socket);
-                } catch (UnknownHostException e) {} catch (IOException e) {}
+                } catch (UnknownHostException ue) {} catch (IOException ie) {}
             }
         });
     }
