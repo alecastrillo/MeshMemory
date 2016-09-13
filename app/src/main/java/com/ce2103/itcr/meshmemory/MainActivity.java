@@ -16,8 +16,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        System.out.println("CEROTE");
-        Toast.makeText(this, "Escuchando!",
+        /*
+        Toast.makeText(this, "¡Bienvenido!",
                 Toast.LENGTH_SHORT).show();
         servidor= new Server();
         servidor.startServer();
@@ -28,6 +28,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 servidor.escribir((Socket)servidor.listaSockets.get(0),cajita.getText().toString());
+            }
+        });
+        */
+        Toast.makeText(this, "¡Bienvenido!",
+                Toast.LENGTH_SHORT).show();
+        servidor= new Server();
+        Button clickButton = (Button) findViewById(R.id.button);
+        final EditText cajita= (EditText) findViewById(R.id.editText);
+        clickButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    System.out.println("Trying to connect to the host: "+cajita.getText().toString());
+                    servidor.startClient(cajita.getText().toString(),8080);
+                }catch(Exception e){}
             }
         });
     }

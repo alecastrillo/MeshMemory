@@ -101,10 +101,12 @@ public class Server extends Thread {
             public void run() {
                 try {
                     socket = new Socket(host, puerto);
+                    AgregarSocket(socket);
                     leer(socket);
                 } catch (UnknownHostException ue) {} catch (IOException ie) {}
             }
         });
+        this.hiloCliente.start();
     }
 
     //Cierra un socket de comunicacion
