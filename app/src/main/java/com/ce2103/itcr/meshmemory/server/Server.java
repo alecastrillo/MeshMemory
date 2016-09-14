@@ -132,7 +132,7 @@ public class Server extends Thread {
             e.printStackTrace();
         }
     }
-    public void AgregarSocket(Socket socket1) {
+    private void AgregarSocket(Socket socket1) {
         boolean result = false;
         if (this.listaSockets != null) {
             for (int s = 0; s < this.listaSockets.size(); s++) {

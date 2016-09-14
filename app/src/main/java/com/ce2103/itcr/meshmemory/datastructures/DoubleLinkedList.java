@@ -13,6 +13,7 @@ public class DoubleLinkedList {
         }
     }
     private Nodo cabeza;
+    private Nodo cola;
     private int numElementos;
     public DoubleLinkedList() {
         cabeza = null;
