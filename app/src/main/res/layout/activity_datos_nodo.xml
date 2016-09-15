@@ -62,7 +62,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
+        android:id="@+id/editTextIP"
         android:layout_centerVertical="true"
         android:layout_alignTop="@id/txtIP"
         android:layout_alignStart="@+id/edtpto"
@@ -95,7 +95,7 @@
         android:id="@+id/edtmem"
         android:layout_alignTop="@+id/txtmem"
         android:layout_toEndOf="@+id/txtmem"
-        android:layout_alignEnd="@+id/editText" />
+        android:layout_alignEnd="@+id/editTextIP" />
 
     <Button
         style="?android:attr/buttonStyleSmall"

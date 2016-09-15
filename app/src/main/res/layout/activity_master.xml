@@ -33,16 +33,37 @@
         android:layout_height="wrap_content"
         android:text="@string/sync_status"
         android:id="@+id/btnsync"
-        android:layout_marginTop="65dp"
-        android:layout_below="@+id/btnmemav"
-        android:layout_alignEnd="@+id/btnerlogs" />
+        android:layout_below="@+id/btnerlogs"
+        android:layout_alignEnd="@+id/btnerlogs"
+        android:layout_marginTop="63dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/error_logs"
         android:id="@+id/btnerlogs"
-        android:layout_marginBottom="56dp"
-        android:layout_alignParentBottom="true"
+        android:layout_centerVertical="true"
         android:layout_alignEnd="@+id/btnmpmem" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Listening IP adress "
+        android:id="@+id/textView2"
+        android:textStyle="italic"
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/btnmemav"
+        android:layout_gravity="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="127.0.0.1"
+        android:id="@+id/textViewIP"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/textView2"
+        android:textStyle="bold|italic" />
 </RelativeLayout>

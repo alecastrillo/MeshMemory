@@ -7,9 +7,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+
 import com.ce2103.itcr.meshmemory.*;
-import com.ce2103.itcr.meshmemory.server.Server;
 
 public class Datos_nodo extends AppCompatActivity {
     public static String ip;
@@ -28,25 +27,23 @@ public class Datos_nodo extends AppCompatActivity {
                 if(TextUtils.isEmpty(dtportmng)){
                     edtxtportmng.setError("Specify manager port");
                 }
-                EditText edtxtipmng=(EditText)findViewById(R.id.editText);
+                EditText edtxtipmng=(EditText)findViewById(R.id.editTextIP);
                 String dtipmng=edtxtipmng.getText().toString();
+
                 if(TextUtils.isEmpty(dtipmng)){
                     edtxtipmng.setError("Specify manager IP");
                 }
-                /*
-                EditText edtxtportnd=(EditText)findViewById(R.id.edtptond);
-                String dtportnd=edtxtportnd.getText().toString();
-                if(TextUtils.isEmpty(dtportnd)){
-                    edtxtportnd.setError("Specify your port");
-                }
-                */
+
                 EditText edtxtmem=(EditText)findViewById(R.id.edtmem);
                 String dtmem=edtxtmem.getText().toString();
+
                 if(TextUtils.isEmpty(dtmem)){
                     edtxtmem.setError("Specify your available memory bytes");
                 }
+
                 EditText edtnum=(EditText)findViewById(R.id.edtnum);
                 String dtnum=edtnum.getText().toString();
+
                 if(TextUtils.isEmpty(dtnum)){
                     edtnum.setError("Specify your cellphone number");
                 }
@@ -98,6 +95,7 @@ public class Datos_nodo extends AppCompatActivity {
                 else{
                     ip=edtxtipmng.getText().toString();
                     port=Integer.parseInt(edtxtportmng.getText().toString());
+                    System.out.println("IP: "+ip+" Puerto: "+port);
                     Intent master= new Intent(v.getContext(),Master.class);
                     startActivityForResult(master,0);
 

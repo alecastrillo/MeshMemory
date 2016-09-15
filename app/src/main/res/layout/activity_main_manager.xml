@@ -66,4 +66,25 @@
         android:layout_below="@id/btndt"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Listening IP adress "
+        android:id="@+id/textView3"
+        android:textStyle="italic"
+        android:layout_gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/btnalt" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="127.0.0.1"
+        android:id="@+id/textViewIP"
+        android:textStyle="bold|italic"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/textView3" />
 </RelativeLayout>

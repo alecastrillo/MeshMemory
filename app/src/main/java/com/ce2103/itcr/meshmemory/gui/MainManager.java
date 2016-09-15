@@ -5,7 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
 import com.ce2103.itcr.meshmemory.*;
+import com.ce2103.itcr.meshmemory.server.Utils;
 
 public class MainManager extends AppCompatActivity {
 
@@ -13,7 +16,9 @@ public class MainManager extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_manager);
-
+        Utils utilidad=new Utils();
+        TextView iptext=(TextView)findViewById(R.id.textViewIP);
+        iptext.setText(utilidad.getIPAddress(true));
         Button btnbrp=(Button)findViewById(R.id.btnbrp);
         btnbrp.setOnClickListener(new View.OnClickListener() {
             @Override
