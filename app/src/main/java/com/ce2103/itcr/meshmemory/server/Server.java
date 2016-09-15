@@ -5,6 +5,10 @@ package com.ce2103.itcr.meshmemory.server;
  */
 
 import com.ce2103.itcr.meshmemory.datastructures.DoubleLinkedList;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.io.*;
 import java.net.*;
 
@@ -17,6 +21,7 @@ public class Server extends Thread {
     private static int puerto;
     private Thread hiloServer;
     private Thread hiloCliente;
+    private Socket socketCL;
     public static DoubleLinkedList listaSockets = new DoubleLinkedList();
 
     public Server() {
@@ -41,7 +46,7 @@ public class Server extends Thread {
                             AgregarSocket(socket);
                             System.out.println("Nuevo cliente conectado: "+String.valueOf(socket));
                             leer(socket);
-                            escribir(socket,"Conexion establecida!");
+                            escribir(socket," Conexion establecida!");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -62,15 +67,21 @@ public class Server extends Thread {
                     while(true){
                         String mensaje= entrada.readLine();
                         if (mensaje!=null) {
-                            if(mensaje.contains("client")){
-                                //read_client()
-                            }else if (mensaje.contains("node")){
-                                //read_node(); agregar este métodop
+                            JsonParser parser = new JsonParser();
+                            JsonElement mensajeCODE = parser.parse(mensaje);
+                            String remitente = mensajeCODE.getAsJsonObject().get("remitente").getAsString();
+                            System.out.println(remitente);
+                            if (remitente.equals("cliente")) {
+                                read_client(sock, mensajeCODE);
+                            } else if (remitente.equals("nodo")) {
+                                //read_node();
                             }
                             System.out.println("Recibido: " + mensaje);
                         }
                     }
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
@@ -118,6 +129,7 @@ public class Server extends Thread {
         } catch (IOException ioe) {
         }
     }
+
     public void close() throws IOException {
         try {
             this.servidor.close();
@@ -132,6 +144,7 @@ public class Server extends Thread {
             e.printStackTrace();
         }
     }
+
     private void AgregarSocket(Socket socket1) {
         boolean result = false;
         if (this.listaSockets != null) {
@@ -151,7 +164,16 @@ public class Server extends Thread {
         }
     }
 
-    public void read_client(){
+    public void read_client(Socket sock, JsonElement mensajeCODE) throws InterruptedException {
+        JsonParser parser=new JsonParser();
+        JsonObject respuestaJSON=new JsonObject();
+        String respuesta;
+        String funcion = mensajeCODE.getAsJsonObject().get("funcion").getAsString();
+        if (funcion.equals("token")){
+            respuestaJSON.addProperty("token","a3s4f5f62");
+            respuesta= respuestaJSON.toString();
+            escribir(sock,respuesta);
+        }
 
     }
 
