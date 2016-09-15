@@ -8,9 +8,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.ce2103.itcr.meshmemory.*;
 import com.ce2103.itcr.meshmemory.server.Server;
+import com.ce2103.itcr.meshmemory.server.Utils;
 
 public class Manager extends AppCompatActivity {
     public Server servidor= new Server();
@@ -18,8 +20,10 @@ public class Manager extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manager);
-
+        Utils utilidad=new Utils();
         Button btnrdymng=(Button)findViewById(R.id.btnrdymng);
+        TextView ip=(TextView)findViewById(R.id.textViewIP);
+        ip.setText(utilidad.getIPAddress(true));
         btnrdymng.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

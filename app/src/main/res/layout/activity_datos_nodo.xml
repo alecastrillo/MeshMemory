@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:text="@string/insert_your_connection_data"
         android:textStyle="italic"
-        android:textSize="20sp"
+        android:textSize="25dp"
         android:id="@+id/txtdt"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
@@ -23,8 +23,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/manager"
-        android:textStyle="italic"
-        android:textSize="20sp"
+        android:textStyle="bold|italic"
+        android:textSize="25dp"
         android:id="@+id/txtmng"
         android:layout_below="@+id/txtdt"
         android:layout_alignParentStart="true"
@@ -56,10 +56,8 @@
         android:textStyle="italic"
         android:textSize="20sp"
         android:id="@+id/txtIP"
-        android:layout_below="@id/txtpto"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="60dp"/>
+        android:layout_below="@+id/edtpto"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -75,30 +73,10 @@
         android:layout_height="wrap_content"
         android:text="@string/nodo"
         android:id="@+id/txtnd"
-        android:textStyle="italic"
-        android:textSize="20sp"
-        android:layout_below="@+id/editText"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="15dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/pto"
-        android:textStyle="italic"
-        android:textSize="20sp"
-        android:id="@+id/txtptond"
-        android:layout_below="@+id/txtnd"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp"/>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/edtptond"
-        android:layout_alignTop="@+id/txtptond"
-        android:layout_alignEnd="@+id/editText"
-        android:layout_alignStart="@+id/editText" />
+        android:textStyle="bold|italic"
+        android:textSize="25dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -107,17 +85,17 @@
         android:textStyle="italic"
         android:textSize="20sp"
         android:id="@+id/txtmem"
-        android:layout_below="@+id/edtptond"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/txtnd" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/edtmem"
         android:layout_alignTop="@+id/txtmem"
-        android:layout_alignEnd="@+id/edtptond"
-        android:layout_toEndOf="@+id/txtmem" />
+        android:layout_toEndOf="@+id/txtmem"
+        android:layout_alignEnd="@+id/editText" />
 
     <Button
         style="?android:attr/buttonStyleSmall"

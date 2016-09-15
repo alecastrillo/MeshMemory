@@ -15,47 +15,52 @@
         android:text="@string/manageract"
         android:id="@+id/txtmnga"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textSize="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/puertomng"
         android:id="@+id/ptomng"
-        android:layout_below="@+id/txtmnga"
+        android:layout_below="@+id/textView"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="97dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/ipmng"
-        android:id="@+id/txtIPmng"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="54dp" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/edtptomng"
-        android:layout_alignTop="@+id/ptomng"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/ptomng" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/edtipmng"
-        android:layout_centerVertical="true"
-        android:layout_alignStart="@+id/edtptomng"
-        android:layout_alignEnd="@+id/edtptomng" />
+        android:text="8080"
+        android:layout_below="@+id/ptomng"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/readymng"
         android:id="@+id/btnrdymng"
-        android:layout_alignParentBottom="true"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="IP"
+        android:id="@+id/textView"
+        android:layout_below="@+id/txtmnga"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="54dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="127.0.0.1"
+        android:id="@+id/textViewIP"
+        android:layout_alignTop="@+id/textView"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="48dp" />
+        android:textStyle="italic" />
+
 </RelativeLayout>
