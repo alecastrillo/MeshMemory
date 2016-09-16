@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.ce2103.itcr.meshmemory.*;
 import com.ce2103.itcr.meshmemory.server.Server;
 import com.ce2103.itcr.meshmemory.server.Utils;
+import com.google.gson.JsonObject;
 
 public class Master extends AppCompatActivity {
     public Server cliente= new Server();
@@ -22,7 +23,13 @@ public class Master extends AppCompatActivity {
         Utils utilidad =new Utils();
         ipTEXT.setText(utilidad.getIPAddress(true));
         Toast.makeText(Master.this, "Connecting to the manager...", Toast.LENGTH_SHORT).show();
+
         cliente.startClient(Datos_nodo.ip,Datos_nodo.port );
+        JsonObject output=new JsonObject();
+        output.addProperty("remitente","node");
+        output.addProperty("funcion","addNode");
+        output.addProperty("bytes",Datos_nodo.node.getTotalMem());
+        cliente.escribir(output.toString());
 
         Button btnmemp=(Button)findViewById(R.id.btnmpmem);
         btnmemp.setOnClickListener(new View.OnClickListener() {

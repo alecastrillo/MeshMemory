@@ -9,10 +9,13 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.ce2103.itcr.meshmemory.*;
+import com.ce2103.itcr.meshmemory.memoryblocks.Node;
 
 public class Datos_nodo extends AppCompatActivity {
     public static String ip;
     public static int port;
+    public static Node node;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,8 +98,10 @@ public class Datos_nodo extends AppCompatActivity {
                 else{
                     ip=edtxtipmng.getText().toString();
                     port=Integer.parseInt(edtxtportmng.getText().toString());
-                    System.out.println("IP: "+ip+" Puerto: "+port);
+                    int bytes=Integer.parseInt(edtxtmem.getText().toString());
+                    int num=Integer.parseInt(edtnum.getText().toString());
                     Intent master= new Intent(v.getContext(),Master.class);
+                    node= new Node(bytes,num);
                     startActivityForResult(master,0);
 
                 }

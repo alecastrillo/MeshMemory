@@ -1,4 +1,7 @@
 package com.ce2103.itcr.meshmemory.datastructures;
+
+import com.google.gson.JsonObject;
+
 /**
  * Created by estape11 on 10/09/16.
  */
@@ -27,7 +30,7 @@ public class DoubleLinkedList {
         }
         numElementos++;
     }
-    private Nodo obtenerNodo(int indice) {
+    public Nodo obtenerNodo(int indice) {
         if (indice >= numElementos || indice < 0) {
             throw new IndexOutOfBoundsException("Indice incorrecto:" + indice);
         }
@@ -82,5 +85,16 @@ public class DoubleLinkedList {
     }
     public int size() {
         return numElementos;
+    }
+
+    public Nodo swapData(int indice, JsonObject nuevodato) {
+        if (indice >= numElementos || indice < 0) {
+            throw new IndexOutOfBoundsException("Indice incorrecto:" + indice);
+        }
+        Nodo actual = cabeza;
+        for (int i = 0; i < indice; i++)
+            actual = actual.siguiente;
+        actual.dato=nuevodato;
+        return actual;
     }
 }
