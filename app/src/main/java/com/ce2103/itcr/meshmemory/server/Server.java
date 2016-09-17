@@ -4,13 +4,7 @@ package com.ce2103.itcr.meshmemory.server;
  * Created by estape11 on 09/09/16.
  */
 
-import android.app.job.JobScheduler;
-
 import com.ce2103.itcr.meshmemory.datastructures.DoubleLinkedList;
-import com.ce2103.itcr.meshmemory.gui.Datos_nodo;
-import com.ce2103.itcr.meshmemory.gui.Nodo;
-import com.ce2103.itcr.meshmemory.memoryblocks.Node;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -19,26 +13,23 @@ import java.net.*;
 
 public class Server extends Thread {
     private ServerSocket servidor;
-    private static String host;
     private Socket socket;
     private BufferedReader entrada;
     private PrintWriter salida;
-    private static int puerto;
+    private int puerto;
     private Thread hiloServer;
-    private Thread hiloCliente;
-    private Socket socketCL;
-    public static DoubleLinkedList listaSockets = new DoubleLinkedList();
-    private DoubleLinkedList listNodes=new DoubleLinkedList();
+    private DoubleLinkedList listaSockets;
+    private DoubleLinkedList listNodes;
     private String metodo="funcion";
-    //public Node node;
 
     public Server() {
+        this.listaSockets = new DoubleLinkedList();
+        this.listNodes=new DoubleLinkedList();
         this.socket = null;
         this.entrada = null;
         this.salida = null;
         this.servidor = null;
         this.hiloServer = null;
-        this.hiloCliente = null;
     }
 
     public void startServer(int puerto) {
@@ -53,11 +44,8 @@ public class Server extends Thread {
                             socket =servidor.accept();
                             AgregarSocket(socket);
                             System.out.println("Nuevo cliente conectado: "+String.valueOf(socket));
-                            leer(socket);
-                            //escribir(socket," Conexion establecida!");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                            readData(socket);
+                        } catch (Exception e) {e.printStackTrace();}
                     }
                 }
             });
@@ -67,7 +55,7 @@ public class Server extends Thread {
         }
     }
 
-    public void leer(final Socket sock){
+    public void readData(final Socket sock){
         Thread leer_hilo=new Thread(new Runnable(){
             public void run(){
                 try{
@@ -77,36 +65,29 @@ public class Server extends Thread {
                         System.out.println("Recibido: " + mensaje);
                         if (mensaje!=null) {
                             JsonParser parser = new JsonParser();
-                            JsonElement mensajeCODE = parser.parse(mensaje);
-                            String remitente = mensajeCODE.getAsJsonObject().get("remitente").getAsString();
+                            JsonObject mensajeCODE = parser.parse(mensaje).getAsJsonObject();
+                            String remitente = mensajeCODE.get("remitente").getAsString();
                             if (remitente.equals("cliente")) {
-                                read_client(sock, mensajeCODE);
+                                readClient(sock, mensajeCODE);
                             } else if (remitente.equals("node")) {
-                                read_node(sock,mensajeCODE);
-                            } else if (remitente.equals("server")){
-                                read_server(mensajeCODE);
+                                readNode(sock,mensajeCODE);
                             }
-
                         }
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                } catch (IOException e) {e.printStackTrace();} catch (InterruptedException e) {e.printStackTrace();}
             }
         });
         leer_hilo.start();
     }
 
-    public void escribir(final Socket socket, final String dato){
+    public void writeData(final Socket socket, final String dato){
         Thread escribir_hilo=new Thread(new Runnable(){
             public void run(){
                 try{
                     if(dato!=null){
                         salida = new PrintWriter(socket.getOutputStream(),true);
                         salida.println(dato);
-                        System.out.println("Enviado:"+dato);
+                        System.out.println("Enviado: "+dato);
                     }
                 }catch(Exception ex){
 
@@ -116,62 +97,10 @@ public class Server extends Thread {
         escribir_hilo.start();
     }
 
-    public void escribir(final String dato){
-        System.out.println("2");
-        Thread escribir_hilo=new Thread(new Runnable(){
-            public void run(){
-                try{
-                    if(dato!=null){
-                        salida = new PrintWriter(socket.getOutputStream(),true);
-                        salida.println(dato);
-                        System.out.println("Enviado:"+dato);
-                    }
-                }catch(Exception ex){
-
-                }
-            }
-        });
-        escribir_hilo.start();
-    }
-
-    public void startClient(final String host, final int puerto) {
-        this.host=host;
-        this.puerto=puerto;
-        this.hiloCliente=new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    socket = new Socket(host, puerto);
-                    System.out.println("Conectado a: "+socket.toString());
-                    AgregarSocket(socket);
-                    leer(socket);
-                } catch (UnknownHostException ue) {} catch (IOException ie) {}
-            }
-        });
-        this.hiloCliente.start();
-    }
-
-    //Cierra un socket de comunicacion
-    public void close(Socket socket) {
+    public void close(){
         try {
-            socket.close();
-        } catch (IOException ioe) {
-        }
-    }
-
-    public void close() throws IOException {
-        try {
-            this.servidor.close();
-            this.socket = null;
-            this.entrada = null;
-            this.salida = null;
-            this.servidor = null;
-            this.hiloServer = null;
-            this.hiloCliente = null;
-            this.listaSockets =new DoubleLinkedList();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            this.socket.close();
+        } catch (IOException ioe) {}
     }
 
     private void AgregarSocket(Socket socket1) {
@@ -214,16 +143,20 @@ public class Server extends Thread {
         }
     }
 
-    public void read_client(Socket sock, JsonElement mensajeCODE) throws InterruptedException, IOException {
-        JsonParser parser=new JsonParser();
+    public void readClient(Socket sock, JsonObject mensajeCODE) throws InterruptedException, IOException {
         JsonObject respuestaJSON=new JsonObject();
-        String respuesta;
-        String funcion = mensajeCODE.getAsJsonObject().get(metodo).getAsString();
-        if (funcion.equals("token")){
-            respuestaJSON.addProperty("token","a3s4f5f62");
-            respuesta= respuestaJSON.toString();
-            escribir(sock,respuesta);
+        Decoder decodicador=new Decoder(mensajeCODE,"cliente");
+        int funcion=decodicador.Decode();
+        switch (funcion){
+            case 0:{
+                respuestaJSON.addProperty("token","a3s4f5f62"); //aqui va el token
+                writeData(socket,respuestaJSON.toString());
+            }
+            case 1:{
+
+            }
         }
+/*
         else if(funcion.equals("xMalloc")){
             int bytes=mensajeCODE.getAsJsonObject().get("bytes").getAsInt();
             int tipo=mensajeCODE.getAsJsonObject().get("type").getAsInt();
@@ -231,7 +164,7 @@ public class Server extends Thread {
             JsonObject output=new JsonObject();
             if(index<0){
                 output.addProperty("UUID","no espacio");
-                escribir(sock,output.toString());
+                writeData(sock,output.toString());
             }
             else{
                 NodeSocket temp = (NodeSocket) listNodes.get(index);
@@ -240,15 +173,14 @@ public class Server extends Thread {
                 peticion.addProperty("funcion","alloc");
                 peticion.addProperty("bytes",bytes);
                 peticion.addProperty("type",tipo);
-                escribir(temp.getSocket(),peticion.toString());
+                writeData(temp.getSocket(),peticion.toString());
                 String mensaje= entrada.readLine();
                 System.out.println(mensaje);
                 output.addProperty("UUID","hola");
-                escribir(sock,output.toString());
-
+                writeData(sock,output.toString());
             }
-
         }
+        */
 
     }
 
@@ -265,11 +197,17 @@ public class Server extends Thread {
         return index;
     }
 
-    public void read_node(Socket sock, JsonElement mensajeCODE ){
-        JsonParser parser=new JsonParser();
+    public void readNode(Socket sock, JsonObject mensajeCODE ){
         JsonObject respuestaJSON=new JsonObject();
-        String respuesta;
-        String funcion = mensajeCODE.getAsJsonObject().get(metodo).getAsString();
+        Decoder decodificador=new Decoder(mensajeCODE,"nodo");
+        int funcion=decodificador.Decode();
+        switch (funcion){
+            case 0:{
+                respuestaJSON.addProperty("respuesta","aceptado");
+                writeData(sock,respuestaJSON.toString());
+            }
+        }
+        /*
         if (funcion.equals("addNode")){
             int bytes=mensajeCODE.getAsJsonObject().get("bytes").getAsInt();
             NodeSocket node=new NodeSocket(sock,sock.toString(),bytes);
@@ -277,21 +215,6 @@ public class Server extends Thread {
             listNodes.add(node);
             System.out.println("Nodo agregado: "+node.getBloque().toString());
         }
-    }
-
-    public void read_server(JsonElement mensajeCODE){
-        String funcion=mensajeCODE.getAsJsonObject().get(metodo).getAsString();
-        if(funcion.equals("alloc")){
-            int tipo=mensajeCODE.getAsJsonObject().get("type").getAsInt();
-            int bytes=mensajeCODE.getAsJsonObject().get("bytes").getAsInt();
-            String UUID=Datos_nodo.node.allocMem(tipo,bytes);
-            JsonObject output=new JsonObject();
-            output.addProperty("UUID",UUID);
-            escribir(output.toString());
-        }
-    }
-
-    public void codeEntry(String entry){
-
+        */
     }
 }

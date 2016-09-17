@@ -1,15 +1,12 @@
 package com.ce2103.itcr.meshmemory.server;
 
 import com.ce2103.itcr.meshmemory.datastructures.DoubleLinkedList;
-import com.ce2103.itcr.meshmemory.gui.Datos_nodo;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -62,7 +59,10 @@ public class Client extends Thread {
                         if (mensaje!=null) {
                             JsonParser parser = new JsonParser();
                             JsonObject mensajeCODE = parser.parse(mensaje).getAsJsonObject();
-                            //creo el objeto que desencripte el mensaje
+                            String remitente=mensajeCODE.get("remitente").getAsString();
+                            if(remitente.equals("server")){
+                                readServer(mensajeCODE);
+                            }
                         }
                     }
                 } catch (IOException e) {e.printStackTrace();}
@@ -112,6 +112,27 @@ public class Client extends Thread {
         else {
             this.listaSockets.add(socket1);
         }
+    }
+
+    public void readServer(JsonObject mensajeCODE){
+        JsonObject respuestaJSON=new JsonObject();
+        Decoder decodificador=new Decoder(mensajeCODE,"server");
+        int funcion=decodificador.Decode();
+        switch (funcion){
+            case 0:{
+            }
+        }
+
+        /*
+        if(funcion.equals("alloc")){
+            int tipo=mensajeCODE.getAsJsonObject().get("type").getAsInt();
+            int bytes=mensajeCODE.getAsJsonObject().get("bytes").getAsInt();
+            String UUID=Datos_nodo.node.allocMem(tipo,bytes);
+            JsonObject output=new JsonObject();
+            output.addProperty("UUID",UUID);
+            writeData(output.toString());
+        }
+        */
     }
 
 }
