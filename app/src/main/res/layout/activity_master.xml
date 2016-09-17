@@ -52,9 +52,9 @@
         android:text="Listening IP adress "
         android:id="@+id/textView2"
         android:textStyle="italic"
+        android:layout_gravity="center"
         android:layout_alignParentBottom="true"
-        android:layout_alignEnd="@+id/btnmemav"
-        android:layout_gravity="center" />
+        android:layout_alignStart="@+id/btnsync" />
 
     <TextView
         android:layout_width="wrap_content"

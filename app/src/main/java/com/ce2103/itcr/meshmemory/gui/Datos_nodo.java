@@ -100,8 +100,8 @@ public class Datos_nodo extends AppCompatActivity {
                     port=Integer.parseInt(edtxtportmng.getText().toString());
                     int bytes=Integer.parseInt(edtxtmem.getText().toString());
                     int num=Integer.parseInt(edtnum.getText().toString());
-                    Intent master= new Intent(v.getContext(),Master.class);
                     node= new Node(bytes,num);
+                    Intent master= new Intent(v.getContext(),Master.class);
                     startActivityForResult(master,0);
 
                 }
