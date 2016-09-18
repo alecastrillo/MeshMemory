@@ -22,11 +22,13 @@ public class Server extends Thread {
     private Thread hiloServer;
     private DoubleLinkedList listaSockets;
     private DoublyLinkedList listNodes;
+    private DoubleLinkedList listTokens;
     private String metodo="funcion";
 
     public Server() {
         this.listaSockets = new DoubleLinkedList();
         this.listNodes=new DoublyLinkedList();
+        this.listTokens= new DoubleLinkedList();
         this.socket = null;
         this.entrada = null;
         this.salida = null;
