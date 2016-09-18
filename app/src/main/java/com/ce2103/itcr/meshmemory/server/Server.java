@@ -45,7 +45,7 @@ public class Server extends Thread {
                             AgregarSocket(socket);
                             System.out.println("Nuevo cliente conectado: "+String.valueOf(socket));
                             readData(socket);
-                        } catch (Exception e) {e.printStackTrace();}
+                        } catch (Exception e) {continue;}
                     }
                 }
             });
@@ -74,7 +74,7 @@ public class Server extends Thread {
                             }
                         }
                     }
-                } catch (IOException e) {e.printStackTrace();} catch (InterruptedException e) {e.printStackTrace();}
+                } catch (IOException io) {io.printStackTrace();} catch (InterruptedException ie) {ie.printStackTrace();}
             }
         });
         leer_hilo.start();
@@ -89,9 +89,7 @@ public class Server extends Thread {
                         salida.println(dato);
                         System.out.println("Enviado: "+dato);
                     }
-                }catch(Exception ex){
-
-                }
+                }catch(Exception ex){ex.printStackTrace();}
             }
         });
         escribir_hilo.start();
@@ -100,7 +98,7 @@ public class Server extends Thread {
     public void close(){
         try {
             this.socket.close();
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) {ioe.printStackTrace();}
     }
 
     private void AgregarSocket(Socket socket1) {
@@ -110,11 +108,9 @@ public class Server extends Thread {
                 if (this.listaSockets.get(s).equals(socket1)) {
                     result = true;
                     break;
-                } else {
-                    continue;
                 }
             }
-            if (result == false) {
+            if (!result) {
                 this.listaSockets.add(socket1);
             }
         }
@@ -130,11 +126,9 @@ public class Server extends Thread {
                 if (this.listNodes.get(s).equals(nodeSocket)) {
                     result = true;
                     break;
-                } else {
-                    continue;
                 }
             }
-            if (result == false) {
+            if (!result) {
                 this.listaSockets.add(nodeSocket);
             }
         }
