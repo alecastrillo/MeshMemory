@@ -9,12 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ce2103.itcr.meshmemory.*;
-import com.ce2103.itcr.meshmemory.server.Client;
-import com.ce2103.itcr.meshmemory.server.Server;
-import com.ce2103.itcr.meshmemory.server.Utils;
 import com.google.gson.JsonObject;
-
-import java.io.IOException;
 
 public class Master extends AppCompatActivity {
     @Override

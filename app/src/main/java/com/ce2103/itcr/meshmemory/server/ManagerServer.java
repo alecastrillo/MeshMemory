@@ -13,7 +13,7 @@ import com.google.gson.JsonParser;
 import java.io.*;
 import java.net.*;
 
-public class Server extends Thread {
+public class ManagerServer extends Thread {
     private ServerSocket servidor;
     private Socket socket;
     private BufferedReader entrada;
@@ -25,7 +25,7 @@ public class Server extends Thread {
     private DoubleLinkedList listTokens;
     private String metodo="funcion";
 
-    public Server() {
+    public ManagerServer() {
         this.listaSockets = new DoubleLinkedList();
         this.listNodes=new DoublyLinkedList();
         this.listTokens= new DoubleLinkedList();

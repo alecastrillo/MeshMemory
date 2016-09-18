@@ -1,6 +1,5 @@
 package com.ce2103.itcr.meshmemory.gui;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,11 +10,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.ce2103.itcr.meshmemory.*;
-import com.ce2103.itcr.meshmemory.server.Server;
+import com.ce2103.itcr.meshmemory.server.ManagerServer;
 import com.ce2103.itcr.meshmemory.server.Utils;
 
 public class Manager extends AppCompatActivity {
-    public Server servidor= new Server();
+    public ManagerServer servidor= new ManagerServer();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

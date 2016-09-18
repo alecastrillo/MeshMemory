@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import com.ce2103.itcr.meshmemory.*;
-import com.ce2103.itcr.meshmemory.server.Server;
 
 public class Nodo extends AppCompatActivity {
     public static boolean master;

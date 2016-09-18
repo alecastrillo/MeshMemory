@@ -9,14 +9,12 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.ce2103.itcr.meshmemory.*;
-import com.ce2103.itcr.meshmemory.datastructures.Node;
-import com.ce2103.itcr.meshmemory.datastructures.NodeMem;
-import com.ce2103.itcr.meshmemory.server.Client;
+import com.ce2103.itcr.meshmemory.server.NodeClient;
 
 public class Datos_nodo extends AppCompatActivity {
     public static String ip;
     public static int port;
-    public static Client cliente= new Client();
+    public static NodeClient cliente= new NodeClient();
     public static int number;
     public static int bytes;
 

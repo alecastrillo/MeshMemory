@@ -13,7 +13,8 @@ import java.net.UnknownHostException;
 /**
  * Created by estape11 on 17/09/16.
  */
-public class Client extends Thread {
+
+public class NodeClient extends Thread {
     private Socket socket;
     private BufferedReader entrada;
     private PrintWriter salida;
@@ -22,7 +23,7 @@ public class Client extends Thread {
     private Thread hiloCliente;
     private DoubleLinkedList listaSockets;
 
-    public Client() {
+    public NodeClient() {
         this.socket = null;
         this.entrada = null;
         this.salida = null;
@@ -122,6 +123,7 @@ public class Client extends Thread {
         int funcion=decodificador.Decode();
         switch (funcion){
             case 0:{
+
             }
         }
 
