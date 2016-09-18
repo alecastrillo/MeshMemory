@@ -9,7 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.ce2103.itcr.meshmemory.*;
-import com.ce2103.itcr.meshmemory.memoryblocks.Node;
+import com.ce2103.itcr.meshmemory.datastructures.Node;
+import com.ce2103.itcr.meshmemory.datastructures.NodeMem;
 import com.ce2103.itcr.meshmemory.server.Client;
 
 public class Datos_nodo extends AppCompatActivity {
@@ -104,7 +105,8 @@ public class Datos_nodo extends AppCompatActivity {
                     port=Integer.parseInt(edtxtportmng.getText().toString());
                     bytes=Integer.parseInt(edtxtmem.getText().toString());
                     number=Integer.parseInt(edtnum.getText().toString());
-                    node= new Node(bytes,number);
+                    NodeMem temp=new NodeMem(bytes,number);
+                    node= new Node(temp);
                     cliente.startClient(Datos_nodo.ip,Datos_nodo.port );
                     Intent master= new Intent(v.getContext(),Master.class);
                     startActivityForResult(master,0);

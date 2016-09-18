@@ -30,7 +30,7 @@ public class Master extends AppCompatActivity {
         output.addProperty("funcion","addNode");
         output.addProperty("numero",Datos_nodo.number);
         output.addProperty("bytes",Datos_nodo.bytes);
-        output.addProperty("mode","master");
+        output.addProperty("master",true);
 
         Datos_nodo.cliente.writeData(output.toString());
 

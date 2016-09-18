@@ -5,6 +5,8 @@ package com.ce2103.itcr.meshmemory.server;
  */
 
 import com.ce2103.itcr.meshmemory.datastructures.DoubleLinkedList;
+import com.ce2103.itcr.meshmemory.datastructures.DoublyLinkedList;
+import com.ce2103.itcr.meshmemory.datastructures.NodeMem;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -19,12 +21,12 @@ public class Server extends Thread {
     private int puerto;
     private Thread hiloServer;
     private DoubleLinkedList listaSockets;
-    private DoubleLinkedList listNodes;
+    private DoublyLinkedList listNodes;
     private String metodo="funcion";
 
     public Server() {
         this.listaSockets = new DoubleLinkedList();
-        this.listNodes=new DoubleLinkedList();
+        this.listNodes=new DoublyLinkedList();
         this.socket = null;
         this.entrada = null;
         this.salida = null;
@@ -119,24 +121,6 @@ public class Server extends Thread {
         }
     }
 
-    private void addNodeSocket(NodeSocket nodeSocket) {
-        boolean result = false;
-        if (this.listNodes != null) {
-            for (int s = 0; s < this.listNodes.size(); s++) {
-                if (this.listNodes.get(s).equals(nodeSocket)) {
-                    result = true;
-                    break;
-                }
-            }
-            if (!result) {
-                this.listaSockets.add(nodeSocket);
-            }
-        }
-        else {
-            this.listaSockets.add(nodeSocket);
-        }
-    }
-
     public void readClient(Socket sock, JsonObject mensajeCODE) throws InterruptedException, IOException {
         JsonObject respuestaJSON=new JsonObject();
         Decoder decodicador=new Decoder(mensajeCODE,"cliente");
@@ -181,14 +165,14 @@ public class Server extends Thread {
 
     public int findSpace(int bytes){
         int index=-2;
-        NodeSocket temp;
+        NodeSocket temp;/*
         for(int i=0;i<listNodes.size();i++){
             temp=(NodeSocket) listNodes.get(i);
             if (temp.getBytes()>bytes){
                 index=i;
                 break;
             }
-        }
+        }*/
         return index;
     }
 
@@ -199,8 +183,15 @@ public class Server extends Thread {
         int funcion=decodificador.Decode();
         switch (funcion){
             case 0:{
+                int number=mensajeCODE.get("numero").getAsInt();
+                int bytes=mensajeCODE.get("bytes").getAsInt();
+                boolean master=mensajeCODE.get("master").getAsBoolean();
+                NodeMem newNode=new NodeMem(bytes,number);
+                listNodes.addMem(newNode);
                 respuestaJSON.addProperty("funcion","aceptado");
                 writeData(sock,respuestaJSON.toString());
+            }
+            case 1:{
             }
         }
         /*

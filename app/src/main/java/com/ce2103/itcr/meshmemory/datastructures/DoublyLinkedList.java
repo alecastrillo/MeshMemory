@@ -8,7 +8,7 @@ public class DoublyLinkedList {
     Node head;
     Node tail;
 
-    DoublyLinkedList(){
+    public DoublyLinkedList(){
         this.head = null;
         this.tail = null;
     }
@@ -37,14 +37,15 @@ public class DoublyLinkedList {
 
     }
 
-    void addMem(NodeMem newMem){
+    public void addMem(NodeMem newMem){
         Node newNode = emptySlave();
         if (newNode == null){      //No slave role available
+            newMem.master=true;
             newNode = new Node(newMem);
             newNode.bytes = newMem.totalBytes;
-
             addNode(newNode);                  //empty slave
         }else{
+            newMem.master=false;
             newNode.Slave = newMem;
             addNode(newNode);
         }
