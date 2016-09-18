@@ -17,6 +17,8 @@ public class Datos_nodo extends AppCompatActivity {
     public static int port;
     public static Node node;
     public static Client cliente= new Client();
+    public static int number;
+    public static int bytes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,9 +102,9 @@ public class Datos_nodo extends AppCompatActivity {
                 else{
                     ip=edtxtipmng.getText().toString();
                     port=Integer.parseInt(edtxtportmng.getText().toString());
-                    int bytes=Integer.parseInt(edtxtmem.getText().toString());
-                    int num=Integer.parseInt(edtnum.getText().toString());
-                    node= new Node(bytes,num);
+                    bytes=Integer.parseInt(edtxtmem.getText().toString());
+                    number=Integer.parseInt(edtnum.getText().toString());
+                    node= new Node(bytes,number);
                     cliente.startClient(Datos_nodo.ip,Datos_nodo.port );
                     Intent master= new Intent(v.getContext(),Master.class);
                     startActivityForResult(master,0);

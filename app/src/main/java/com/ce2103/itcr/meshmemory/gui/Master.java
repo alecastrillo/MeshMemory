@@ -25,11 +25,12 @@ public class Master extends AppCompatActivity {
         ipTEXT.setText(Datos_nodo.ip); //Ajusto el ip al que estoy conectado
         Toast.makeText(Master.this, "Connecting to the manager "+Datos_nodo.ip, Toast.LENGTH_SHORT).show();
 
-
         JsonObject output=new JsonObject();
         output.addProperty("remitente","nodo");
         output.addProperty("funcion","addNode");
-        output.addProperty("bytes",Datos_nodo.node.getTotalMem());
+        output.addProperty("numero",Datos_nodo.number);
+        output.addProperty("bytes",Datos_nodo.bytes);
+        output.addProperty("mode","master");
 
         Datos_nodo.cliente.writeData(output.toString());
 
