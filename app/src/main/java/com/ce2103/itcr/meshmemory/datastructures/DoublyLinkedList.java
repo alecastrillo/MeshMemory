@@ -3,6 +3,7 @@ package com.ce2103.itcr.meshmemory.datastructures;
 /**
  * Created by alecm on 17/09/16.
  */
+
 public class DoublyLinkedList {
     Node head;
     Node tail;
@@ -23,7 +24,7 @@ public class DoublyLinkedList {
                 return null;
             }
         }
-        for(current=head; current==tail; current=current.next){
+        for(current=head; current!=tail; current=current.next){
             if(current.Slave == null){
                 return current;
             }
@@ -125,7 +126,7 @@ public class DoublyLinkedList {
 
     int getTotalBytes(){
         int bytes = 0;
-        for(Node current = head; current == tail; current = current.next){
+        for(Node current = head; current != tail; current = current.next){
             bytes+= current.getTotalBytes();
         }
         if(head!=null && head ==tail){
@@ -136,7 +137,7 @@ public class DoublyLinkedList {
 
     int getAvailableBytes(){
         int availableBytes=0;
-        for(Node current = head; current == tail; current = current.next){
+        for(Node current = head; current != tail; current = current.next){
             availableBytes += current.getBytesAvailable();
         }
         if(head!=null && head ==tail){
@@ -147,7 +148,7 @@ public class DoublyLinkedList {
 
     int getOccupiedBytes(){
         int occupiedBytes=0;
-        for(Node current = head; current == tail; current = current.next){
+        for(Node current = head; current != tail; current = current.next){
             occupiedBytes += current.getBytesOccupied();
         }
         if(head!=null && head ==tail){
@@ -166,9 +167,9 @@ public class DoublyLinkedList {
             return null;
         }
 
-        for(Node current = head; current == tail; current = current.next){
+        for(Node current = head; current != tail; current = current.next){
             String currentNodeArray[] = current.getBytesArray();
-            for(int i=0; i==current.bytes; i++){
+            for(int i=0; i<current.bytes; i++){
                 bytesArray[currentByte] = currentNodeArray[i];
                 currentByte++;
             }

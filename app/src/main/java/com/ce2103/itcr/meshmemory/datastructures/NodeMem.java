@@ -10,8 +10,6 @@ public class NodeMem {
     int bytesAvailable;
     boolean master;
 
-
-
     NodeMem(){
 
     }
