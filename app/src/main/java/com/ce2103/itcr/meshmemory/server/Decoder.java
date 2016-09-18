@@ -12,6 +12,7 @@ public class Decoder {
     String sender;
     public Decoder(JsonObject mensajeCODE, String sender){
         this.msgCODE=mensajeCODE;
+        this.sender=sender;
     }
     public int Decode(){
         int value =-2;

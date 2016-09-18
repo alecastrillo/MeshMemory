@@ -37,10 +37,12 @@ public class Client extends Thread {
             @Override
             public void run() {
                 try {
-                    socket = new Socket(host, puerto);
-                    System.out.println("Conectado a: "+socket.toString());
-                    AgregarSocket(socket);
-                    readData(socket);
+                    if (socket==null) {
+                        socket = new Socket(host, puerto);
+                        System.out.println("Conectado a: " + socket.toString());
+                        AgregarSocket(socket);
+                        readData(socket);
+                    }
                 } catch (UnknownHostException ue) {} catch (IOException ie) {}
             }
         });
@@ -81,7 +83,7 @@ public class Client extends Thread {
                         System.out.println("Enviado: "+dato);
                     }
                 }catch(Exception ex){
-
+                    System.out.println("ERROR");
                 }
             }
         });

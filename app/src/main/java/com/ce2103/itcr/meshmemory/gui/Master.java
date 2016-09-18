@@ -17,7 +17,6 @@ import com.google.gson.JsonObject;
 import java.io.IOException;
 
 public class Master extends AppCompatActivity {
-    public Client cliente= new Client();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,13 +25,13 @@ public class Master extends AppCompatActivity {
         ipTEXT.setText(Datos_nodo.ip); //Ajusto el ip al que estoy conectado
         Toast.makeText(Master.this, "Connecting to the manager "+Datos_nodo.ip, Toast.LENGTH_SHORT).show();
 
-        cliente.startClient(Datos_nodo.ip,Datos_nodo.port );
+
         JsonObject output=new JsonObject();
-        output.addProperty("remitente","node");
+        output.addProperty("remitente","nodo");
         output.addProperty("funcion","addNode");
         output.addProperty("bytes",Datos_nodo.node.getTotalMem());
-        System.out.println("1");
-        cliente.writeData(output.toString());
+
+        Datos_nodo.cliente.writeData(output.toString());
 
         Button btnmemp=(Button)findViewById(R.id.btnmpmem);
         btnmemp.setOnClickListener(new View.OnClickListener() {

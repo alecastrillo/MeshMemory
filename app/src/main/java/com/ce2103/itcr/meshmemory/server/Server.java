@@ -41,7 +41,7 @@ public class Server extends Thread {
                 public void run() {
                     while (true){
                         try {
-                            socket =servidor.accept();
+                            socket = servidor.accept();
                             AgregarSocket(socket);
                             System.out.println("Nuevo cliente conectado: "+String.valueOf(socket));
                             readData(socket);
@@ -69,7 +69,7 @@ public class Server extends Thread {
                             String remitente = mensajeCODE.get("remitente").getAsString();
                             if (remitente.equals("cliente")) {
                                 readClient(sock, mensajeCODE);
-                            } else if (remitente.equals("node")) {
+                            } else if (remitente.equals("nodo")) {
                                 readNode(sock,mensajeCODE);
                             }
                         }
@@ -203,7 +203,8 @@ public class Server extends Thread {
         int funcion=decodificador.Decode();
         switch (funcion){
             case 0:{
-                respuestaJSON.addProperty("respuesta","aceptado");
+                respuestaJSON.addProperty("remitente","server");
+                respuestaJSON.addProperty("funcion","aceptado");
                 writeData(sock,respuestaJSON.toString());
             }
         }

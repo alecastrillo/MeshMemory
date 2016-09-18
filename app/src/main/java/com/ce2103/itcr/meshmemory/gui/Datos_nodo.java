@@ -10,11 +10,13 @@ import android.widget.EditText;
 
 import com.ce2103.itcr.meshmemory.*;
 import com.ce2103.itcr.meshmemory.memoryblocks.Node;
+import com.ce2103.itcr.meshmemory.server.Client;
 
 public class Datos_nodo extends AppCompatActivity {
     public static String ip;
     public static int port;
     public static Node node;
+    public static Client cliente= new Client();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +103,7 @@ public class Datos_nodo extends AppCompatActivity {
                     int bytes=Integer.parseInt(edtxtmem.getText().toString());
                     int num=Integer.parseInt(edtnum.getText().toString());
                     node= new Node(bytes,num);
+                    cliente.startClient(Datos_nodo.ip,Datos_nodo.port );
                     Intent master= new Intent(v.getContext(),Master.class);
                     startActivityForResult(master,0);
 
