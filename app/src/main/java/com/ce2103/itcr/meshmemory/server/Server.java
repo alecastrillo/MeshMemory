@@ -146,6 +146,7 @@ public class Server extends Thread {
     public void readClient(Socket sock, JsonObject mensajeCODE) throws InterruptedException, IOException {
         JsonObject respuestaJSON=new JsonObject();
         Decoder decodicador=new Decoder(mensajeCODE,"cliente");
+        respuestaJSON.addProperty("remitente","server");
         int funcion=decodicador.Decode();
         switch (funcion){
             case 0:{
@@ -200,10 +201,10 @@ public class Server extends Thread {
     public void readNode(Socket sock, JsonObject mensajeCODE ){
         JsonObject respuestaJSON=new JsonObject();
         Decoder decodificador=new Decoder(mensajeCODE,"nodo");
+        respuestaJSON.addProperty("remitente","server");
         int funcion=decodificador.Decode();
         switch (funcion){
             case 0:{
-                respuestaJSON.addProperty("remitente","server");
                 respuestaJSON.addProperty("funcion","aceptado");
                 writeData(sock,respuestaJSON.toString());
             }
