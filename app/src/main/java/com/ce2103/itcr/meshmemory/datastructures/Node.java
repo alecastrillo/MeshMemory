@@ -13,7 +13,7 @@ public class Node {
     int bytesAvailable;
     String memoryBlock[];
 
-    Node(NodeMem newMem){
+    public Node(NodeMem newMem){
         this.master = newMem;
         this.Slave = null;
         this.prev = null;
@@ -26,19 +26,19 @@ public class Node {
         }
     }
 
-    int getTotalBytes(){
+    public int getTotalBytes(){
         return bytes;
     }
 
-    int getBytesAvailable(){
+    public int getBytesAvailable(){
         return this.master.bytesAvailable;
     }
 
-    int getBytesOccupied(){
+    public int getBytesOccupied(){
         return this.master.totalBytes - this.master.bytesAvailable;
     }
 
-    String[] getBytesArray(){
+    public String[] getBytesArray(){
         return this.memoryBlock;
     }
 

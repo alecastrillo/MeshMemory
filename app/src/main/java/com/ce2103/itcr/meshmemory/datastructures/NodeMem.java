@@ -10,16 +10,13 @@ public class NodeMem {
     int bytesAvailable;
     boolean master;
 
-    NodeMem(){
+    public NodeMem(){}
 
-    }
-
-    NodeMem(int pBytes, int pPhoneNum){
+    public NodeMem(int pBytes, int pPhoneNum){
         this.master = true;
         this.phoneNum = pPhoneNum;
         this.totalBytes = pBytes;
         this.bytesAvailable = pBytes;
         this.occuBytes = 0;
-
     }
 }
