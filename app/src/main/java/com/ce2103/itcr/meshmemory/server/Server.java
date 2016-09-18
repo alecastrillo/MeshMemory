@@ -95,9 +95,9 @@ public class Server extends Thread {
         escribir_hilo.start();
     }
 
-    public void close(){
+    public void close(Socket sock){
         try {
-            this.socket.close();
+            sock.close();
         } catch (IOException ioe) {ioe.printStackTrace();}
     }
 
