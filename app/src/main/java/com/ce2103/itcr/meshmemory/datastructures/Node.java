@@ -5,13 +5,13 @@ package com.ce2103.itcr.meshmemory.datastructures;
  */
 
 public class Node {
-    NodeMem master;
-    NodeMem Slave;
-    Node next;
-    Node prev;
-    int bytes;
-    int bytesAvailable;
-    String memoryBlock[];
+    public NodeMem master;
+    public NodeMem Slave;
+    public Node next;
+    public Node prev;
+    public int bytes;
+    public int bytesAvailable;
+    public String memoryBlock[];
 
     public Node(NodeMem newMem){
         this.master = newMem;
