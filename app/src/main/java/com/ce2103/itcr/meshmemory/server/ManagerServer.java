@@ -77,9 +77,9 @@ public class ManagerServer extends Thread {
                     entrada =new BufferedReader(new InputStreamReader(sock.getInputStream()));
                     while(true){
                         String mensaje= entrada.readLine();
-                        System.out.println("Recibido: " + mensaje);
                         log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+"Recibido: " + mensaje+"\n";
                         if (mensaje!=null){
+                            System.out.println("Recibido: " + mensaje);
                             JsonParser parser = new JsonParser();
                             JsonObject mensajeCODE = parser.parse(mensaje).getAsJsonObject();
                             String remitente = mensajeCODE.get("remitente").getAsString();
