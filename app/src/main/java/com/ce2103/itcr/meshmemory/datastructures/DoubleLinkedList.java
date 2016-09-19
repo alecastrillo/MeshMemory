@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 /**
  * Created by estape11 on 10/09/16.
  */
+
 public class DoubleLinkedList {
     private class Nodo {
         Object dato;
