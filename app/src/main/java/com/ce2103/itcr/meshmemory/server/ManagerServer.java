@@ -50,6 +50,7 @@ public class ManagerServer extends Thread {
         try {
             servidor = new ServerSocket(puerto);
             System.out.println("Servidor iniciado");
+            log+=DateFormat.getDateTimeInstance().format(new Date())+"-> Servidor iniciado...";
             this.hiloServer = new Thread(new Runnable() {
                 public void run() {
                     while (true){
@@ -138,8 +139,8 @@ public class ManagerServer extends Thread {
 
     public void readClient(Socket sock, JsonObject mensajeCODE) throws InterruptedException, IOException {
         JsonObject respuestaJSON=new JsonObject();
-        Decoder decodicador=new Decoder(mensajeCODE,"cliente");
         respuestaJSON.addProperty("remitente","server");
+        Decoder decodicador=new Decoder(mensajeCODE,"cliente");
         Token genTok=new Token();
         int funcion=decodicador.Decode();
         switch (funcion){
@@ -160,14 +161,17 @@ public class ManagerServer extends Thread {
                     int type=mensajeCODE.get("type").getAsInt();
                     Object[] array=listNodes.nodesBytesAvailable(bytes,uuid);
                     if (array!=null){
-                        for(int i=0;i<array.length;i+=2){
+                        for(int i=0;i<array.length;i+=2){//Distribuye la memoria
                             JsonObject mensajeNode=new JsonObject();
+                            mensajeNode.addProperty("remitente","server");
                             mensajeNode.addProperty("funcion","xMalloc");
                             mensajeNode.addProperty("bytes",(int) array[i]);
                             mensajeNode.addProperty("UUID",uuid);
                             mensajeNode.addProperty("type",type);
                             writeData(((Node) array[i+1]).master.socket,mensajeNode.toString());
                         }
+                        mensajeCODE.addProperty("UUID",uuid);
+                        writeData(socketCliente,mensajeCODE.toString());
                     }
                     else{
                         genError(mensajeCODE,sock,3);
