@@ -164,7 +164,7 @@ public class ManagerServer extends Thread {
         */
 
     }
-
+    /*
     public int findSpace(int bytes){
         int index=-2;
         NodeSocket temp;/*
@@ -174,10 +174,10 @@ public class ManagerServer extends Thread {
                 index=i;
                 break;
             }
-        }*/
+        }
         return index;
     }
-
+    */
     public void readNode(Socket sock, JsonObject mensajeCODE ){
         JsonObject respuestaJSON=new JsonObject();
         Decoder decodificador=new Decoder(mensajeCODE,"nodo");
@@ -188,7 +188,7 @@ public class ManagerServer extends Thread {
                 int number=mensajeCODE.get("numero").getAsInt();
                 int bytes=mensajeCODE.get("bytes").getAsInt();
                 boolean master=mensajeCODE.get("master").getAsBoolean();
-                NodeMem newNode=new NodeMem(bytes,number, sock);
+                NodeMem newNode=new NodeMem(bytes,number,sock);
                 listNodes.addMem(newNode);
                 respuestaJSON.addProperty("funcion","aceptado");
                 writeData(sock,respuestaJSON.toString());

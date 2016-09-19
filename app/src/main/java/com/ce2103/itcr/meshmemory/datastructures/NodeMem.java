@@ -12,7 +12,6 @@ public class NodeMem {
     int bytesAvailable;
     boolean master;
     Socket socket;
-
     public NodeMem(){}
 
     public NodeMem(int pBytes, int pPhoneNum, Socket socket){

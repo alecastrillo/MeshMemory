@@ -18,7 +18,6 @@ public class Node {
     private int numTel;
     private DoubleLinkedList memList;
     private boolean master;
-
     public Node(int totalMem,int numTel){
         this.totalMem=totalMem;
         this.empyMem=totalMem;
