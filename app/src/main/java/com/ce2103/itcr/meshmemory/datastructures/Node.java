@@ -26,6 +26,15 @@ public class Node {
         }
     }
 
+    boolean ownerUUID(String UUID){
+        for(int i=0; i<bytes; i++){
+            if (memoryBlock[i]==UUID){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public int getTotalBytes(){
         return bytes;
     }

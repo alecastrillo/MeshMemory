@@ -181,9 +181,27 @@ public class DoublyLinkedList {
         }
 
         return bytesArray;
-
     }
 
+    NodeMem ownerOfUUID(String UUID){
+        if(head==null){
+            return null;
+        }
+        if(head==tail){
+            if(head.ownerUUID(UUID)){
+                return head.master;
+            }
+        }
+        for(Node current = head; current!=tail; current=current.next){
+            if (current.ownerUUID(UUID)){
+                return  current.master;
+            }
+        }
+        if (tail.ownerUUID(UUID)){
+            return tail.master;
+        }
+        return null;
+    }
 }
 
 

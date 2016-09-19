@@ -23,4 +23,6 @@ public class NodeMem {
         this.occuBytes = 0;
         this.socket = socket;
     }
+
+
 }
