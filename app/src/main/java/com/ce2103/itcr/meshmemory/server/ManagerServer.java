@@ -140,6 +140,7 @@ public class ManagerServer extends Thread {
             }
             case 1:{//xMalloc
                 String uuid = UUID.randomUUID().toString(); //genero el UUID para el espacio de memoria
+                //busco el espacio disponible
             }
             case 2:{//desreferencia
             }

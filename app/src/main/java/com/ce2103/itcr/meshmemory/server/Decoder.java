@@ -8,8 +8,8 @@ import java.net.Socket;
  * Created by estape11 on 17/09/16.
  */
 public class Decoder {
-    JsonObject msgCODE;
-    String sender;
+    private JsonObject msgCODE;
+    private String sender;
 
     public Decoder(JsonObject mensajeCODE, String sender){
         this.msgCODE=mensajeCODE;
@@ -71,4 +71,5 @@ public class Decoder {
         }
         return value;
     }
+
 }
