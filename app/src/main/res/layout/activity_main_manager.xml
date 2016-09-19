@@ -87,4 +87,14 @@
         android:textStyle="bold|italic"
         android:layout_alignParentBottom="true"
         android:layout_toEndOf="@+id/textView3" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/error_logs"
+        android:id="@+id/buttonLog"
+        android:layout_above="@+id/textView3"
+        android:layout_centerHorizontal="true"
+        android:textStyle="italic"
+        android:textSize="20dp" />
 </RelativeLayout>

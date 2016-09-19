@@ -23,5 +23,24 @@ public class NodeMem {
         this.socket = socket;
     }
 
+    public int getPhoneNum() {
+        return phoneNum;
+    }
+
+    public int getTotalBytes() {
+        return totalBytes;
+    }
+
+    public int getOccuBytes() {
+        return occuBytes;
+    }
+
+    public int getBytesAvailable() {
+        return bytesAvailable;
+    }
+
+    public Socket getSocket() {
+        return socket;
+    }
 
 }

@@ -55,7 +55,7 @@ public class Decoder {
             value=0;
         }
         else if(funcion.equals("desreferecia")) {
-            value = 1;
+            value=1;
         }
         else if(funcion.equals("asignar")){
             value=2;
@@ -68,6 +68,9 @@ public class Decoder {
         int value=-2;
         if(funcion.equals("addNode")){
             value=0;
+        }
+        else if(funcion.equals("desreferencia")){
+            value=1;
         }
         return value;
     }

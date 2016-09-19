@@ -126,6 +126,7 @@ public class NodeClient extends Thread {
 
     public void readServer(JsonObject mensajeCODE){
         JsonObject respuestaJSON=new JsonObject();
+        respuestaJSON.addProperty("remitente","nodo");
         Decoder decodificador=new Decoder(mensajeCODE,"server");
         int funcion=decodificador.Decode();
         switch (funcion){
@@ -134,10 +135,21 @@ public class NodeClient extends Thread {
                 int type=mensajeCODE.get("type").getAsInt();
                 String uuid=mensajeCODE.get("UUID").getAsString();
                 nodo.allocMem(type,bytes,uuid);
+                break;
             }
             case 1:{//desreferencia
+                String uuid=mensajeCODE.get("UUID").getAsString();
+                String value=nodo.getData(uuid);
+                respuestaJSON.addProperty("funcion","desreferencia");
+                respuestaJSON.addProperty("value",value);
+                writeData(respuestaJSON.toString());
+                break;
             }
             case 2:{//asignar
+                String uuid=mensajeCODE.get("UUID").getAsString();
+                String value=mensajeCODE.get("value").getAsString();
+                nodo.assignData(uuid,value);
+                break;
             }
         }
 

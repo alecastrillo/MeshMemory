@@ -14,7 +14,7 @@ import com.ce2103.itcr.meshmemory.server.ManagerServer;
 import com.ce2103.itcr.meshmemory.server.Utils;
 
 public class Manager extends AppCompatActivity {
-    public ManagerServer servidor= new ManagerServer();
+    public static ManagerServer servidor= new ManagerServer();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

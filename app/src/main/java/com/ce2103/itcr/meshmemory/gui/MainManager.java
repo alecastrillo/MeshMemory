@@ -61,5 +61,14 @@ public class MainManager extends AppCompatActivity {
                 startActivityForResult(garbcol,0);
             }
         });
+
+        Button btnerror=(Button)findViewById(R.id.buttonLog);
+        btnerror.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent error=new Intent(v.getContext(),Error_logs.class);
+                startActivityForResult(error,0);
+            }
+        });
     }
 }

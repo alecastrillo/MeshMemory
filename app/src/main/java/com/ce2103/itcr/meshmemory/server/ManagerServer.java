@@ -12,6 +12,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.io.*;
 import java.net.*;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 public class ManagerServer extends Thread {
@@ -26,6 +28,7 @@ public class ManagerServer extends Thread {
     private DoublyLinkedList listNodes;
     private DoubleLinkedList listTokens;
     private String metodo="funcion";
+    private String log; //log de los procesos
 
     public ManagerServer() {
         this.listaSockets = new DoubleLinkedList();
@@ -36,6 +39,7 @@ public class ManagerServer extends Thread {
         this.salida = null;
         this.servidor = null;
         this.hiloServer = null;
+        this.log="";
     }
 
     public void startServer(int puerto) {
@@ -50,6 +54,7 @@ public class ManagerServer extends Thread {
                             socket = servidor.accept();
                             AgregarSocket(socket);
                             System.out.println("Nuevo cliente conectado: "+String.valueOf(socket));
+                            log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+"Nuevo cliente conectado: "+String.valueOf(socket)+"\n";
                             readData(socket);
                         } catch (Exception e) {continue;}
                     }
@@ -57,7 +62,7 @@ public class ManagerServer extends Thread {
             });
             hiloServer.start();
         } catch (Exception e) {
-            e.printStackTrace();
+            log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+"Error "+e.getMessage()+"\n";
         }
     }
 
@@ -69,7 +74,8 @@ public class ManagerServer extends Thread {
                     while(true){
                         String mensaje= entrada.readLine();
                         System.out.println("Recibido: " + mensaje);
-                        if (mensaje!=null) {
+                        log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+"Recibido: " + mensaje+"\n";
+                        if (mensaje!=null){
                             JsonParser parser = new JsonParser();
                             JsonObject mensajeCODE = parser.parse(mensaje).getAsJsonObject();
                             String remitente = mensajeCODE.get("remitente").getAsString();
@@ -80,7 +86,8 @@ public class ManagerServer extends Thread {
                             }
                         }
                     }
-                } catch (IOException io) {io.printStackTrace();} catch (InterruptedException ie) {ie.printStackTrace();}
+                } catch (IOException io) {log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+"Error "+io.getMessage()+"\n";}
+                  catch (InterruptedException ie) {log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+"Error "+ie.getMessage()+"\n";}
             }
         });
         leer_hilo.start();
@@ -94,8 +101,9 @@ public class ManagerServer extends Thread {
                         salida = new PrintWriter(socket.getOutputStream(),true);
                         salida.println(dato);
                         System.out.println("Enviado: "+dato);
+                        log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+"Enviado: "+dato+"\n";
                     }
-                }catch(Exception ex){ex.printStackTrace();}
+                }catch(Exception ex){log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+"Error "+ex.getMessage()+"\n";}
             }
         });
         escribir_hilo.start();
@@ -138,12 +146,21 @@ public class ManagerServer extends Thread {
                 listTokens.add(token);
                 respuestaJSON.addProperty("token",token);
                 writeData(socket,respuestaJSON.toString());
+                break;
             }
             case 1:{//xMalloc
                 String uuid = UUID.randomUUID().toString(); //genero el UUID para el espacio de memoria
                 //busco el espacio disponible
+                break;
             }
             case 2:{//desreferencia
+                String uuid=mensajeCODE.get("UUID").getAsString();
+                String value=mensajeCODE.get("value").getAsString();
+                Socket tempSock=listNodes.ownerOfUUID(uuid).getSocket();
+                respuestaJSON.addProperty("funcion","asignar");
+                respuestaJSON.addProperty("value",value);
+                writeData(tempSock,respuestaJSON.toString());
+                break;
             }
             case 3:{//asignar
             }
@@ -152,10 +169,10 @@ public class ManagerServer extends Thread {
 
     public void readNode(Socket sock, JsonObject mensajeCODE ){
         JsonObject respuestaJSON=new JsonObject();
-        Decoder decodificador=new Decoder(mensajeCODE,"nodo");
         respuestaJSON.addProperty("remitente","server");
+        Decoder decodificador=new Decoder(mensajeCODE,"nodo");
         int funcion=decodificador.Decode();
-        switch (funcion){
+        switch(funcion){
             case 0:{ //addNode
                 int number=mensajeCODE.get("numero").getAsInt();
                 int bytes=mensajeCODE.get("bytes").getAsInt();
@@ -164,9 +181,17 @@ public class ManagerServer extends Thread {
                 listNodes.addMem(newNode);
                 respuestaJSON.addProperty("funcion","aceptado");
                 writeData(sock,respuestaJSON.toString());
+                break;
             }
-            case 1:{
+            case 1:{ //desreferencia (devuelvo el valor)
+                String value=mensajeCODE.get("value").getAsString();
+                mensajeCODE.addProperty("funcion","desreferencia");
+                mensajeCODE.addProperty("value",value);
+                writeData(socketCliente,mensajeCODE.toString()); //Se lo envio al cliente
+                break;
             }
         }
     }
+
+    public String getLog(){return this.log;}
 }

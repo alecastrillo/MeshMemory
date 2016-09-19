@@ -47,26 +47,6 @@ public class Node {
 
     public void allocMem(int type,int bytes, String uuid){// aparta la memoria para usarla despues
         JsonObject memBlock=new JsonObject();
-        /*
-        switch (type){
-            case 0: {
-                memBlock.addProperty("type", "int");
-            }
-            case 1: {
-                memBlock.addProperty("type","long");
-            }
-            case 2: {
-                memBlock.addProperty("type","float");
-            }
-            case 3: {
-                memBlock.addProperty("type","string");
-            }
-            case 4: {
-                memBlock.addProperty("type","char");
-            }
-        }
-        */
-        //String uuid = UUID.randomUUID().toString();
         memBlock.addProperty("type",type);
         memBlock.addProperty("bytes",bytes);
         memBlock.addProperty("UUID", uuid);
@@ -93,10 +73,13 @@ public class Node {
         this.freeMem +=tofree;
     }
 
-    public void getData(String UUID){
-        JsonObject value;
-        value=(JsonObject) memList.get(findIndex(UUID));
-        String type=value.get("type").getAsString();
+    public String getData(String UUID) {
+        JsonObject temp;
+        temp = (JsonObject) memList.get(findIndex(UUID));
+        String value = temp.get("value").getAsString();
+        return value;
+    }
+        /*
         switch (type){
             case "int": {
                 getAsInt(UUID);
@@ -161,4 +144,5 @@ public class Node {
         return master;
     }
     public int getUsedMem() {return usedMem;}
+    */
 }

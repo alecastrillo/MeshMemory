@@ -7,18 +7,23 @@ import java.io.UnsupportedEncodingException;
  */
 public class Token {
 
-    public boolean verifyToken(String token){
+    public boolean verifyToken(String token) throws UnsupportedEncodingException {
         //Verifies if the token exists and if it hasn't expired
-        /* //Convierte de base64 a string
-        byte[] data = Base64.decode(base64, Base64.DEFAULT);
+        //Convierte de base64 a string
+        boolean value=false;
+        byte[] data = Base64.decode(token, Base64.DEFAULT);
         String text = new String(data, "UTF-8");
-        */
-        return false;
+        long time=System.currentTimeMillis();
+        if((time-Long.parseLong(text))<600000){ //Verifica que el token tenga menos de 10 minutos
+            value=true;
+        }
+        return value;
     }
 
     public String genToken() throws UnsupportedEncodingException {
         //Generates and saves token
-        String tok="";
+        long time=System.currentTimeMillis();
+        String tok=String.valueOf(time);
         //Convierte de string a base 64;
         byte[] data = tok.getBytes("UTF-8");
         String token = Base64.encodeToString(data, Base64.DEFAULT);
