@@ -10,12 +10,16 @@ public class DoublyLinkedList {
     Node head;
     Node tail;
 
-    DoublyLinkedList(){
+    public DoublyLinkedList(){
         this.head = null;
         this.tail = null;
     }
 
-    Node emptySlave(){
+    /**
+     * Determines if there is a node without a slave in the list
+     * @return The node without slave of null if there isn't a node without a slave
+     */
+    public Node emptySlave(){
         Node current;
         if(this.head == null){
             return null;
@@ -39,22 +43,49 @@ public class DoublyLinkedList {
 
     }
 
-    void addMem(NodeMem newMem){
+    /**
+     * Adds a Member to the list, it will be a slave if there is a node
+     * without a slave, or master i there is no slave role available.
+     * @param newMem
+     */
+    public void addMem(NodeMem newMem){
         Node newNode = emptySlave();
         if (newNode == null){      //No slave role available
+            newMem.master=true;
             newMem.master = true;
             newNode = new Node(newMem);
             newNode.bytes = newMem.totalBytes;
-
             addNode(newNode);                  //empty slave
+            System.out.println("Node Member created as a Master");
         }else{
+            newMem.master = false;
             newMem.master=false;
             newNode.Slave = newMem;
-            addNode(newNode);
+            if(newNode.prev==null){
+                if (newNode.next==null){
+                    head = newNode;
+                    tail = newNode;
+                }else{
+                    newNode.next.prev = newNode;
+                    head = newNode;
+                }
+            }else if(newNode.next==null){
+                newNode.prev.next = newNode;
+                tail = newNode;
+            }else{
+                newNode.prev.next = newNode;
+                newNode.next.prev = newNode;
+            }
+            System.out.println("Node Member created as a Slave");
         }
+
     }
 
-    void addNode(Node newNode){
+    /**
+     * Adds a node as the tail of the list
+     * @param newNode
+     */
+    public void addNode(Node newNode){
         if(this.head == null){
             this.head = newNode;
             this.head.next = null;
@@ -73,10 +104,14 @@ public class DoublyLinkedList {
             this.tail.next = newNode;
             this.tail = newNode;
         }
+        System.out.println("Node added to the list");
 
     }
 
-    void deleteNode(Node pNode){
+    /**
+     * @param pNode
+     */
+    public void deleteNode(Node pNode){
         if(this.head==pNode) {
             if (this.tail == this.head) {
                 this.head = null;
@@ -105,7 +140,14 @@ public class DoublyLinkedList {
 
     }
 
-    void delNodeMem(Node pNodeofMem, boolean master){
+    /**
+     * Deletes a member of the node, if the member deleted is a master
+     * then the member left (the slave) will be the new master of the
+     * node.
+     * @param pNodeofMem
+     * @param master
+     */
+    public void delNodeMem(Node pNodeofMem, boolean master){
         if (master) {
             if (pNodeofMem.Slave == null) {
                 deleteNode(pNodeofMem);
@@ -128,7 +170,10 @@ public class DoublyLinkedList {
         }
     }
 
-    int getTotalBytes(){
+    /**
+     * @return Total bytes of the list (bytes given by the nodes)
+     */
+    public int getTotalBytes(){
         int bytes = 0;
         for(Node current = head; current != tail; current = current.next){
             bytes+= current.getTotalBytes();
@@ -139,7 +184,10 @@ public class DoublyLinkedList {
         return bytes + tail.getTotalBytes();
     }
 
-    int getAvailableBytes(){
+    /**
+     * @return Amount of bytes available in the list
+     */
+    public int getAvailableBytes(){
         int availableBytes=0;
         for(Node current = head; current != tail; current = current.next){
             availableBytes += current.getBytesAvailable();
@@ -150,7 +198,10 @@ public class DoublyLinkedList {
         return availableBytes + tail.getBytesAvailable();
     }
 
-    int getOccupiedBytes(){
+    /**
+     * @return Amount of bytes occupied of the list
+     */
+    public int getOccupiedBytes(){
         int occupiedBytes=0;
         for(Node current = head; current != tail; current = current.next){
             occupiedBytes += current.getBytesOccupied();
@@ -161,16 +212,21 @@ public class DoublyLinkedList {
         return occupiedBytes + tail.getBytesOccupied();
     }
 
-//mnhbgvfcdx
-    String[] getBytesArray(){
+    /**
+     * Makes a String array with the size of the total amount of bytes
+     * in the list, each element of the array will contain one of two
+     * options:
+     *   - "Available"
+     *   - "Token; UUID" : token of the client who it belongs and the UUID related to the data
+     * @return
+     */
+    public String[] getBytesArray(){
         int totalBytes = getTotalBytes();
         int currentByte = 0;
         String bytesArray[] = new String[totalBytes];
-
         if (totalBytes == 0){
             return null;
         }
-
         for(Node current = head; current != tail; current = current.next){
             String currentNodeArray[] = current.getBytesArray();
             for(int i=0; i<current.bytes; i++){
@@ -178,13 +234,165 @@ public class DoublyLinkedList {
                 currentByte++;
             }
         }
-
         if(head==tail){
             bytesArray = head.getBytesArray();
         }
-
         return bytesArray;
+    }
 
+    /**
+     * Search for the node that contains the data
+     * with the UUID taken as parameter
+     * @param UUID
+     * @return
+     */
+    public NodeMem ownerOfUUID(String UUID){
+        if(head==null){
+            return null;
+        }
+        if(head==tail){
+            if(head.ownerUUID(UUID)){
+                return head.master;
+            }
+        }
+        for(Node current = head; current!=tail; current=current.next){
+            if (current.ownerUUID(UUID)){
+                return  current.master;
+            }
+        }
+        if (tail.ownerUUID(UUID)){
+            return tail.master;
+        }
+        return null;
+    }
+
+
+
+    /**
+     * Search for a node with the amount of bytes available
+     * defined as parameter.
+     * @param bytes
+     * @return
+     */
+    public Node nodeBytesAvailable(int bytes){
+        for(Node current = head; current != tail; current=current.next){
+            if(current.getBytesAvailable()>=bytes){
+                return current;
+            }
+        }
+        if(tail.getBytesAvailable()>=bytes){
+            return tail;
+        }
+        return null;
+    }
+
+    /**
+     * @return AMount of nodes in the list
+     */
+    public int amountOfNodes(){
+        int count=0;
+        for(Node current=head; current!=null; current=current.next){
+            count++;
+        }
+        return count;
+    }
+
+    /**
+     * Creates an array with the size of twice the amount
+     * of nodes of the list, each node is related to two
+     * elements of the array, the first element will contain the
+     * amount of bytes that the node will provide to save
+     * the data, the second one contains the node. For example:
+     * if the list has only three nodes:
+     *     returns {2,head,5,tail}
+     *     The first node is the head and it will provide 2 bytes
+     *     The second node provides 5bytes
+     * @param pBytes
+     * @return Array
+     */
+    //Estebitan
+    public Object[] nodesBytesAvailable(int pBytes, String UUID){
+        if (pBytes<=0){
+            return null;
+        }
+        if (getAvailableBytes()<pBytes){
+            return null;
+        }
+        Object[] nodes;
+        Node node = nodeBytesAvailable(pBytes);
+        if(node!=null){
+            nodes = new Object[2];
+            nodes[0]=pBytes;
+            nodes[1]=node;
+            saveUUIDinNodeBytesArray(pBytes, (Node)nodes[1], UUID);
+            return nodes;
+        }
+        int nodesGivingBytes=0;
+        int indexBeingFilled=0;
+        int bytesFilled=0;
+        nodes = new Object[amountOfNodes()*2];
+        for(Node current=head; current!=null; current=current.next){
+            if(bytesFilled==pBytes){
+                nodes[indexBeingFilled] = null;
+                nodes[indexBeingFilled+1]=null;
+                indexBeingFilled+=2;
+            }else if(current.getBytesAvailable()==0){
+                nodes[indexBeingFilled]=null;
+                nodes[indexBeingFilled+1]=null;
+                indexBeingFilled+=2;
+            }else{
+                int x=current.getBytesAvailable();
+                if(x <= pBytes-bytesFilled){
+                    nodes[indexBeingFilled]=x;
+                    nodes[indexBeingFilled+1]=current;
+                    bytesFilled+= x;
+                    nodesGivingBytes++;
+                    indexBeingFilled+=2;
+                }else if(x > pBytes-bytesFilled){
+                    nodes[indexBeingFilled]=pBytes-bytesFilled;
+                    nodes[indexBeingFilled+1]=current;
+                    bytesFilled+= pBytes-bytesFilled;
+                    nodesGivingBytes++;
+                    indexBeingFilled+=2;
+                }
+            }
+
+        }
+        return saveUUIDinBytes(nodes, nodesGivingBytes, UUID);
+    }
+
+    public Object[] saveUUIDinBytes(Object[] nodesArray, int nodesGivingBytes, String UUID){
+        Object[]array = new Object[nodesGivingBytes*2];
+        int arrayIndex = 0;
+        for(int i=0; i<amountOfNodes()*2;i+=2){
+            if(nodesArray[i]!=null){
+                array[arrayIndex]=nodesArray[i];
+                array[arrayIndex+1]=nodesArray[i+1];
+                arrayIndex+=2;
+            }
+        }
+        for(int i=0; i<nodesGivingBytes*2; i+=2){
+            saveUUIDinNodeBytesArray((int)array[i], (Node)array[i+1], UUID);
+        }
+        return nodesArray;
+
+    }
+
+    public void saveUUIDinNodeBytesArray(int bytes, Node node, String UUID){
+        int x=0;
+        for(int i=0; i<node.bytes; i++){
+            if(x==bytes){
+                return;
+            }
+            if(node.memoryBlock[i]=="Available"){
+                node.memoryBlock[i]=UUID;
+                node.bytesAvailable--;
+                node.next.prev=node;
+                node.prev.next=node;
+                x++;
+            }
+        }
+        System.out.println("UUID saved...UUID: "+UUID+" socket: "+node.master.socket.toString());
     }
 
     void burping(){
