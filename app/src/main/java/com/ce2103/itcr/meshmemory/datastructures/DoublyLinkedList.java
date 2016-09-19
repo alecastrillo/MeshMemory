@@ -250,7 +250,7 @@ public class DoublyLinkedList {
      * @param bytes
      * @return
      */
-    Node nodeBytesAvailable(int bytes){
+    public Node nodeBytesAvailable(int bytes){
         for(Node current = head; current != tail; current=current.next){
             if(current.getBytesAvailable()>=bytes){
                 return current;
@@ -265,7 +265,7 @@ public class DoublyLinkedList {
     /**
      * @return AMount of nodes in the list
      */
-    int amountOfNodes(){
+    public int amountOfNodes(){
         int count=0;
         for(Node current=head; current!=null; current=current.next){
             count++;
@@ -287,7 +287,7 @@ public class DoublyLinkedList {
      * @return Array
      */
     //Estebitan
-    Object[] nodesBytesAvailable(int pBytes, String UUID){
+    public Object[] nodesBytesAvailable(int pBytes, String UUID){
         if (pBytes<=0){
             return null;
         }
@@ -337,7 +337,7 @@ public class DoublyLinkedList {
         return saveUUIDinBytes(nodes, nodesGivingBytes, UUID);
     }
 
-    Object[] saveUUIDinBytes(Object[] nodesArray, int nodesGivingBytes, String UUID){
+    public Object[] saveUUIDinBytes(Object[] nodesArray, int nodesGivingBytes, String UUID){
         Object[]array = new Object[nodesGivingBytes*2];
         int arrayIndex = 0;
         for(int i=0; i<amountOfNodes()*2;i+=2){
@@ -353,7 +353,8 @@ public class DoublyLinkedList {
         return nodesArray;
 
     }
-    void saveUUIDinNodeBytesArray(int bytes, Node node, String UUID){
+
+    public void saveUUIDinNodeBytesArray(int bytes, Node node, String UUID){
         int x=0;
         for(int i=0; i<node.bytes; i++){
             if(x==bytes){
@@ -368,9 +369,6 @@ public class DoublyLinkedList {
             }
         }
     }
-
-
-
 
 }
 

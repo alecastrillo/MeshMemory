@@ -1,13 +1,15 @@
 package com.ce2103.itcr.meshmemory.gui;
+
 import android.util.Base64;
+import com.ce2103.itcr.meshmemory.datastructures.DoubleLinkedList;
 import java.io.UnsupportedEncodingException;
 
 /**
- * Created by alecm on 18/09/16.
+ * Created by alecm and estape11 on 18/09/16.
  */
 public class Token {
 
-    public boolean verifyToken(String token) throws UnsupportedEncodingException {
+    private boolean verifyToken(String token) throws UnsupportedEncodingException {
         //Verifies if the token exists and if it hasn't expired
         //Convierte de base64 a string
         boolean value=false;
@@ -16,6 +18,25 @@ public class Token {
         long time=System.currentTimeMillis();
         if((time-Long.parseLong(text))<600000){ //Verifica que el token tenga menos de 10 minutos
             value=true;
+        }
+        return value;
+    }
+
+    public int verifyToken(DoubleLinkedList listToken,String token) throws UnsupportedEncodingException {
+        int value=1; // 1 no esta en la lista de tokens, 2 ya expiro y 0 que es valido
+        for(int i=0;i<listToken.size();i++){
+            if( token.equals(listToken.get(i)) ){
+                if(verifyToken(token)){
+                    value=0;
+                    break;
+                }
+                else {
+                    value = 2;
+                }
+            }
+            else{
+                value=1;
+            }
         }
         return value;
     }

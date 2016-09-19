@@ -6,10 +6,13 @@ package com.ce2103.itcr.meshmemory.server;
 
 import com.ce2103.itcr.meshmemory.datastructures.DoubleLinkedList;
 import com.ce2103.itcr.meshmemory.datastructures.DoublyLinkedList;
+import com.ce2103.itcr.meshmemory.datastructures.Node;
 import com.ce2103.itcr.meshmemory.datastructures.NodeMem;
 import com.ce2103.itcr.meshmemory.gui.Token;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.internal.bind.ObjectTypeAdapter;
+
 import java.io.*;
 import java.net.*;
 import java.text.DateFormat;
@@ -137,11 +140,11 @@ public class ManagerServer extends Thread {
         JsonObject respuestaJSON=new JsonObject();
         Decoder decodicador=new Decoder(mensajeCODE,"cliente");
         respuestaJSON.addProperty("remitente","server");
+        Token genTok=new Token();
         int funcion=decodicador.Decode();
         switch (funcion){
             case 0:{//Token
                 this.socketCliente=sock;
-                Token genTok=new Token();
                 String token=genTok.genToken();
                 listTokens.add(token);
                 respuestaJSON.addProperty("token",token);
@@ -149,20 +152,59 @@ public class ManagerServer extends Thread {
                 break;
             }
             case 1:{//xMalloc
-                String uuid = UUID.randomUUID().toString(); //genero el UUID para el espacio de memoria
-                //busco el espacio disponible
+                String token=mensajeCODE.get("token").getAsString();
+                int verificador=genTok.verifyToken(listTokens,token);
+                if(verificador==0){
+                    String uuid = UUID.randomUUID().toString(); //genero el UUID para el espacio de memoria
+                    int bytes=mensajeCODE.get("bytes").getAsInt();
+                    int type=mensajeCODE.get("type").getAsInt();
+                    Object[] array=listNodes.nodesBytesAvailable(bytes,uuid);
+                    if (array!=null){
+                        for(int i=0;i<array.length;i+=2){
+                            JsonObject mensajeNode=new JsonObject();
+                            mensajeNode.addProperty("funcion","xMalloc");
+                            mensajeNode.addProperty("bytes",(int) array[i]);
+                            mensajeNode.addProperty("UUID",uuid);
+                            mensajeNode.addProperty("type",type);
+                            writeData(((Node) array[i+1]).master.socket,mensajeNode.toString());
+                        }
+                    }
+                    else{
+                        genError(mensajeCODE,sock,3);
+                    }
+                    //busco el espacio disponible
+                    //si no hay devolver un error numero 3
+                }
+                else{
+                    genError(mensajeCODE,sock,verificador);
+                }
                 break;
             }
             case 2:{//desreferencia
-                String uuid=mensajeCODE.get("UUID").getAsString();
-                String value=mensajeCODE.get("value").getAsString();
-                Socket tempSock=listNodes.ownerOfUUID(uuid).getSocket();
-                respuestaJSON.addProperty("funcion","asignar");
-                respuestaJSON.addProperty("value",value);
-                writeData(tempSock,respuestaJSON.toString());
+                String token=mensajeCODE.get("token").getAsString();
+                int verificador=genTok.verifyToken(listTokens,token);
+                if(verificador==0) {
+                    String uuid = mensajeCODE.get("UUID").getAsString();
+                    String value = mensajeCODE.get("value").getAsString();
+                    Socket tempSock = listNodes.ownerOfUUID(uuid).getSocket();
+                    respuestaJSON.addProperty("funcion", "asignar");
+                    respuestaJSON.addProperty("value", value);
+                    writeData(tempSock, respuestaJSON.toString());
+                }
+                else{
+                    genError(mensajeCODE,sock,verificador);
+                }
                 break;
             }
             case 3:{//asignar
+                String token=mensajeCODE.get("token").getAsString();
+                int verificador=genTok.verifyToken(listTokens,token);
+                if(verificador==0){
+                   //Hace lo de asignar un valor a un espacio de memoria referenciado por un UUID
+                }
+                else {
+                    genError(mensajeCODE,sock,verificador);
+                }
             }
         }
     }
@@ -194,4 +236,9 @@ public class ManagerServer extends Thread {
     }
 
     public String getLog(){return this.log;}
+    public void genError(JsonObject respuestaJSON, Socket sock, int error){
+        respuestaJSON.addProperty("funcion","error");
+        respuestaJSON.addProperty("error",error);
+        writeData(sock,respuestaJSON.toString());
+    }
 }
