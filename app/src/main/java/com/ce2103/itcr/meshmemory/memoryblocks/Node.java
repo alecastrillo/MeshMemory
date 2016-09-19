@@ -46,11 +46,11 @@ public class Node {
             }
         }
         return value;
-
     }
 
-    public String allocMem(int type,int size){// aparta la memoria para usarla despues
+    public void allocMem(int type,int size, String uuid){// aparta la memoria para usarla despues
         JsonObject memBlock=new JsonObject();
+        /*
         switch (type){
             case 0: {
                 memBlock.addProperty("type", "int");
@@ -68,14 +68,15 @@ public class Node {
                 memBlock.addProperty("type","char");
             }
         }
-        String uuid = UUID.randomUUID().toString();
+        */
+        //String uuid = UUID.randomUUID().toString();
+        memBlock.addProperty("type",type);
         memBlock.addProperty("size",size);
         memBlock.addProperty("UUID", uuid);
         memBlock.addProperty("value","");
         this.memList.add(memBlock);
         this.empyMem-=size;
         this.usedMem+=size;
-        return uuid;
     }
 
     public void assignData(String UUID, String pvalue){

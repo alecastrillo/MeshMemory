@@ -103,11 +103,10 @@ public class Datos_nodo extends AppCompatActivity {
                     bytes=Integer.parseInt(edtxtmem.getText().toString());
                     number=Integer.parseInt(edtnum.getText().toString());
                     cliente.startClient(Datos_nodo.ip,Datos_nodo.port );
+                    cliente.setNodo(bytes,number);
                     Intent master= new Intent(v.getContext(),Master.class);
                     startActivityForResult(master,0);
-
                 }
-
             }
         });
     }

@@ -1,6 +1,8 @@
 package com.ce2103.itcr.meshmemory.server;
 
 import com.ce2103.itcr.meshmemory.datastructures.DoubleLinkedList;
+import com.ce2103.itcr.meshmemory.gui.Nodo;
+import com.ce2103.itcr.meshmemory.memoryblocks.Node;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.io.BufferedReader;
@@ -22,6 +24,7 @@ public class NodeClient extends Thread {
     private String host;
     private Thread hiloCliente;
     private DoubleLinkedList listaSockets;
+    private Node nodo;
 
     public NodeClient() {
         this.socket = null;
@@ -29,6 +32,7 @@ public class NodeClient extends Thread {
         this.salida = null;
         this.hiloCliente = null;
         this.listaSockets = new DoubleLinkedList();
+        this.nodo=null;
     }
 
     public void startClient(final String host, final int puerto) {
@@ -48,7 +52,10 @@ public class NodeClient extends Thread {
             }
         });
         this.hiloCliente.start();
+    }
 
+    public void setNodo(int bytes, int number){
+        this.nodo=new Node(bytes,number);
     }
 
     public void readData(final Socket sock){
@@ -122,8 +129,11 @@ public class NodeClient extends Thread {
         Decoder decodificador=new Decoder(mensajeCODE,"server");
         int funcion=decodificador.Decode();
         switch (funcion){
-            case 0:{
-
+            case 0:{//xMalloc
+                int bytes=mensajeCODE.get("bytes").getAsInt();
+                int type=mensajeCODE.get("type").getAsInt();
+                String uuid=mensajeCODE.get("UUID").getAsString();
+                nodo.allocMem(type,bytes,uuid);
             }
         }
 
@@ -138,5 +148,4 @@ public class NodeClient extends Thread {
         }
         */
     }
-
 }
