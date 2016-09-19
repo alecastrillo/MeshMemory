@@ -102,6 +102,7 @@ public class Datos_nodo extends AppCompatActivity {
                     port=Integer.parseInt(edtxtportmng.getText().toString());
                     bytes=Integer.parseInt(edtxtmem.getText().toString());
                     number=Integer.parseInt(edtnum.getText().toString());
+                    //Se conecta con el servidor
                     cliente.startClient(Datos_nodo.ip,Datos_nodo.port );
                     cliente.setNodo(bytes,number);
                     Intent master= new Intent(v.getContext(),Master.class);

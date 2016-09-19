@@ -135,6 +135,10 @@ public class NodeClient extends Thread {
                 String uuid=mensajeCODE.get("UUID").getAsString();
                 nodo.allocMem(type,bytes,uuid);
             }
+            case 1:{//desreferencia
+            }
+            case 2:{//asignar
+            }
         }
 
         /*

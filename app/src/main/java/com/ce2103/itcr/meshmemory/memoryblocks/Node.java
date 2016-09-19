@@ -1,26 +1,23 @@
 package com.ce2103.itcr.meshmemory.memoryblocks;
 
 import com.ce2103.itcr.meshmemory.datastructures.DoubleLinkedList;
-import com.ce2103.itcr.meshmemory.server.NodeSocket;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import java.util.UUID;
 
 /**
  * Created by estape11 on 15/09/16.
  */
 
 public class Node {
-    private int empyMem;
+    private int freeMem;
     private int totalMem;
     private int usedMem;
     private int numTel;
     private DoubleLinkedList memList;
     private boolean master;
+
     public Node(int totalMem,int numTel){
         this.totalMem=totalMem;
-        this.empyMem=totalMem;
+        this.freeMem =totalMem;
         this.usedMem=0;
         this.numTel=numTel;
         memList=new DoubleLinkedList();
@@ -48,7 +45,7 @@ public class Node {
         return value;
     }
 
-    public void allocMem(int type,int size, String uuid){// aparta la memoria para usarla despues
+    public void allocMem(int type,int bytes, String uuid){// aparta la memoria para usarla despues
         JsonObject memBlock=new JsonObject();
         /*
         switch (type){
@@ -71,12 +68,12 @@ public class Node {
         */
         //String uuid = UUID.randomUUID().toString();
         memBlock.addProperty("type",type);
-        memBlock.addProperty("size",size);
+        memBlock.addProperty("bytes",bytes);
         memBlock.addProperty("UUID", uuid);
         memBlock.addProperty("value","");
         this.memList.add(memBlock);
-        this.empyMem-=size;
-        this.usedMem+=size;
+        this.freeMem -=bytes;
+        this.usedMem+=bytes;
     }
 
     public void assignData(String UUID, String pvalue){
@@ -93,7 +90,7 @@ public class Node {
         int tofree=value.get("size").getAsInt();
         memList.remove(findIndex(UUID));
         this.usedMem-=tofree;
-        this.empyMem+=tofree;
+        this.freeMem +=tofree;
     }
 
     public void getData(String UUID){
@@ -153,7 +150,7 @@ public class Node {
 
 
     ////////////////////GETTERS/////////////////////
-    public int getEmpyMem() {return empyMem;}
+    public int getFreeMem() {return freeMem;}
     public int getNumTel() {
         return numTel;
     }

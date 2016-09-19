@@ -13,7 +13,7 @@ public class DoublyLinkedList {
         this.tail = null;
     }
 
-    Node emptySlave(){
+    public Node emptySlave(){
         Node current;
         if(this.head == null){
             return null;
@@ -51,7 +51,7 @@ public class DoublyLinkedList {
         }
     }
 
-    void addNode(Node newNode){
+    public void addNode(Node newNode){
         if(this.head == null){
             this.head = newNode;
             this.head.next = null;
@@ -73,7 +73,7 @@ public class DoublyLinkedList {
 
     }
 
-    void deleteNode(Node pNode){
+    public void deleteNode(Node pNode){
         if(this.head==pNode) {
             if (this.tail == this.head) {
                 this.head = null;
@@ -102,7 +102,7 @@ public class DoublyLinkedList {
 
     }
 
-    void delNodeMem(Node pNodeofMem, boolean master){
+    public void delNodeMem(Node pNodeofMem, boolean master){
         if (master) {
             if (pNodeofMem.Slave == null) {
                 deleteNode(pNodeofMem);
@@ -125,7 +125,7 @@ public class DoublyLinkedList {
         }
     }
 
-    int getTotalBytes(){
+    public int getTotalBytes(){
         int bytes = 0;
         for(Node current = head; current != tail; current = current.next){
             bytes+= current.getTotalBytes();
@@ -136,7 +136,7 @@ public class DoublyLinkedList {
         return bytes + tail.getTotalBytes();
     }
 
-    int getAvailableBytes(){
+    public int getAvailableBytes(){
         int availableBytes=0;
         for(Node current = head; current != tail; current = current.next){
             availableBytes += current.getBytesAvailable();
@@ -147,7 +147,7 @@ public class DoublyLinkedList {
         return availableBytes + tail.getBytesAvailable();
     }
 
-    int getOccupiedBytes(){
+    public int getOccupiedBytes(){
         int occupiedBytes=0;
         for(Node current = head; current != tail; current = current.next){
             occupiedBytes += current.getBytesOccupied();
@@ -159,15 +159,13 @@ public class DoublyLinkedList {
     }
 
 
-    String[] getBytesArray(){
+    public String[] getBytesArray(){
         int totalBytes = getTotalBytes();
         int currentByte = 0;
         String bytesArray[] = new String[totalBytes];
-
         if (totalBytes == 0){
             return null;
         }
-
         for(Node current = head; current != tail; current = current.next){
             String currentNodeArray[] = current.getBytesArray();
             for(int i=0; i<current.bytes; i++){
@@ -175,15 +173,13 @@ public class DoublyLinkedList {
                 currentByte++;
             }
         }
-
         if(head==tail){
             bytesArray = head.getBytesArray();
         }
-
         return bytesArray;
     }
 
-    NodeMem ownerOfUUID(String UUID){
+    public NodeMem ownerOfUUID(String UUID){
         if(head==null){
             return null;
         }

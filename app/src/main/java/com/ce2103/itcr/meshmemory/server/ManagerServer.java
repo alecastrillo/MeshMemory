@@ -7,11 +7,13 @@ package com.ce2103.itcr.meshmemory.server;
 import com.ce2103.itcr.meshmemory.datastructures.DoubleLinkedList;
 import com.ce2103.itcr.meshmemory.datastructures.DoublyLinkedList;
 import com.ce2103.itcr.meshmemory.datastructures.NodeMem;
+import com.ce2103.itcr.meshmemory.gui.Token;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.*;
 import java.net.*;
+import java.util.UUID;
 
 public class ManagerServer extends Thread {
     private ServerSocket servidor;
@@ -129,62 +131,30 @@ public class ManagerServer extends Thread {
         respuestaJSON.addProperty("remitente","server");
         int funcion=decodicador.Decode();
         switch (funcion){
-            case 0:{
-                respuestaJSON.addProperty("token","a3s4f5f62"); //aqui va el token
+            case 0:{//Token
+                Token genTok=new Token();
+                String token=genTok.genToken();
+                listTokens.add(token);
+                respuestaJSON.addProperty("token",token);
                 writeData(socket,respuestaJSON.toString());
             }
-            case 1:{
-
+            case 1:{//xMalloc
+                String uuid = UUID.randomUUID().toString(); //genero el UUID para el espacio de memoria
+            }
+            case 2:{//desreferencia
+            }
+            case 3:{//asignar
             }
         }
-/*
-        else if(funcion.equals("xMalloc")){
-            int bytes=mensajeCODE.getAsJsonObject().get("bytes").getAsInt();
-            int tipo=mensajeCODE.getAsJsonObject().get("type").getAsInt();
-            int index=findSpace(bytes);
-            JsonObject output=new JsonObject();
-            if(index<0){
-                output.addProperty("UUID","no espacio");
-                writeData(sock,output.toString());
-            }
-            else{
-                NodeSocket temp = (NodeSocket) listNodes.get(index);
-                JsonObject peticion=new JsonObject();
-                peticion.addProperty("remitente","server");
-                peticion.addProperty("funcion","alloc");
-                peticion.addProperty("bytes",bytes);
-                peticion.addProperty("type",tipo);
-                writeData(temp.getSocket(),peticion.toString());
-                String mensaje= entrada.readLine();
-                System.out.println(mensaje);
-                output.addProperty("UUID","hola");
-                writeData(sock,output.toString());
-            }
-        }
-        */
-
     }
-    /*
-    public int findSpace(int bytes){
-        int index=-2;
-        NodeSocket temp;/*
-        for(int i=0;i<listNodes.size();i++){
-            temp=(NodeSocket) listNodes.get(i);
-            if (temp.getBytes()>bytes){
-                index=i;
-                break;
-            }
-        }
-        return index;
-    }
-    */
+
     public void readNode(Socket sock, JsonObject mensajeCODE ){
         JsonObject respuestaJSON=new JsonObject();
         Decoder decodificador=new Decoder(mensajeCODE,"nodo");
         respuestaJSON.addProperty("remitente","server");
         int funcion=decodificador.Decode();
         switch (funcion){
-            case 0:{
+            case 0:{ //addNode
                 int number=mensajeCODE.get("numero").getAsInt();
                 int bytes=mensajeCODE.get("bytes").getAsInt();
                 boolean master=mensajeCODE.get("master").getAsBoolean();
@@ -196,14 +166,5 @@ public class ManagerServer extends Thread {
             case 1:{
             }
         }
-        /*
-        if (funcion.equals("addNode")){
-            int bytes=mensajeCODE.getAsJsonObject().get("bytes").getAsInt();
-            NodeSocket node=new NodeSocket(sock,sock.toString(),bytes);
-            //addNodeSocket(node);
-            listNodes.add(node);
-            System.out.println("Nodo agregado: "+node.getBloque().toString());
-        }
-        */
     }
 }

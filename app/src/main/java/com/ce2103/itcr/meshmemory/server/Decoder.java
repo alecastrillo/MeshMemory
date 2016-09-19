@@ -10,10 +10,12 @@ import java.net.Socket;
 public class Decoder {
     JsonObject msgCODE;
     String sender;
+
     public Decoder(JsonObject mensajeCODE, String sender){
         this.msgCODE=mensajeCODE;
         this.sender=sender;
     }
+
     public int Decode(){
         int value =-2;
         if (this.sender.equals("cliente")){
@@ -27,6 +29,7 @@ public class Decoder {
         }
         return value;
     }
+
     private int decodeClient(){
         String funcion=msgCODE.get("funcion").getAsString();
         int value=-2;
@@ -36,6 +39,12 @@ public class Decoder {
         else if(funcion.equals("xMalloc")){
             value=1;
         }
+        else if(funcion.equals("desreferecia")) {
+            value=2;
+        }
+        else if(funcion.equals("asignar")){
+            value=3;
+        }
         return value;
     }
 
@@ -44,6 +53,12 @@ public class Decoder {
         int value=-2;
         if(funcion.equals("xMalloc")){
             value=0;
+        }
+        else if(funcion.equals("desreferecia")) {
+            value = 1;
+        }
+        else if(funcion.equals("asignar")){
+            value=2;
         }
         return value;
     }
