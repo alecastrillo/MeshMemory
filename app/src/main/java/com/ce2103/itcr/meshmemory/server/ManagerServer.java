@@ -188,7 +188,7 @@ public class ManagerServer extends Thread {
                 int number=mensajeCODE.get("numero").getAsInt();
                 int bytes=mensajeCODE.get("bytes").getAsInt();
                 boolean master=mensajeCODE.get("master").getAsBoolean();
-                NodeMem newNode=new NodeMem(bytes,number);
+                NodeMem newNode=new NodeMem(bytes,number, sock);
                 listNodes.addMem(newNode);
                 respuestaJSON.addProperty("funcion","aceptado");
                 writeData(sock,respuestaJSON.toString());
