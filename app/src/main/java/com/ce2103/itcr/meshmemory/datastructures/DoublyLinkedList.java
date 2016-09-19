@@ -158,7 +158,6 @@ public class DoublyLinkedList {
         return occupiedBytes + tail.getBytesOccupied();
     }
 
-
     public String[] getBytesArray(){
         int totalBytes = getTotalBytes();
         int currentByte = 0;
@@ -198,6 +197,7 @@ public class DoublyLinkedList {
         }
         return null;
     }
+
 }
 
 
