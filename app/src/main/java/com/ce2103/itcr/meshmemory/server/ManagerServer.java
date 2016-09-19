@@ -10,7 +10,6 @@ import com.ce2103.itcr.meshmemory.datastructures.NodeMem;
 import com.ce2103.itcr.meshmemory.gui.Token;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
 import java.io.*;
 import java.net.*;
 import java.util.UUID;
@@ -18,6 +17,7 @@ import java.util.UUID;
 public class ManagerServer extends Thread {
     private ServerSocket servidor;
     private Socket socket;
+    private Socket socketCliente;
     private BufferedReader entrada;
     private PrintWriter salida;
     private int puerto;
@@ -132,6 +132,7 @@ public class ManagerServer extends Thread {
         int funcion=decodicador.Decode();
         switch (funcion){
             case 0:{//Token
+                this.socketCliente=sock;
                 Token genTok=new Token();
                 String token=genTok.genToken();
                 listTokens.add(token);
