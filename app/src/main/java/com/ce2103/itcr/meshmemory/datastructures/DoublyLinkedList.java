@@ -53,11 +53,28 @@ public class DoublyLinkedList {
             newNode = new Node(newMem);
             newNode.bytes = newMem.totalBytes;
             addNode(newNode);                  //empty slave
+            System.out.println("Node Member created as a Master");
         }else{
-            newMem.master=false;
+            newMem.master = false;
             newNode.Slave = newMem;
-            addNode(newNode);
+            if(newNode.prev==null){
+                if (newNode.next==null){
+                    head = newNode;
+                    tail = newNode;
+                }else{
+                    newNode.next.prev = newNode;
+                    head = newNode;
+                }
+            }else if(newNode.next==null){
+                newNode.prev.next = newNode;
+                tail = newNode;
+            }else{
+                newNode.prev.next = newNode;
+                newNode.next.prev = newNode;
+            }
+            System.out.println("Node Member created as a Slave");
         }
+
     }
 
     /**
@@ -83,6 +100,7 @@ public class DoublyLinkedList {
             this.tail.next = newNode;
             this.tail = newNode;
         }
+        System.out.println("Node added to the list");
 
     }
 
@@ -244,6 +262,8 @@ public class DoublyLinkedList {
         return null;
     }
 
+
+
     /**
      * Search for a node with the amount of bytes available
      * defined as parameter.
@@ -368,6 +388,7 @@ public class DoublyLinkedList {
                 x++;
             }
         }
+        System.out.println("UUID saved...UUID: "+UUID+" socket: "+node.master.socket.toString());
     }
 
 }
