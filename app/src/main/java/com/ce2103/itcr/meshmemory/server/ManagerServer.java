@@ -8,14 +8,13 @@ import com.ce2103.itcr.meshmemory.datastructures.DoubleLinkedList;
 import com.ce2103.itcr.meshmemory.datastructures.DoublyLinkedList;
 import com.ce2103.itcr.meshmemory.datastructures.Node;
 import com.ce2103.itcr.meshmemory.datastructures.NodeMem;
-import com.ce2103.itcr.meshmemory.gui.Token;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.internal.bind.ObjectTypeAdapter;
 
 import java.io.*;
 import java.net.*;
 import java.text.DateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
@@ -32,6 +31,7 @@ public class ManagerServer extends Thread {
     private DoubleLinkedList listTokens;
     private String metodo="funcion";
     private String log; //log de los procesos
+    private String value[];
 
     public ManagerServer() {
         this.listaSockets = new DoubleLinkedList();
@@ -43,6 +43,7 @@ public class ManagerServer extends Thread {
         this.servidor = null;
         this.hiloServer = null;
         this.log="";
+        this.value=new String[10];
     }
 
     public void startServer(int puerto) {
@@ -185,6 +186,7 @@ public class ManagerServer extends Thread {
                 break;
             }
             case 2:{//desreferencia
+                Arrays.fill(value,"");//Relleno el arreglo de strings vacios
                 String token=mensajeCODE.get("token").getAsString();
                 int verificador=genTok.verifyToken(listTokens,token);
                 if(verificador==0) {
@@ -201,6 +203,9 @@ public class ManagerServer extends Thread {
                 break;
             }
             case 3:{//asignar
+                //Nesecito enviarle el index del valor que le toca y tambien si es la ultima parte
+                //Cual metodo de doublylinkedlist devuelte el arreglo con los nodos que poseen el UUID
+                //Aqui debemos poner como se divide el valor en la memoria
                 String token=mensajeCODE.get("token").getAsString();
                 int verificador=genTok.verifyToken(listTokens,token);
                 if(verificador==0){
@@ -230,10 +235,19 @@ public class ManagerServer extends Thread {
                 break;
             }
             case 1:{ //desreferencia (devuelvo el valor)
-                String value=mensajeCODE.get("value").getAsString();
-                mensajeCODE.addProperty("funcion","desreferencia");
-                mensajeCODE.addProperty("value",value);
-                writeData(socketCliente,mensajeCODE.toString()); //Se lo envio al cliente
+                String dato=mensajeCODE.get("value").getAsString();
+                int index=mensajeCODE.get("index").getAsInt();
+                boolean fin=mensajeCODE.get("fin").getAsBoolean();
+                value[index]=dato;
+                if (fin){
+                    String valor="";
+                    for(int i=0;i<value.length;i++){
+                        valor+=value[i];
+                    }
+                    mensajeCODE.addProperty("funcion","desreferencia");
+                    mensajeCODE.addProperty("value",valor);
+                    writeData(socketCliente,mensajeCODE.toString()); //Se lo envio al cliente
+                }
                 break;
             }
         }

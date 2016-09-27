@@ -148,7 +148,9 @@ public class NodeClient extends Thread {
             case 2:{//asignar
                 String uuid=mensajeCODE.get("UUID").getAsString();
                 String value=mensajeCODE.get("value").getAsString();
-                nodo.assignData(uuid,value);
+                int index=mensajeCODE.get("index").getAsInt();
+                boolean fin=mensajeCODE.get("final").getAsBoolean();
+                nodo.assignData(uuid,value,index,fin); //Este metodo crea un nuevo bloque de memoria
                 break;
             }
         }

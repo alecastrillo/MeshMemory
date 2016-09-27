@@ -50,17 +50,17 @@ public class Node {
         memBlock.addProperty("type",type);
         memBlock.addProperty("bytes",bytes);
         memBlock.addProperty("UUID", uuid);
-        memBlock.addProperty("value","");
         this.memList.add(memBlock);
         this.freeMem -=bytes;
         this.usedMem+=bytes;
     }
 
-    public void assignData(String UUID, String pvalue){
+    public void assignData(String UUID, String pvalue, int index, boolean fin){
         JsonObject value;
         value=(JsonObject) memList.get(findIndex(UUID));
-        value.remove("value");
         value.addProperty("value",pvalue);
+        value.addProperty("index",index);
+        value.addProperty("final",fin);
         memList.swapData(findIndex(UUID),value);
     }
 
@@ -77,6 +77,7 @@ public class Node {
         JsonObject temp;
         temp = (JsonObject) memList.get(findIndex(UUID));
         String value = temp.get("value").getAsString();
+        //Podemos hacer un Json con el valor, el indice y si es la ultima parte
         return value;
     }
         /*

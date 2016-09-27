@@ -266,8 +266,6 @@ public class DoublyLinkedList {
         return null;
     }
 
-
-
     /**
      * Search for a node with the amount of bytes available
      * defined as parameter.

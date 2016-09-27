@@ -1,4 +1,4 @@
-package com.ce2103.itcr.meshmemory.gui;
+package com.ce2103.itcr.meshmemory.server;
 
 import android.util.Base64;
 import com.ce2103.itcr.meshmemory.datastructures.DoubleLinkedList;
@@ -48,9 +48,6 @@ public class Token {
         //Convierte de string a base 64;
         byte[] data = tok.getBytes("UTF-8");
         String token = Base64.encodeToString(data, Base64.DEFAULT);
-        String tkn = token.substring(0, token.length()-2);
-        System.out.println("Token sin los dos ultimos "+ tkn);
-        System.out.println("Token "+token);
         return  token;
     }
 
