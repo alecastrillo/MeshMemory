@@ -80,6 +80,21 @@ public class Node {
         //Podemos hacer un Json con el valor, el indice y si es la ultima parte
         return value;
     }
+    public int getIndex(String UUID){
+        JsonObject temp;
+        temp = (JsonObject) memList.get(findIndex(UUID));
+        int value = temp.get("index").getAsCharacter();
+        //Podemos hacer un Json con el valor, el indice y si es la ultima parte
+        return value;
+    }
+    public boolean getFin(String UUID){
+        JsonObject temp;
+        temp = (JsonObject) memList.get(findIndex(UUID));
+        boolean value = temp.get("final").getAsBoolean();
+        //Podemos hacer un Json con el valor, el indice y si es la ultima parte
+        return value;
+    }
+
         /*
         switch (type){
             case "int": {

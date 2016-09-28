@@ -190,12 +190,10 @@ public class ManagerServer extends Thread {
                 String token=mensajeCODE.get("token").getAsString();
                 int verificador=genTok.verifyToken(listTokens,token);
                 if(verificador==0) {
+                    //Hace lo de unir los pedazos del valor almacenado en los nodos
                     String uuid = mensajeCODE.get("UUID").getAsString();
-                    String value = mensajeCODE.get("value").getAsString();
-                    Socket tempSock = listNodes.ownerOfUUID(uuid).getSocket();
-                    respuestaJSON.addProperty("funcion", "asignar");
-                    respuestaJSON.addProperty("value", value);
-                    writeData(tempSock, respuestaJSON.toString());
+                    respuestaJSON.addProperty("funcion", "desreferencia");
+                    //Les escribe a cada uno de los nodos pidiendoles el pedazo de nodo que tengan
                 }
                 else{
                     genError(mensajeCODE,sock,verificador);
@@ -210,6 +208,13 @@ public class ManagerServer extends Thread {
                 int verificador=genTok.verifyToken(listTokens,token);
                 if(verificador==0){
                    //Hace lo de asignar un valor a un espacio de memoria referenciado por un UUID
+                    String uuid = mensajeCODE.get("UUID").getAsString();
+                    String value = mensajeCODE.get("value").getAsString();
+                    Socket tempSock = listNodes.ownerOfUUID(uuid).getSocket(); //Tiene que tomar en cuenta todos los nodos que tengan el UUID
+                    respuestaJSON.addProperty("funcion", "asignar");
+                    respuestaJSON.addProperty("value", value);
+                    //Tengo que dividir el string del dato en el numero de nodos que puedo usar
+                    writeData(tempSock, respuestaJSON.toString());
                 }
                 else {
                     genError(mensajeCODE,sock,verificador);
@@ -234,7 +239,7 @@ public class ManagerServer extends Thread {
                 writeData(sock,respuestaJSON.toString());
                 break;
             }
-            case 1:{ //desreferencia (devuelvo el valor)
+            case 1:{ //desreferencia (recibo el valor que solicite)
                 String dato=mensajeCODE.get("value").getAsString();
                 int index=mensajeCODE.get("index").getAsInt();
                 boolean fin=mensajeCODE.get("fin").getAsBoolean();

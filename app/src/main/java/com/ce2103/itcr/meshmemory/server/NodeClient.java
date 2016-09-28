@@ -139,9 +139,13 @@ public class NodeClient extends Thread {
             }
             case 1:{//desreferencia
                 String uuid=mensajeCODE.get("UUID").getAsString();
-                String value=nodo.getData(uuid);
+                String value=nodo.getData(uuid); //Obtengo el pedazo de valor
+                int index=nodo.getIndex(uuid); //Obtengo el indice del pedazo que posee el nodo
+                boolean fin=nodo.getFin(uuid); //Obtengo un booleano para saber si es el ultimo pedazo
                 respuestaJSON.addProperty("funcion","desreferencia");
                 respuestaJSON.addProperty("value",value);
+                respuestaJSON.addProperty("index",index);
+                respuestaJSON.addProperty("final",fin);
                 writeData(respuestaJSON.toString());
                 break;
             }
