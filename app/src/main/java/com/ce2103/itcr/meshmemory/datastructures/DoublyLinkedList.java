@@ -359,6 +359,33 @@ public class DoublyLinkedList {
         return saveUUIDinBytes(nodes, nodesGivingBytes, UUID);
     }
 
+    public Object[] arrayOfNodesWithUUID(String UUID){
+        int totalBytes = getTotalBytes();
+        Object[] array = new Object[totalBytes];
+        int nodes = 0;
+        int currentIndex = 0;
+        for(Node currentNode = head; currentNode!=null; currentNode=currentNode.next){
+            //int x = currentNode.bytesWithUUID(UUID);
+            if(currentNode.ownerUUID(UUID)){
+                array[currentIndex]=currentNode;
+                nodes++;
+            }else{
+                array[currentIndex]=null;
+            }
+            currentIndex+=2;
+        }
+        Object[] arrayWithNodes = new Object[nodes];
+        int nodesDone = 0;
+        for(int i=0; i<totalBytes; i++){
+            if(array[i]!=null){
+                arrayWithNodes[nodesDone]=array[i];
+                nodesDone++;
+            }
+        }
+        return arrayWithNodes;
+
+    }
+
     public Object[] saveUUIDinBytes(Object[] nodesArray, int nodesGivingBytes, String UUID){
         Object[]array = new Object[nodesGivingBytes*2];
         int arrayIndex = 0;

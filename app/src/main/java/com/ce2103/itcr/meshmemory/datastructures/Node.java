@@ -11,7 +11,7 @@ public class Node {
     public Node prev;
     public int bytes;
     public int bytesAvailable;
-    public String memoryBlock[];
+    public String[] memoryBlock;
 
     public Node(NodeMem newMem){
         this.master = newMem;
@@ -24,6 +24,16 @@ public class Node {
         for(int i=0; i==bytes; i++){
             this.memoryBlock[i]="Available";
         }
+    }
+
+    int bytesWithUUID(String UUID){
+        int Bytes=0;
+        for(int i=0; i<bytes; i++) {
+            if(memoryBlock[i]==UUID){
+                Bytes++;
+            }
+        }
+        return Bytes;
     }
 
     boolean ownerUUID(String UUID){
