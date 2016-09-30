@@ -13,6 +13,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 /**
+ * Client class for the Node
  * Created by estape11 on 17/09/16.
  */
 
@@ -26,6 +27,9 @@ public class NodeClient extends Thread {
     private DoubleLinkedList listaSockets;
     private Node nodo;
 
+    /**
+     * Constructor
+     */
     public NodeClient() {
         this.socket = null;
         this.entrada = null;
@@ -35,6 +39,11 @@ public class NodeClient extends Thread {
         this.nodo=null;
     }
 
+    /**
+     * Initialize the client with the port and IP of the Manager
+     * @param host
+     * @param puerto
+     */
     public void startClient(final String host, final int puerto) {
         this.host=host;
         this.puerto=puerto;
@@ -58,6 +67,10 @@ public class NodeClient extends Thread {
         this.nodo=new Node(bytes,number);
     }
 
+    /**
+     * Thread to read data from the manager
+     * @param sock
+     */
     public void readData(final Socket sock){
         Thread leer_hilo=new Thread(new Runnable(){
             public void run(){
@@ -81,6 +94,10 @@ public class NodeClient extends Thread {
         leer_hilo.start();
     }
 
+    /**
+     * Send data to the manager
+     * @param dato
+     */
     public void writeData(final String dato){
         Thread escribir_hilo=new Thread(new Runnable(){
             public void run(){
@@ -98,12 +115,19 @@ public class NodeClient extends Thread {
         escribir_hilo.start();
     }
 
+    /**
+     * Close the connection between the manager
+     */
     public void close() {
         try {
             socket.close();
         } catch (IOException ioe) {}
     }
 
+    /**
+     * Adds the new socket connection into the sockets list
+     * @param socket1
+     */
     private void AgregarSocket(Socket socket1) {
         boolean result = false;
         if (this.listaSockets != null) {
@@ -124,6 +148,10 @@ public class NodeClient extends Thread {
         }
     }
 
+    /**
+     * Decode the message received from the manager and makes the funtion
+     * @param mensajeCODE
+     */
     public void readServer(JsonObject mensajeCODE){
         JsonObject respuestaJSON=new JsonObject();
         respuestaJSON.addProperty("remitente","nodo");
@@ -158,16 +186,5 @@ public class NodeClient extends Thread {
                 break;
             }
         }
-
-        /*
-        if(funcion.equals("alloc")){
-            int tipo=mensajeCODE.getAsJsonObject().get("type").getAsInt();
-            int bytes=mensajeCODE.getAsJsonObject().get("bytes").getAsInt();
-            String UUID=Datos_nodo.node.allocMem(tipo,bytes);
-            JsonObject output=new JsonObject();
-            output.addProperty("UUID",UUID);
-            writeData(output.toString());
-        }
-        */
     }
 }

@@ -5,17 +5,27 @@ import com.google.gson.JsonObject;
 import java.net.Socket;
 
 /**
+ * This class decode the incoming message received by the client, node or server
  * Created by estape11 on 17/09/16.
  */
 public class Decoder {
     private JsonObject msgCODE;
     private String sender;
 
+    /**
+     * Constructor, set the attributes
+     * @param mensajeCODE
+     * @param sender
+     */
     public Decoder(JsonObject mensajeCODE, String sender){
         this.msgCODE=mensajeCODE;
         this.sender=sender;
     }
 
+    /**
+     * General method to decode the message
+     * @return
+     */
     public int Decode(){
         int value =-2;
         if (this.sender.equals("cliente")){
@@ -30,6 +40,10 @@ public class Decoder {
         return value;
     }
 
+    /**
+     * This decode is special for the messages sent by the client
+     * @return number of function to do
+     */
     private int decodeClient(){
         String funcion=msgCODE.get("funcion").getAsString();
         int value=-2;
@@ -48,6 +62,10 @@ public class Decoder {
         return value;
     }
 
+    /**
+     * This decode is special for the messages sent by the Server
+     * @return number of function to do
+     */
     private int decodeServer(){
         String funcion=msgCODE.get("funcion").getAsString();
         int value=-2;
@@ -63,6 +81,10 @@ public class Decoder {
         return value;
     }
 
+    /**
+     * This decode is special for the messages sent by the Node
+     * @return number of function to do
+     */
     private int decodeNode(){
         String funcion=msgCODE.get("funcion").getAsString();
         int value=-2;

@@ -1,16 +1,11 @@
 package com.ce2103.itcr.meshmemory.server;
-
-/**
- * Created by estape11 on 09/09/16.
- */
-
+//Imports
 import com.ce2103.itcr.meshmemory.datastructures.DoubleLinkedList;
 import com.ce2103.itcr.meshmemory.datastructures.DoublyLinkedList;
 import com.ce2103.itcr.meshmemory.datastructures.Node;
 import com.ce2103.itcr.meshmemory.datastructures.NodeMem;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
 import java.io.*;
 import java.net.*;
 import java.text.DateFormat;
@@ -18,6 +13,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * This class was the Manager of the server, manage the memory
+ * Created by estape11 on 09/09/16.
+ */
 public class ManagerServer extends Thread {
     private ServerSocket servidor;
     private Socket socket;
@@ -31,8 +30,11 @@ public class ManagerServer extends Thread {
     private DoubleLinkedList listTokens;
     private String metodo="funcion";
     private String log; //log de los procesos
-    private String value[];
+    private String value[]; //almacena el dato por desreferenciar
 
+    /**
+     * Constructor
+     */
     public ManagerServer() {
         this.listaSockets = new DoubleLinkedList();
         this.listNodes=new DoublyLinkedList();
@@ -46,6 +48,10 @@ public class ManagerServer extends Thread {
         this.value=new String[10];
     }
 
+    /**
+     * Initialize the server by the listener port number
+     * @param puerto
+     */
     public void startServer(int puerto) {
         this.puerto=puerto;
         try {
@@ -71,6 +77,10 @@ public class ManagerServer extends Thread {
         }
     }
 
+    /**
+     * Thread to stay listening the connected clients
+     * @param sock
+     */
     public void readData(final Socket sock){
         Thread leer_hilo=new Thread(new Runnable(){
             public void run(){
@@ -98,6 +108,11 @@ public class ManagerServer extends Thread {
         leer_hilo.start();
     }
 
+    /**
+     * Send a message to specific socket(client)
+     * @param socket
+     * @param dato
+     */
     public void writeData(final Socket socket, final String dato){
         Thread escribir_hilo=new Thread(new Runnable(){
             public void run(){
@@ -114,12 +129,20 @@ public class ManagerServer extends Thread {
         escribir_hilo.start();
     }
 
+    /**
+     * Close the socket connection
+     * @param sock
+     */
     public void close(Socket sock){
         try {
             sock.close();
         } catch (IOException ioe) {ioe.printStackTrace();}
     }
 
+    /**
+     * Adds the new sockets(clients) to the sockets list
+     * @param socket1
+     */
     private void AgregarSocket(Socket socket1) {
         boolean result = false;
         if (this.listaSockets != null) {
@@ -138,6 +161,13 @@ public class ManagerServer extends Thread {
         }
     }
 
+    /**
+     * Decode and makes the function sent by client
+     * @param sock
+     * @param mensajeCODE
+     * @throws InterruptedException
+     * @throws IOException
+     */
     public void readClient(Socket sock, JsonObject mensajeCODE) throws InterruptedException, IOException {
         JsonObject respuestaJSON=new JsonObject();
         respuestaJSON.addProperty("remitente","server");
@@ -239,6 +269,11 @@ public class ManagerServer extends Thread {
         }
     }
 
+    /**
+     * Decode and makes the function sent by node
+     * @param sock
+     * @param mensajeCODE
+     */
     public void readNode(Socket sock, JsonObject mensajeCODE ){
         JsonObject respuestaJSON=new JsonObject();
         respuestaJSON.addProperty("remitente","server");
@@ -275,6 +310,13 @@ public class ManagerServer extends Thread {
     }
 
     public String getLog(){return this.log;}
+
+    /**
+     * Generate error and send to the client
+     * @param respuestaJSON
+     * @param sock
+     * @param error
+     */
     public void genError(JsonObject respuestaJSON, Socket sock, int error){
         respuestaJSON.addProperty("funcion","error");
         respuestaJSON.addProperty("error",error);
