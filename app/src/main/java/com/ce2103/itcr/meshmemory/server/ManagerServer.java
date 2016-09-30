@@ -202,7 +202,6 @@ public class ManagerServer extends Thread {
             }
             case 3:{//asignar
                 //Nesecito enviarle el index del valor que le toca y tambien si es la ultima parte
-                //Cual metodo de doublylinkedlist devuelte el arreglo con los nodos que poseen el UUID
                 //Aqui debemos poner como se divide el valor en la memoria
                 String token=mensajeCODE.get("token").getAsString();
                 int verificador=genTok.verifyToken(listTokens,token);
@@ -210,11 +209,28 @@ public class ManagerServer extends Thread {
                    //Hace lo de asignar un valor a un espacio de memoria referenciado por un UUID
                     String uuid = mensajeCODE.get("UUID").getAsString();
                     String value = mensajeCODE.get("value").getAsString();
-                    Socket tempSock = listNodes.ownerOfUUID(uuid).getSocket(); //Tiene que tomar en cuenta todos los nodos que tengan el UUID
-                    respuestaJSON.addProperty("funcion", "asignar");
-                    respuestaJSON.addProperty("value", value);
+                    Object[] arrayNodes=listNodes.arrayOfNodesWithUUID(uuid);//Devuelve el arreglo con los nodos que poseen el UUID
+                    if (arrayNodes!=null){
+                        int division=value.length()/arrayNodes.length;
+                        for (int i=0;i<arrayNodes.length;i++){
+                            if (i==arrayNodes.length-1){//le envio lo que queda del value
+                                Socket tempSock =((Node) arrayNodes[i]).master.socket; //Tiene que tomar en cuenta todos los nodos que tengan el UUID
+                                respuestaJSON.addProperty("funcion", "asignar");
+                                respuestaJSON.addProperty("value", value);
+                                writeData(tempSock, respuestaJSON.toString());
+                            }
+                            else{
+                                Socket tempSock =((Node) arrayNodes[i]).master.socket; //Tiene que tomar en cuenta todos los nodos que tengan el UUID
+                                respuestaJSON.addProperty("funcion", "asignar");
+                                respuestaJSON.addProperty("value", Utils.slice_end(value,i+division+1));//El uno es por que el mae recibe el indice y empieza en1
+                                value=Utils.slice_start(value,i+division+1);//Recorto lo que me queda del value
+                                writeData(tempSock, respuestaJSON.toString());
+                            }
+                        }
+                    }
+
                     //Tengo que dividir el string del dato en el numero de nodos que puedo usar
-                    writeData(tempSock, respuestaJSON.toString());
+
                 }
                 else {
                     genError(mensajeCODE,sock,verificador);
