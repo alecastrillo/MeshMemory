@@ -404,7 +404,7 @@ public class DoublyLinkedList {
         return nodesArray;
 
     }
-    
+    /*
     public void nodeModified(Node node){
         for(Node current==node; current!=null; current=current.prev){
             if(current.socket==head.socket){
@@ -413,7 +413,7 @@ public class DoublyLinkedList {
             }
         }
     }
-    
+    */
     /**
      * Saves the UUID in the array of the node entered as 
      * parameter
@@ -429,7 +429,7 @@ public class DoublyLinkedList {
                 node.bytesAvailable--;
                 node.next.prev=node;
                 node.prev.next=node;
-                nodeModified(node);
+                //nodeModified(node);
                 x++;
             }
         }
