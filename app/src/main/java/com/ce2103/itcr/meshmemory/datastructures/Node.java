@@ -22,9 +22,10 @@ public class Node {
         this.bytes = newMem.bytesAvailable;
         this.bytesAvailable = newMem.bytesAvailable;
         this.memoryBlock = new String[bytes];
-        for(int i=0; i==bytes; i++){
+        for(int i=0; i<bytes; i++){
             this.memoryBlock[i]="Available";
         }
+         
     }
 
     /**
