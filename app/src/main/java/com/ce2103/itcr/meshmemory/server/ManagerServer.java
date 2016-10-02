@@ -28,7 +28,7 @@ public class ManagerServer extends Thread {
     private DoubleLinkedList listaSockets;
     private DoublyLinkedList listNodes;
     private DoubleLinkedList listTokens;
-    private String metodo="funcion";
+    //private String metodo="funcion"; unused variable
     private String log; //log de los procesos
     private String value[]; //almacena el dato por desreferenciar
 
@@ -65,7 +65,8 @@ public class ManagerServer extends Thread {
                             socket = servidor.accept();
                             AgregarSocket(socket);
                             System.out.println("Nuevo cliente conectado: "+String.valueOf(socket));
-                            log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+"Nuevo cliente conectado: "+String.valueOf(socket)+"\n";
+                            log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+"Nuevo cliente conectado: "+
+                                    String.valueOf(socket)+"\n";
                             readData(socket);
                         } catch (Exception e) {continue;}
                     }
@@ -88,8 +89,8 @@ public class ManagerServer extends Thread {
                     entrada =new BufferedReader(new InputStreamReader(sock.getInputStream()));
                     while(true){
                         String mensaje= entrada.readLine();
-                        log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+"Recibido: " + mensaje+"\n";
                         if (mensaje!=null){
+                            log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+"Recibido: " + mensaje+"\n";
                             System.out.println("Recibido: " + mensaje);
                             JsonParser parser = new JsonParser();
                             JsonObject mensajeCODE = parser.parse(mensaje).getAsJsonObject();
@@ -101,8 +102,10 @@ public class ManagerServer extends Thread {
                             }
                         }
                     }
-                } catch (IOException io) {log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+"Error "+io.getMessage()+"\n";}
-                  catch (InterruptedException ie) {log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+"Error "+ie.getMessage()+"\n";}
+                } catch (Exception io) {log+=DateFormat.getDateTimeInstance().
+                        format(new Date())+"-> "+"Error "+io.getMessage()+"\n";}
+                  //catch (InterruptedException ie) {log+=DateFormat.getDateTimeInstance().
+                  //        format(new Date())+"-> "+"Error "+ie.getMessage()+"\n";}
             }
         });
         leer_hilo.start();
@@ -123,7 +126,9 @@ public class ManagerServer extends Thread {
                         System.out.println("Enviado: "+dato);
                         log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+"Enviado: "+dato+"\n";
                     }
-                }catch(Exception ex){log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+"Error "+ex.getMessage()+"\n";}
+                }catch(Exception ex){
+                    log+=DateFormat.getDateTimeInstance().format(new Date())+
+                            "-> "+"Error "+ex.getMessage()+"\n";}
             }
         });
         escribir_hilo.start();
@@ -179,6 +184,7 @@ public class ManagerServer extends Thread {
                 this.socketCliente=sock;
                 String token=genTok.genToken();
                 listTokens.add(token);
+                respuestaJSON.addProperty("funcion","token");
                 respuestaJSON.addProperty("token",token);
                 writeData(socket,respuestaJSON.toString());
                 break;
@@ -201,17 +207,16 @@ public class ManagerServer extends Thread {
                             mensajeNode.addProperty("type",type);
                             writeData(((Node) array[i+1]).master.socket,mensajeNode.toString());
                         }
-                        mensajeCODE.addProperty("UUID",uuid);
-                        writeData(socketCliente,mensajeCODE.toString());
+                        respuestaJSON.addProperty("UUID",uuid);
+                        respuestaJSON.addProperty("funcion","UUID");
+                        writeData(socketCliente,respuestaJSON.toString());
                     }
                     else{
-                        genError(mensajeCODE,sock,3);
+                        genError(respuestaJSON,sock,3);
                     }
-                    //busco el espacio disponible
-                    //si no hay devolver un error numero 3
                 }
                 else{
-                    genError(mensajeCODE,sock,verificador);
+                    genError(respuestaJSON,sock,verificador);
                 }
                 break;
             }
@@ -226,44 +231,47 @@ public class ManagerServer extends Thread {
                     //Les escribe a cada uno de los nodos pidiendoles el pedazo de nodo que tengan
                 }
                 else{
-                    genError(mensajeCODE,sock,verificador);
+                    genError(respuestaJSON,sock,verificador);
                 }
                 break;
             }
             case 3:{//asignar
-                //Nesecito enviarle el index del valor que le toca y tambien si es la ultima parte
-                //Aqui debemos poner como se divide el valor en la memoria
+                System.out.println("hey1");
                 String token=mensajeCODE.get("token").getAsString();
                 int verificador=genTok.verifyToken(listTokens,token);
-                if(verificador==0){
-                   //Hace lo de asignar un valor a un espacio de memoria referenciado por un UUID
+                if(verificador==0) {
+                    System.out.println("hey2");
                     String uuid = mensajeCODE.get("UUID").getAsString();
                     String value = mensajeCODE.get("value").getAsString();
-                    Object[] arrayNodes=listNodes.arrayOfNodesWithUUID(uuid);//Devuelve el arreglo con los nodos que poseen el UUID
-                    if (arrayNodes!=null){
-                        int division=value.length()/arrayNodes.length;
-                        for (int i=0;i<arrayNodes.length;i++){
-                            if (i==arrayNodes.length-1){//le envio lo que queda del value
-                                Socket tempSock =((Node) arrayNodes[i]).master.socket; //Tiene que tomar en cuenta todos los nodos que tengan el UUID
+                    Object[] arrayNodes = listNodes.arrayOfNodesWithUUID(uuid);
+                    if (arrayNodes != null) {
+                        System.out.println("hey3");
+                        System.out.println(arrayNodes.length);
+                        int division = value.length()/arrayNodes.length;
+                        System.out.println("hey4");
+                        System.out.println(division); //Deberia ser !=0
+                        for (int i = 0; i < arrayNodes.length; i++) {
+                            if (i == arrayNodes.length - 1) { //le envio lo que queda del value
+                                Socket tempSock = ((Node) arrayNodes[i]).master.socket;
                                 respuestaJSON.addProperty("funcion", "asignar");
                                 respuestaJSON.addProperty("value", value);
+                                respuestaJSON.addProperty("final", true);
+                                respuestaJSON.addProperty("index", i);
                                 writeData(tempSock, respuestaJSON.toString());
-                            }
-                            else{
-                                Socket tempSock =((Node) arrayNodes[i]).master.socket; //Tiene que tomar en cuenta todos los nodos que tengan el UUID
+                            } else {
+                                Socket tempSock = ((Node) arrayNodes[i]).master.socket;
                                 respuestaJSON.addProperty("funcion", "asignar");
-                                respuestaJSON.addProperty("value", Utils.slice_end(value,i+division+1));//El uno es por que el mae recibe el indice y empieza en1
-                                value=Utils.slice_start(value,i+division+1);//Recorto lo que me queda del value
+                                respuestaJSON.addProperty("value", Utils.slice_end(value, division));
+                                respuestaJSON.addProperty("final", false);
+                                respuestaJSON.addProperty("index", i);
+                                value = Utils.slice_start(value, division);//Recorto lo que me queda del value
                                 writeData(tempSock, respuestaJSON.toString());
                             }
                         }
                     }
-
-                    //Tengo que dividir el string del dato en el numero de nodos que puedo usar
-
                 }
                 else {
-                    genError(mensajeCODE,sock,verificador);
+                    genError(respuestaJSON,sock,verificador);
                 }
             }
         }
@@ -300,8 +308,8 @@ public class ManagerServer extends Thread {
                     for(int i=0;i<value.length;i++){
                         valor+=value[i];
                     }
-                    mensajeCODE.addProperty("funcion","desreferencia");
-                    mensajeCODE.addProperty("value",valor);
+                    respuestaJSON.addProperty("funcion","desreferencia");
+                    respuestaJSON.addProperty("value",valor);
                     writeData(socketCliente,mensajeCODE.toString()); //Se lo envio al cliente
                 }
                 break;
@@ -318,6 +326,7 @@ public class ManagerServer extends Thread {
      * @param error
      */
     public void genError(JsonObject respuestaJSON, Socket sock, int error){
+        System.out.println("Error #"+error);
         respuestaJSON.addProperty("funcion","error");
         respuestaJSON.addProperty("error",error);
         writeData(sock,respuestaJSON.toString());
