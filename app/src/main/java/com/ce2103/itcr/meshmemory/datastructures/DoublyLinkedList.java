@@ -59,7 +59,7 @@ public class DoublyLinkedList {
             System.out.println("Node Member created as a Master");
         }else{
             newMem.master = false;
-            newMem.master=false;
+            newMem.master = false;
             newNode.Slave = newMem;
             if(newNode.prev==null){
                 if (newNode.next==null){
@@ -96,7 +96,7 @@ public class DoublyLinkedList {
             newNode.prev = head;
             newNode.next = null;
             this.tail = newNode;
-            this.head.next = newNode;
+            this.head.next = tail;
         }else{
             this.tail.next = newNode;
             newNode.prev= tail;
@@ -227,7 +227,7 @@ public class DoublyLinkedList {
         if (totalBytes == 0){
             return null;
         }
-        for(Node current = head; current != tail; current = current.next){
+        for(Node current = head; current != null; current = current.next){
             String currentNodeArray[] = current.getBytesArray();
             for(int i=0; i<current.bytes; i++){
                 bytesArray[currentByte] = currentNodeArray[i];
@@ -273,13 +273,10 @@ public class DoublyLinkedList {
      * @return
      */
     public Node nodeBytesAvailable(int bytes){
-        for(Node current = head; current != tail; current=current.next){
+        for(Node current = head; current != null; current=current.next){
             if(current.getBytesAvailable()>=bytes){
                 return current;
             }
-        }
-        if(tail.getBytesAvailable()>=bytes){
-            return tail;
         }
         return null;
     }
@@ -313,16 +310,17 @@ public class DoublyLinkedList {
         if (pBytes<=0){
             return null;
         }
+        System.out.println("Bytes available in the list: "+getBytesAvailable());
         if (getAvailableBytes()<pBytes){
             return null;
         }
         Object[] nodes;
-        Node node = nodeBytesAvailable(pBytes);
+        Node node = nodeBytesAvailable(pBytes);                        *******
         if(node!=null){
             nodes = new Object[2];
             nodes[0]=pBytes;
             nodes[1]=node;
-            saveUUIDinNodeBytesArray(pBytes, (Node)nodes[1], UUID);
+            saveUUIDinNodeBytesArray(pBytes, (Node)nodes[1], UUID);      ********
             return nodes;
         }
         int nodesGivingBytes=0;
@@ -332,7 +330,7 @@ public class DoublyLinkedList {
         for(Node current=head; current!=null; current=current.next){
             if(bytesFilled==pBytes){
                 nodes[indexBeingFilled] = null;
-                nodes[indexBeingFilled+1]=null;
+                nodes[indexBeingFilled+1] = null;
                 indexBeingFilled+=2;
             }else if(current.getBytesAvailable()==0){
                 nodes[indexBeingFilled]=null;
@@ -386,10 +384,14 @@ public class DoublyLinkedList {
 
     }
 
+    /**
+     * Saves the UUID in the nodes given in the array
+     *
+     */
     public Object[] saveUUIDinBytes(Object[] nodesArray, int nodesGivingBytes, String UUID){
         Object[]array = new Object[nodesGivingBytes*2];
         int arrayIndex = 0;
-        for(int i=0; i<amountOfNodes()*2;i+=2){
+        for(int i=0 ; i<amountOfNodes()*2 ; i+=2){
             if(nodesArray[i]!=null){
                 array[arrayIndex]=nodesArray[i];
                 array[arrayIndex+1]=nodesArray[i+1];
@@ -411,7 +413,11 @@ public class DoublyLinkedList {
             }
         }
     }
-
+    
+    /**
+     * Saves the UUID in the array of the node entered as 
+     * parameter
+     */
     public void saveUUIDinNodeBytesArray(int bytes, Node node, String UUID){
         int x=0;
         for(int i=0; i<node.bytes; i++){
