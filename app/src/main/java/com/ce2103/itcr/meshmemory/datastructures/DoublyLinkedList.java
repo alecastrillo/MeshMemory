@@ -402,6 +402,15 @@ public class DoublyLinkedList {
         return nodesArray;
 
     }
+    
+    public void nodeModified(Node node){
+        for(Node current==node; current!=null; current=current.prev){
+            if(current.socket==head.socket){
+                head=current;
+                break;
+            }
+        }
+    }
 
     public void saveUUIDinNodeBytesArray(int bytes, Node node, String UUID){
         int x=0;
@@ -414,6 +423,7 @@ public class DoublyLinkedList {
                 node.bytesAvailable--;
                 node.next.prev=node;
                 node.prev.next=node;
+                nodeModified(node);
                 x++;
             }
         }
