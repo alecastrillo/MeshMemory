@@ -75,6 +75,7 @@ public class ManagerServer extends Thread {
             hiloServer.start();
         } catch (Exception e) {
             log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+"Error "+e.getMessage()+"\n";
+            e.printStackTrace();
         }
     }
 
@@ -103,7 +104,9 @@ public class ManagerServer extends Thread {
                         }
                     }
                 } catch (Exception io) {log+=DateFormat.getDateTimeInstance().
-                        format(new Date())+"-> "+"Error "+io.getMessage()+"\n";}
+                        format(new Date())+"-> "+"Error "+io.getMessage()+"\n";
+                    io.printStackTrace();
+                }
                   //catch (InterruptedException ie) {log+=DateFormat.getDateTimeInstance().
                   //        format(new Date())+"-> "+"Error "+ie.getMessage()+"\n";}
             }
@@ -128,7 +131,9 @@ public class ManagerServer extends Thread {
                     }
                 }catch(Exception ex){
                     log+=DateFormat.getDateTimeInstance().format(new Date())+
-                            "-> "+"Error "+ex.getMessage()+"\n";}
+                            "-> "+"Error "+ex.getMessage()+"\n";
+                    ex.printStackTrace();
+                }
             }
         });
         escribir_hilo.start();
@@ -141,7 +146,10 @@ public class ManagerServer extends Thread {
     public void close(Socket sock){
         try {
             sock.close();
-        } catch (IOException ioe) {ioe.printStackTrace();}
+        } catch (IOException ioe) {
+            log+=DateFormat.getDateTimeInstance().format(new Date())+
+                    "-> "+"Error "+ioe.getMessage()+"\n";
+            ioe.printStackTrace();}
     }
 
     /**
@@ -196,7 +204,14 @@ public class ManagerServer extends Thread {
                     String uuid = UUID.randomUUID().toString(); //genero el UUID para el espacio de memoria
                     int bytes=mensajeCODE.get("bytes").getAsInt();
                     int type=mensajeCODE.get("type").getAsInt();
+
+                    System.out.println("-Guardando UUID");
+                    System.out.println(Arrays.toString(listNodes.head.getBytesArray()));
+
                     Object[] array=listNodes.nodesBytesAvailable(bytes,uuid);
+
+                    System.out.println(Arrays.toString(listNodes.head.getBytesArray()));
+
                     if (array!=null){
                         for(int i=0;i<array.length;i+=2){//Distribuye la memoria
                             JsonObject mensajeNode=new JsonObject();
@@ -244,14 +259,17 @@ public class ManagerServer extends Thread {
                     String uuid = mensajeCODE.get("UUID").getAsString();
                     String value = mensajeCODE.get("value").getAsString();
                     Object[] arrayNodes = listNodes.arrayOfNodesWithUUID(uuid);
+
+                    System.out.println(Arrays.toString(listNodes.head.getBytesArray()));
+
                     if (arrayNodes != null) {
                         System.out.println("hey3");
                         System.out.println(arrayNodes.length);
                         int division = value.length()/arrayNodes.length;
-                        System.out.println("hey4");
+                        System.out.println("hey4"); //AUN NO LLEGA ACA
                         System.out.println(division); //Deberia ser !=0
                         for (int i = 0; i < arrayNodes.length; i++) {
-                            if (i == arrayNodes.length - 1) { //le envio lo que queda del value
+                            if (i == arrayNodes.length-1) { //le envio lo que queda del value
                                 Socket tempSock = ((Node) arrayNodes[i]).master.socket;
                                 respuestaJSON.addProperty("funcion", "asignar");
                                 respuestaJSON.addProperty("value", value);

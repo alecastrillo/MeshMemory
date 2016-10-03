@@ -7,8 +7,8 @@ import com.ce2103.itcr.meshmemory.gui.GarbageCollection;
  */
 
 public class DoublyLinkedList {
-    Node head;
-    Node tail;
+    public Node head;
+    public Node tail;
 
     public DoublyLinkedList(){
         this.head = null;
@@ -310,17 +310,17 @@ public class DoublyLinkedList {
         if (pBytes<=0){
             return null;
         }
-        System.out.println("Bytes available in the list: "+getBytesAvailable());
+        System.out.println("Bytes available in the list: "+getAvailableBytes());
         if (getAvailableBytes()<pBytes){
             return null;
         }
         Object[] nodes;
-        Node node = nodeBytesAvailable(pBytes);                        *******
+        Node node = nodeBytesAvailable(pBytes);
         if(node!=null){
             nodes = new Object[2];
             nodes[0]=pBytes;
             nodes[1]=node;
-            saveUUIDinNodeBytesArray(pBytes, (Node)nodes[1], UUID);      ********
+            saveUUIDinNodeBytesArray(pBytes, (Node)nodes[1], UUID);
             return nodes;
         }
         int nodesGivingBytes=0;
@@ -406,8 +406,8 @@ public class DoublyLinkedList {
     }
     /*
     public void nodeModified(Node node){
-        for(Node current==node; current!=null; current=current.prev){
-            if(current.socket==head.socket){
+        for(Node current=node; current!=null; current=current.prev){
+            if(current.master.socket==head.master.socket){
                 head=current;
                 break;
             }
