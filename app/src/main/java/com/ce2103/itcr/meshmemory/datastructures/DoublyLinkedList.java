@@ -427,8 +427,11 @@ public class DoublyLinkedList {
             if(node.memoryBlock[i]=="Available"){
                 node.memoryBlock[i]=UUID;
                 node.bytesAvailable--;
-                node.next.prev=node;
-                node.prev.next=node;
+                if(node.next!=null){
+                    node.next.prev = node;
+                }if(node.prev!=null){
+                    node.prev.next=node;
+                }
                 //nodeModified(node);
                 x++;
             }
