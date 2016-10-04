@@ -524,7 +524,7 @@ public class DoublyLinkedList {
         int bytes = getTotalBytes();
         int count=0;
         for(int i=0; i<bytes;i++){
-            if(Array[i]==UUID){
+            if(Array[i].equals(UUID)){
                 count++;
             }
         }
