@@ -2,6 +2,8 @@ package com.ce2103.itcr.meshmemory.datastructures;
 
 import com.ce2103.itcr.meshmemory.gui.GarbageCollection;
 
+import java.util.UUID;
+
 /**
  * Created by alecm on 17/09/16.
  */
@@ -507,14 +509,26 @@ public class DoublyLinkedList {
         }
     }
 
-    public Object[] burping(Node node){
-        if(node.next.equals(null)){
+   /* public Object[] burping(Node node) {
+        if (node.next.equals(null)) {
             return null;
-        }else{
-            if(node.getBytesAvailable()>=node.next.getBytesOccupied()){
+        } else {
+            if (node.getBytesAvailable() >= node.next.getBytesOccupied()) {
 
             }
         }
+    }
+    */
+    public int amountOfBytesWithUUID(String UUID){
+        String[] Array = getBytesArray();
+        int bytes = getTotalBytes();
+        int count=0;
+        for(int i=0; i<=bytes;i++){
+            if(Array[i]==UUID){
+                count++;
+            }
+        }
+        return count;
     }
 
     void garbageCollection(){
