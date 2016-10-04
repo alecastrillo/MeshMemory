@@ -28,7 +28,6 @@ public class ManagerServer extends Thread {
     private DoubleLinkedList listaSockets;
     private DoublyLinkedList listNodes;
     private DoubleLinkedList listTokens;
-    //private String metodo="funcion"; unused variable
     private String log; //log de los procesos
     private String value[]; //almacena el dato por desreferenciar
 
