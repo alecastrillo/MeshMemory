@@ -49,8 +49,9 @@ public class Node {
      * @return boolean
      */
     boolean ownerUUID(String UUID){
-
+        System.out.print("UUID: "+ UUID);
         for(int i=0; i<this.bytes; i++){
+            System.out.print("Memoryblock[i] "+memoryBlock[i]);
             if (memoryBlock[i]==UUID){
                 return true;
             }

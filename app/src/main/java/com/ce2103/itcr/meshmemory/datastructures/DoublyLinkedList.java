@@ -378,11 +378,8 @@ public class DoublyLinkedList {
         int totalBytes = getTotalBytes();
         System.out.println("Total bytes: "+totalBytes);
         Object[] array = new Object[totalBytes];
-        System.out.print(1);
         int nodes = 0;
-        System.out.print(1);
         int currentIndex = 0;
-        System.out.print("currentNode!=null ");
         System.out.println(head!=null);
         for(Node currentNode = head; currentNode!=null; currentNode=currentNode.next){
             //int x = currentNode.bytesWithUUID(UUID);
