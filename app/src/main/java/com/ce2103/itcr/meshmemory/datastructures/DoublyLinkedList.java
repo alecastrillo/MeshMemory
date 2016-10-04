@@ -240,27 +240,42 @@ public class DoublyLinkedList {
         return bytesArray;
     }
 
+    private void printArrayOfNode(Node node){
+        System.out.print("Array: ");
+        for(int i=0; i<node.bytes; i++){
+            System.out.print(node.memoryBlock[i]);
+        }
+        System.out.println(" ");
+    }
+
     /**
      * Search for the node that contains the data
      * with the UUID taken as parameter
      * @param UUID
      * @return
      */
+
     public NodeMem ownerOfUUID(String UUID){
+
         if(head==null){
             return null;
         }
         if(head==tail){
+            System.out.println("head==tail");
             if(head.ownerUUID(UUID)){
+                System.out.println("head.ownerUUID");
+                printArrayOfNode(head);
                 return head.master;
             }
         }
         for(Node current = head; current!=tail; current=current.next){
             if (current.ownerUUID(UUID)){
+                printArrayOfNode(current);
                 return  current.master;
             }
         }
         if (tail.ownerUUID(UUID)){
+            printArrayOfNode(tail);
             return tail.master;
         }
         return null;
@@ -366,6 +381,7 @@ public class DoublyLinkedList {
         for(Node currentNode = head; currentNode!=null; currentNode=currentNode.next){
             //int x = currentNode.bytesWithUUID(UUID);
             if(currentNode.ownerUUID(UUID)){
+                System.out.println("currentNode.ownerUUID");
                 array[currentIndex]=currentNode;
                 nodes++;
             }else{
