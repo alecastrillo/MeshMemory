@@ -91,7 +91,7 @@ public class DoublyLinkedList {
             this.head.next = null;
             this.head.prev = null;
             this.tail = head;
-        }else if(this.head == this.tail){
+        }else if(this.head == this.tail){                       /////////////////
             this.head.next = newNode;
             newNode.prev = head;
             newNode.next = null;
@@ -280,8 +280,6 @@ public class DoublyLinkedList {
         return null;
     }
 
-
-
     /**
      * Search for a node with the amount of bytes available
      * defined as parameter.
@@ -305,6 +303,7 @@ public class DoublyLinkedList {
         for(Node current=head; current!=null; current=current.next){
             count++;
         }
+        System.out.println("count "+count);
         return count;
     }
 
