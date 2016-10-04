@@ -52,7 +52,7 @@ public class Node {
         System.out.print("UUID: "+ UUID+". ");
         for(int i=0; i<this.bytes; i++){
             System.out.print("Memoryblock[i]: "+memoryBlock[i]+". ");
-            if (memoryBlock[i]==UUID){
+            if (memoryBlock[i].equals(UUID)){
                 return true;
             }
         }
