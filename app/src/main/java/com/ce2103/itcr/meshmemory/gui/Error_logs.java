@@ -15,6 +15,12 @@ public class Error_logs extends AppCompatActivity {
         setContentView(R.layout.activity_error_logs);
         final TextView logTextView=(TextView) findViewById(R.id.logTextView);
         logTextView.setMovementMethod(new ScrollingMovementMethod());
-        logTextView.setText(Manager.servidor.getLog());
+        if(!Manager.servidor.getLog().equals("")){
+            logTextView.setText(Manager.servidor.getLog());
+        }
+        else if(!Datos_nodo.cliente.getLog().equals("")){
+            logTextView.setText(Datos_nodo.cliente.getLog());
+        }
+
     }
 }

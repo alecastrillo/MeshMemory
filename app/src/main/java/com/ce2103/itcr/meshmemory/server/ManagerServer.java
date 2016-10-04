@@ -28,7 +28,7 @@ public class ManagerServer extends Thread {
     private DoubleLinkedList listaSockets;
     private DoublyLinkedList listNodes;
     private DoubleLinkedList listTokens;
-    private String log; //log de los procesos
+    private String log=""; //log de los procesos
     private String value[]; //almacena el dato por desreferenciar
 
     /**
@@ -43,7 +43,6 @@ public class ManagerServer extends Thread {
         this.salida = null;
         this.servidor = null;
         this.hiloServer = null;
-        this.log="";
         this.value=new String[10];
     }
 
@@ -56,7 +55,7 @@ public class ManagerServer extends Thread {
         try {
             servidor = new ServerSocket(puerto);
             System.out.println("Servidor iniciado");
-            log+=DateFormat.getDateTimeInstance().format(new Date())+"-> Servidor iniciado...";
+            log+=DateFormat.getDateTimeInstance().format(new Date())+"-> Servidor iniciado..."+"\n";
             this.hiloServer = new Thread(new Runnable() {
                 public void run() {
                     while (true){
@@ -67,14 +66,16 @@ public class ManagerServer extends Thread {
                             log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+
                                     "Nuevo cliente conectado: "+String.valueOf(socket)+"\n";
                             readData(socket);
-                        } catch (Exception e) {continue;}
+                        } catch (Exception e) {
+                            log+=DateFormat.getDateTimeInstance().format(new Date())+"-> EXCEPTION: "+
+                                    e.getMessage()+"\n";
+                            continue;}
                     }
                 }
             });
             hiloServer.start();
         } catch (Exception e) {
-            log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+"Error "+e.getMessage()+"\n";
-            e.printStackTrace();
+            log+=DateFormat.getDateTimeInstance().format(new Date())+"-> EXCEPTION: "+e.getMessage()+"\n";
         }
     }
 
@@ -103,9 +104,10 @@ public class ManagerServer extends Thread {
                             }
                         }
                     }
-                } catch (Exception io) {log+=DateFormat.getDateTimeInstance().
-                        format(new Date())+"-> "+"Error "+io.getMessage()+"\n";
-                    io.printStackTrace();
+                } catch (Exception io) {
+                    log+=DateFormat.getDateTimeInstance().format(new Date())+
+                            "-> EXCEPTION: "+io.getMessage()+"\n";
+
                 }
                   //catch (InterruptedException ie) {log+=DateFormat.getDateTimeInstance().
                   //        format(new Date())+"-> "+"Error "+ie.getMessage()+"\n";}
@@ -131,7 +133,7 @@ public class ManagerServer extends Thread {
                     }
                 }catch(Exception ex){
                     log+=DateFormat.getDateTimeInstance().format(new Date())+
-                            "-> "+"Error "+ex.getMessage()+"\n";
+                            "-> EXCEPTION: "+ex.getMessage()+"\n";
                     ex.printStackTrace();
                 }
             }
@@ -259,15 +261,8 @@ public class ManagerServer extends Thread {
                     String uuid = mensajeCODE.get("UUID").getAsString();
                     String value = mensajeCODE.get("value").getAsString();
                     Object[] arrayNodes = listNodes.arrayOfNodesWithUUID(uuid);
-
-                    System.out.println(Arrays.toString(listNodes.head.getBytesArray()));
-
                     if (arrayNodes != null) {
-                        System.out.println("hey3");
-                        System.out.println(arrayNodes.length);
                         int division = value.length()/arrayNodes.length;
-                        System.out.println("hey4"); //AUN NO LLEGA ACA
-                        System.out.println(division); //Deberia ser !=0
                         for (int i = 0; i < arrayNodes.length; i++) {
                             if (i == arrayNodes.length-1) { //le envio lo que queda del value
                                 Socket tempSock = ((Node) arrayNodes[i]).master.socket;

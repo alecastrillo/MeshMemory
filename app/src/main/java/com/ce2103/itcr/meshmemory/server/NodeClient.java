@@ -11,6 +11,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.text.DateFormat;
+import java.util.Date;
 
 /**
  * Client class for the Node
@@ -26,6 +28,7 @@ public class NodeClient extends Thread {
     private Thread hiloCliente;
     private DoubleLinkedList listaSockets;
     private Node nodo;
+    private String log=""; //log de los procesos
 
     /**
      * Constructor
@@ -53,11 +56,16 @@ public class NodeClient extends Thread {
                 try {
                     if (socket==null) {
                         socket = new Socket(host, puerto);
+                        log+= DateFormat.getDateTimeInstance().format(new Date())+
+                                "-> Conectado al manager"+"\n";
                         System.out.println("Conectado a: " + socket.toString());
                         AgregarSocket(socket);
                         readData(socket);
                     }
-                } catch (UnknownHostException ue) {} catch (IOException ie) {}
+                } catch (Exception ue) {
+                    log+= DateFormat.getDateTimeInstance().format(new Date())+"-> EXCEPTION: "+
+                            ue.getMessage()+"\n";
+                }
             }
         });
         this.hiloCliente.start();
@@ -65,6 +73,8 @@ public class NodeClient extends Thread {
 
     public void setNodo(int bytes, int number){
         this.nodo=new Node(bytes,number);
+        log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Datos del Nodo: numero "+number+
+                ", Bytes "+bytes+"\n";
     }
 
     /**
@@ -80,6 +90,8 @@ public class NodeClient extends Thread {
                         String mensaje= entrada.readLine();
                         if (mensaje!=null) {
                             System.out.println("Recibido: " + mensaje);
+                            log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Recibido: "+
+                                    mensaje+"\n";
                             JsonParser parser = new JsonParser();
                             JsonObject mensajeCODE = parser.parse(mensaje).getAsJsonObject();
                             String remitente=mensajeCODE.get("remitente").getAsString();
@@ -88,7 +100,10 @@ public class NodeClient extends Thread {
                             }
                         }
                     }
-                } catch (IOException e) {e.printStackTrace();}
+                } catch (Exception e) {
+                    log+= DateFormat.getDateTimeInstance().format(new Date())+"-> EXCEPTION: "+
+                            e.getMessage()+"\n";
+                }
             }
         });
         leer_hilo.start();
@@ -106,9 +121,11 @@ public class NodeClient extends Thread {
                         salida = new PrintWriter(socket.getOutputStream(),true);
                         salida.println(dato);
                         System.out.println("Enviado: "+dato);
+                        log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Enviado: "+dato+"\n";
                     }
                 }catch(Exception ex){
-                    System.out.println("ERROR");
+                    log+= DateFormat.getDateTimeInstance().format(new Date())+"-> EXCEPTION: "+
+                            ex.getMessage()+"\n";
                 }
             }
         });
@@ -121,7 +138,9 @@ public class NodeClient extends Thread {
     public void close() {
         try {
             socket.close();
-        } catch (IOException ioe) {}
+        } catch (Exception ioe) {
+            log+= DateFormat.getDateTimeInstance().format(new Date())+"-> EXCEPTION: "+ioe.getMessage()+"\n";
+        }
     }
 
     /**
@@ -159,32 +178,49 @@ public class NodeClient extends Thread {
         int funcion=decodificador.Decode();
         switch (funcion){
             case 0:{//xMalloc
+                log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion xMalloc: En proceso"+"\n";
                 int bytes=mensajeCODE.get("bytes").getAsInt();
                 int type=mensajeCODE.get("type").getAsInt();
                 String uuid=mensajeCODE.get("UUID").getAsString();
                 nodo.allocMem(type,bytes,uuid);
+                log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion xMalloc: UUID "+uuid+", "
+                        +"Bytes "+bytes+", Tipo "+type+"\n";
+                log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion xMalloc: Completado"+"\n";
                 break;
             }
             case 1:{//desreferencia
+                log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion desreferencia: En proceso"
+                        +"\n";
                 String uuid=mensajeCODE.get("UUID").getAsString();
                 String value=nodo.getData(uuid); //Obtengo el pedazo de valor
                 int index=nodo.getIndex(uuid); //Obtengo el indice del pedazo que posee el nodo
                 boolean fin=nodo.getFin(uuid); //Obtengo un booleano para saber si es el ultimo pedazo
+                log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion desreferencia: UUID "+
+                        uuid+","+"Index "+index+", Fin "+fin+"\n";
                 respuestaJSON.addProperty("funcion","desreferencia");
                 respuestaJSON.addProperty("value",value);
                 respuestaJSON.addProperty("index",index);
                 respuestaJSON.addProperty("final",fin);
                 writeData(respuestaJSON.toString());
+                log+= DateFormat.getDateTimeInstance().format(new Date())+
+                        "-> Funcion desreferencia: Completado"+"\n";
                 break;
             }
             case 2:{//asignar
+                log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion asignar: En proceso"+"\n";
                 String uuid=mensajeCODE.get("UUID").getAsString();
                 String value=mensajeCODE.get("value").getAsString();
                 int index=mensajeCODE.get("index").getAsInt();
                 boolean fin=mensajeCODE.get("final").getAsBoolean();
+                log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion asignar: UUID "+uuid+
+                        ", Index "+index+", Fin "+fin+"\n";
                 nodo.assignData(uuid,value,index,fin); //Este metodo crea un nuevo bloque de memoria
+                log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion asignar: Completado"+"\n";
                 break;
             }
         }
+    }
+    public String getLog(){
+        return this.log;
     }
 }
