@@ -384,6 +384,7 @@ public class DoublyLinkedList {
         System.out.println(head!=null);
         for(Node currentNode = head; currentNode!=null; currentNode=currentNode.next){
             //int x = currentNode.bytesWithUUID(UUID);
+            printArrayOfNode(currentNode);
             System.out.println("currentNode.ownerUUID(UUID) "+currentNode.ownerUUID(UUID));
             if(currentNode.ownerUUID(UUID)){
                 System.out.println("currentNode.ownerUUID");
@@ -427,7 +428,7 @@ public class DoublyLinkedList {
         return nodesArray;
 
     }
-    /*
+
     public void nodeModified(Node node){
         for(Node current=node; current!=null; current=current.prev){
             if(current.master.socket==head.master.socket){
@@ -436,7 +437,7 @@ public class DoublyLinkedList {
             }
         }
     }
-    */
+
     /**
      * Saves the UUID in the array of the node entered as 
      * parameter
@@ -455,7 +456,7 @@ public class DoublyLinkedList {
                 }if(node.prev!=null){
                     node.prev.next=node;
                 }
-                //nodeModified(node);
+                nodeModified(node);
                 x++;
             }
         }

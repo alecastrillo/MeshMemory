@@ -49,6 +49,7 @@ public class Node {
      * @return boolean
      */
     boolean ownerUUID(String UUID){
+
         for(int i=0; i<this.bytes; i++){
             if (memoryBlock[i]==UUID){
                 return true;
