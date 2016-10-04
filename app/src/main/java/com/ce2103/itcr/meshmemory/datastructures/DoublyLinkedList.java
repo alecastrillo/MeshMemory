@@ -256,11 +256,10 @@ public class DoublyLinkedList {
      */
 
     public NodeMem ownerOfUUID(String UUID){
-
         if(head==null){
             return null;
         }
-        if(head==tail){
+        if(amountOfNodes()==1){
             System.out.println("head==tail");
             if(head.ownerUUID(UUID)){
                 System.out.println("head.ownerUUID");
@@ -280,6 +279,8 @@ public class DoublyLinkedList {
         }
         return null;
     }
+
+
 
     /**
      * Search for a node with the amount of bytes available
