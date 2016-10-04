@@ -213,9 +213,17 @@ public class NodeClient extends Thread {
                 int index=mensajeCODE.get("index").getAsInt();
                 boolean fin=mensajeCODE.get("final").getAsBoolean();
                 log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion asignar: UUID "+uuid+
-                        ", Index "+index+", Fin "+fin+"\n";
+                        ", Dato "+value+", Index "+index+", Fin "+fin+"\n";
                 nodo.assignData(uuid,value,index,fin); //Este metodo crea un nuevo bloque de memoria
                 log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion asignar: Completado"+"\n";
+                break;
+            }
+            case 3: {//xFree
+                log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion xFree: En proceso"+"\n";
+                String uuid=mensajeCODE.get("UUID").getAsString();
+                log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion xFree: UUID "+uuid+"\n";
+                nodo.freeData(uuid);
+                log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion xFree: Completado"+"\n";
                 break;
             }
         }

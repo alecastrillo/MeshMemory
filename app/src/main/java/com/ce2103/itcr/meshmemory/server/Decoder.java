@@ -59,6 +59,9 @@ public class Decoder {
         else if(funcion.equals("asignar")){
             value=3;
         }
+        else if(funcion.equals("xFree")){
+            value=4;
+        }
         return value;
     }
 
@@ -77,6 +80,9 @@ public class Decoder {
         }
         else if(funcion.equals("asignar")){
             value=2;
+        }
+        else if(funcion.equals("xFree")){
+            value=3;
         }
         return value;
     }

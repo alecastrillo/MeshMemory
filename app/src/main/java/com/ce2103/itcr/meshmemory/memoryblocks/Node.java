@@ -3,6 +3,8 @@ package com.ce2103.itcr.meshmemory.memoryblocks;
 import com.ce2103.itcr.meshmemory.datastructures.DoubleLinkedList;
 import com.google.gson.JsonObject;
 
+import java.util.Arrays;
+
 /**
  * This node class is used for the NodeClient
  * Created by estape11 on 15/09/16.
@@ -15,6 +17,7 @@ public class Node {
     private int numTel;
     private DoubleLinkedList memList;
     private boolean master;
+    private JsonObject bytesArray[];
 
     public Node(int totalMem,int numTel){
         this.totalMem=totalMem;
@@ -23,6 +26,11 @@ public class Node {
         this.numTel=numTel;
         memList=new DoubleLinkedList();
         this.master=true;
+
+        bytesArray=new JsonObject[totalMem];
+        JsonObject NULL=new JsonObject();
+        NULL.addProperty("NULL",true);
+        Arrays.fill(bytesArray,NULL);
     }
 
     /**
@@ -67,7 +75,22 @@ public class Node {
         memBlock.addProperty("type",type);
         memBlock.addProperty("bytes",bytes);
         memBlock.addProperty("UUID", uuid);
-        this.memList.add(memBlock);
+        memBlock.addProperty("NULL",false);
+        int bytesUsados=0;
+        for(int i=0;i<bytesArray.length;i++){
+            if (bytesArray[i].get("NULL").getAsBoolean()){ //Esto es si e null
+                if(bytesUsados==bytes){
+                    break;
+                }
+                else{
+                    bytesArray[i]=memBlock;
+                    bytesUsados++;
+                }
+            }
+            else{
+                continue;
+            }
+        }
         this.freeMem -=bytes;
         this.usedMem+=bytes;
     }
@@ -80,12 +103,24 @@ public class Node {
      * @param fin (the value to know if the value was the last)
      */
     public void assignData(String UUID, String pvalue, int index, boolean fin){
-        JsonObject value;
-        value=(JsonObject) memList.get(findIndex(UUID));
-        value.addProperty("value",pvalue);
-        value.addProperty("index",index);
-        value.addProperty("final",fin);
-        memList.swapData(findIndex(UUID),value);
+        /**
+        JsonObject tempMem;
+        tempMem=(JsonObject) memList.get(findIndex(UUID));
+        tempMem.addProperty("value",pvalue);
+        tempMem.addProperty("index",index);
+        tempMem.addProperty("final",fin);
+        memList.swapData(findIndex(UUID),tempMem);*/
+        for(int i=0;i<bytesArray.length;i++){
+            if (bytesArray[i].get("UUID").getAsString().equals(UUID)){
+                bytesArray[i].addProperty("value",pvalue);
+                bytesArray[i].addProperty("index",index);
+                bytesArray[i].addProperty("final",fin);
+                break;
+            }
+            else{
+                continue;
+            }
+        }
     }
 
     /**
@@ -93,10 +128,25 @@ public class Node {
      * @param UUID (reference to the memory block)
      */
     public void freeData(String UUID){
+        /**
         JsonObject value;
         value=(JsonObject) memList.get(findIndex(UUID));
         int tofree=value.get("size").getAsInt();
-        memList.remove(findIndex(UUID));
+        memList.remove(findIndex(UUID));*/
+
+        bytesArray=new JsonObject[totalMem];
+        JsonObject NULL=new JsonObject();
+        NULL.addProperty("NULL",true);
+        int tofree=0;
+        for(int i=0;i<bytesArray.length;i++){
+            if(bytesArray[i].get("UUID").getAsString().equals(UUID)){
+                bytesArray[i]=NULL;
+                tofree++;
+            }
+            else{
+                continue;
+            }
+        }
         this.usedMem-=tofree;
         this.freeMem +=tofree;
     }
@@ -107,10 +157,21 @@ public class Node {
      * @return string (return the memory value)
      */
     public String getData(String UUID) {
+        /**
         JsonObject temp;
         temp = (JsonObject) memList.get(findIndex(UUID));
-        String value = temp.get("value").getAsString();
-        //Podemos hacer un Json con el valor, el indice y si es la ultima parte
+        String value = temp.get("value").getAsString();*/
+
+        String value="";
+        for(int i=0;i<bytesArray.length;i++){
+            if(bytesArray[i].get("UUID").getAsString().equals(UUID)){
+                value=bytesArray[i].get("value").getAsString();
+                break;
+            }
+            else{
+                continue;
+            }
+        }
         return value;
     }
 
@@ -138,6 +199,10 @@ public class Node {
         boolean value = temp.get("final").getAsBoolean();
         //Podemos hacer un Json con el valor, el indice y si es la ultima parte
         return value;
+    }
+
+    public void burping(){
+
     }
 
     ////////////////////GETTERS/////////////////////

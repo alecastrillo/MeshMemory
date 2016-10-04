@@ -30,6 +30,8 @@ public class ManagerServer extends Thread {
     private DoubleLinkedList listTokens;
     private String log=""; //log de los procesos
     private String value[]; //almacena el dato por desreferenciar
+    private int partesValue;
+    private String completar="********************";
 
     /**
      * Constructor
@@ -43,7 +45,6 @@ public class ManagerServer extends Thread {
         this.salida = null;
         this.servidor = null;
         this.hiloServer = null;
-        this.value=new String[10];
     }
 
     /**
@@ -206,14 +207,7 @@ public class ManagerServer extends Thread {
                     String uuid = UUID.randomUUID().toString(); //genero el UUID para el espacio de memoria
                     int bytes=mensajeCODE.get("bytes").getAsInt();
                     int type=mensajeCODE.get("type").getAsInt();
-
-                    System.out.println("-Guardando UUID");
-                    System.out.println(Arrays.toString(listNodes.head.getBytesArray()));
-
                     Object[] array=listNodes.nodesBytesAvailable(bytes,uuid);
-
-                    System.out.println(Arrays.toString(listNodes.head.getBytesArray()));
-
                     if (array!=null){
                         for(int i=0;i<array.length;i+=2){//Distribuye la memoria
                             JsonObject mensajeNode=new JsonObject();
@@ -238,14 +232,19 @@ public class ManagerServer extends Thread {
                 break;
             }
             case 2:{//desreferencia
-                Arrays.fill(value,"");//Relleno el arreglo de strings vacios
                 String token=mensajeCODE.get("token").getAsString();
                 int verificador=genTok.verifyToken(listTokens,token);
                 if(verificador==0) {
-                    //Hace lo de unir los pedazos del valor almacenado en los nodos
                     String uuid = mensajeCODE.get("UUID").getAsString();
+                    partesValue=0;
+                    value=new String[listNodes.amountOfBytesWithUUID(uuid)];
+                    Object[] arregloNodos=listNodes.arrayOfNodesWithUUID(uuid);
                     respuestaJSON.addProperty("funcion", "desreferencia");
-                    //Les escribe a cada uno de los nodos pidiendoles el pedazo de nodo que tengan
+                    respuestaJSON.addProperty("UUID",uuid);
+                    for(int i=0;i<arregloNodos.length;i+=2){
+                        Socket tempSock = ((Node) arregloNodos[i+1]).master.socket;
+                        writeData(tempSock,respuestaJSON.toString()); //Ahora espero que me contesten
+                    }
                 }
                 else{
                     genError(respuestaJSON,sock,verificador);
@@ -253,35 +252,60 @@ public class ManagerServer extends Thread {
                 break;
             }
             case 3:{//asignar
-                System.out.println("hey1");
                 String token=mensajeCODE.get("token").getAsString();
                 int verificador=genTok.verifyToken(listTokens,token);
                 if(verificador==0) {
-                    System.out.println("hey2");
                     String uuid = mensajeCODE.get("UUID").getAsString();
                     String value = mensajeCODE.get("value").getAsString();
+                    value+=completar; //Completo el tamano del value
                     Object[] arrayNodes = listNodes.arrayOfNodesWithUUID(uuid);
+                    int contador=0;//Numero de bytes
+                    int numeroBytes=listNodes.amountOfBytesWithUUID(uuid);
                     if (arrayNodes != null) {
-                        int division = value.length()/arrayNodes.length;
-                        for (int i = 0; i < arrayNodes.length; i++) {
-                            if (i == arrayNodes.length-1) { //le envio lo que queda del value
-                                Socket tempSock = ((Node) arrayNodes[i]).master.socket;
-                                respuestaJSON.addProperty("funcion", "asignar");
-                                respuestaJSON.addProperty("value", value);
-                                respuestaJSON.addProperty("final", true);
-                                respuestaJSON.addProperty("index", i);
-                                respuestaJSON.addProperty("UUID",uuid);
-                                writeData(tempSock, respuestaJSON.toString());
-                            } else {
-                                Socket tempSock = ((Node) arrayNodes[i]).master.socket;
-                                respuestaJSON.addProperty("funcion", "asignar");
-                                respuestaJSON.addProperty("value", Utils.slice_end(value, division));
-                                respuestaJSON.addProperty("final", false);
-                                respuestaJSON.addProperty("index", i);
-                                respuestaJSON.addProperty("UUID",uuid);
-                                value = Utils.slice_start(value, division);//Recorto lo que me queda del value
-                                writeData(tempSock, respuestaJSON.toString());
+                        int division = value.length()/numeroBytes;
+                        for (int i = 0; i <arrayNodes.length; i+=2) {
+                            Socket tempSock = ((Node) arrayNodes[i+1]).master.socket;
+                            for(int j=0;j<(int)arrayNodes[i];i++){
+                                if ( (j==(int)arrayNodes[i]-1) & (i==arrayNodes.length-1) ){
+                                    respuestaJSON=new JsonObject();
+                                    respuestaJSON.addProperty("remitente","server");
+                                    respuestaJSON.addProperty("funcion", "asignar");
+                                    respuestaJSON.addProperty("value", value);
+                                    respuestaJSON.addProperty("final", true);
+                                    respuestaJSON.addProperty("index", contador);
+                                    respuestaJSON.addProperty("UUID",uuid);
+                                    writeData(tempSock, respuestaJSON.toString());
+                                    contador++;
+                                }
+                                else{
+                                    respuestaJSON=new JsonObject();
+                                    respuestaJSON.addProperty("remitente","server");
+                                    respuestaJSON.addProperty("funcion", "asignar");
+                                    respuestaJSON.addProperty("value", Utils.slice_end(value, division));
+                                    respuestaJSON.addProperty("final", false);
+                                    respuestaJSON.addProperty("index", contador);
+                                    respuestaJSON.addProperty("UUID",uuid);
+                                    value = Utils.slice_start(value, division);//Recorto lo que me queda del value
+                                    writeData(tempSock, respuestaJSON.toString());
+                                    contador++;
+                                }
                             }
+                        }
+                    }
+                }
+                else {
+                    genError(respuestaJSON,sock,verificador);
+                }
+            }
+            case 4:{//xFree
+                String token=mensajeCODE.get("token").getAsString();
+                int verificador=genTok.verifyToken(listTokens,token);
+                if(verificador==0) {
+                    String uuid=mensajeCODE.get("UUID").getAsString();
+                    Object[] array=listNodes.xFree(uuid);
+                    if (array!=null){
+                        for(int i=0;i<array.length;i+=2){
+
                         }
                     }
                 }
@@ -316,15 +340,16 @@ public class ManagerServer extends Thread {
             case 1:{ //desreferencia (recibo el valor que solicite)
                 String dato=mensajeCODE.get("value").getAsString();
                 int index=mensajeCODE.get("index").getAsInt();
-                boolean fin=mensajeCODE.get("fin").getAsBoolean();
                 value[index]=dato;
-                if (fin){
+                partesValue++;
+                if (partesValue==value.length){
                     String valor="";
                     for(int i=0;i<value.length;i++){
                         valor+=value[i];
                     }
                     respuestaJSON.addProperty("funcion","desreferencia");
-                    respuestaJSON.addProperty("value",valor);
+                    String output=Utils.slice_end(valor,valor.length()-20);
+                    respuestaJSON.addProperty("value",output);
                     writeData(socketCliente,mensajeCODE.toString()); //Se lo envio al cliente
                 }
                 break;
