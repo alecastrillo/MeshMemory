@@ -65,8 +65,8 @@ public class ManagerServer extends Thread {
                             socket = servidor.accept();
                             AgregarSocket(socket);
                             System.out.println("Nuevo cliente conectado: "+String.valueOf(socket));
-                            log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+"Nuevo cliente conectado: "+
-                                    String.valueOf(socket)+"\n";
+                            log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+
+                                    "Nuevo cliente conectado: "+String.valueOf(socket)+"\n";
                             readData(socket);
                         } catch (Exception e) {continue;}
                     }
@@ -91,7 +91,8 @@ public class ManagerServer extends Thread {
                     while(true){
                         String mensaje= entrada.readLine();
                         if (mensaje!=null){
-                            log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+"Recibido: " + mensaje+"\n";
+                            log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+
+                                    "Recibido: " + mensaje+"\n";
                             System.out.println("Recibido: " + mensaje);
                             JsonParser parser = new JsonParser();
                             JsonObject mensajeCODE = parser.parse(mensaje).getAsJsonObject();
