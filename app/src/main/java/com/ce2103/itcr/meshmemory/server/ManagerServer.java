@@ -275,6 +275,7 @@ public class ManagerServer extends Thread {
                                 respuestaJSON.addProperty("value", value);
                                 respuestaJSON.addProperty("final", true);
                                 respuestaJSON.addProperty("index", i);
+                                respuestaJSON.addProperty("UUID",uuid);
                                 writeData(tempSock, respuestaJSON.toString());
                             } else {
                                 Socket tempSock = ((Node) arrayNodes[i]).master.socket;
@@ -282,6 +283,7 @@ public class ManagerServer extends Thread {
                                 respuestaJSON.addProperty("value", Utils.slice_end(value, division));
                                 respuestaJSON.addProperty("final", false);
                                 respuestaJSON.addProperty("index", i);
+                                respuestaJSON.addProperty("UUID",uuid);
                                 value = Utils.slice_start(value, division);//Recorto lo que me queda del value
                                 writeData(tempSock, respuestaJSON.toString());
                             }
