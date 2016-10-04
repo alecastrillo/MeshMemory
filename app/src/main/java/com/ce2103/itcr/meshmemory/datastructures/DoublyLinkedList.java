@@ -2,6 +2,7 @@ package com.ce2103.itcr.meshmemory.datastructures;
 
 import com.ce2103.itcr.meshmemory.gui.GarbageCollection;
 
+import java.lang.reflect.Array;
 import java.util.UUID;
 
 /**
@@ -387,6 +388,7 @@ public class DoublyLinkedList {
             }
             currentIndex+=2;
         }
+        System.out.print("Array:    ");
         Object[] arrayWithNodes = new Object[nodes*2];
         int nodesDone = 0;
         for(int i=0; i<totalBytes*2; i+=2){
