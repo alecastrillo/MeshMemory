@@ -233,6 +233,7 @@ public class ManagerServer extends Thread {
                 break;
             }
             case 2:{//desreferencia
+                System.out.println("desreferencia");
                 String token=mensajeCODE.get("token").getAsString();
                 int verificador=genTok.verifyToken(listTokens,token);
                 if(verificador==0) {
@@ -256,7 +257,6 @@ public class ManagerServer extends Thread {
                 String token=mensajeCODE.get("token").getAsString();
                 int verificador=genTok.verifyToken(listTokens,token);
                 if(verificador==0) {
-                    System.out.println("CEROTES");
                     String uuid = mensajeCODE.get("UUID").getAsString();
                     String value = mensajeCODE.get("value").getAsString();
                     value+=completar; //Completo el tamano del value
@@ -264,15 +264,9 @@ public class ManagerServer extends Thread {
                     int contador=0;//Numero de bytes
                     int numeroBytes=listNodes.amountOfBytesWithUUID(uuid);
                     if (arrayNodes != null) {
-                        System.out.println("CEROTES");
                         int division = value.length()/numeroBytes;
-                        System.out.println(arrayNodes.length);
-                        System.out.println(((Node) arrayNodes[1]).bytes);
                         for (int i = 0; i <arrayNodes.length; i+=2) {
-                            System.out.println("CEROTES");
                             Socket tempSock = ((Node) arrayNodes[i+1]).master.socket;
-                            System.out.println(tempSock.toString());
-                            System.out.println(arrayNodes[i]);
                             for(int j=0;j<(int)arrayNodes[i];j++){
                                 if ( (j==(int)arrayNodes[i]-1) & (i==arrayNodes.length-1) ){
                                     respuestaJSON=new JsonObject();
@@ -286,7 +280,6 @@ public class ManagerServer extends Thread {
                                     contador++;
                                 }
                                 else{
-                                    System.out.println("GERE");
                                     respuestaJSON=new JsonObject();
                                     respuestaJSON.addProperty("remitente","server");
                                     respuestaJSON.addProperty("funcion", "asignar");

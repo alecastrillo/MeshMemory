@@ -9,9 +9,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.text.DateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -103,6 +105,7 @@ public class NodeClient extends Thread {
                 } catch (Exception e) {
                     log+= DateFormat.getDateTimeInstance().format(new Date())+"-> EXCEPTION: "+
                             e.getMessage()+"\n";
+                    e.printStackTrace();
                 }
             }
         });
@@ -178,6 +181,7 @@ public class NodeClient extends Thread {
         int funcion=decodificador.Decode();
         switch (funcion){
             case 0:{//xMalloc
+                System.out.println(Arrays.toString(nodo.getBytesArray()));
                 log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion xMalloc: En proceso"+"\n";
                 int bytes=mensajeCODE.get("bytes").getAsInt();
                 int type=mensajeCODE.get("type").getAsInt();
@@ -186,22 +190,27 @@ public class NodeClient extends Thread {
                 log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion xMalloc: UUID "+uuid+", "
                         +"Bytes "+bytes+", Tipo "+type+"\n";
                 log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion xMalloc: Completado"+"\n";
+                System.out.println(Arrays.toString(nodo.getBytesArray()));
                 break;
             }
             case 1:{//desreferencia
                 log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion desreferencia: En proceso"
                         +"\n";
+                JsonObject[] barray= nodo.getBytesArray();
                 String uuid=mensajeCODE.get("UUID").getAsString();
-                String value=nodo.getData(uuid); //Obtengo el pedazo de valor
-                int index=nodo.getIndex(uuid); //Obtengo el indice del pedazo que posee el nodo
-                boolean fin=nodo.getFin(uuid); //Obtengo un booleano para saber si es el ultimo pedazo
-                log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion desreferencia: UUID "+
-                        uuid+","+"Index "+index+", Fin "+fin+"\n";
-                respuestaJSON.addProperty("funcion","desreferencia");
-                respuestaJSON.addProperty("value",value);
-                respuestaJSON.addProperty("index",index);
-                respuestaJSON.addProperty("final",fin);
-                writeData(respuestaJSON.toString());
+                for (int i=0;i<barray.length;i++){
+                    if(barray[i].get("UUID").getAsString().equals(uuid)){
+                        respuestaJSON=new JsonObject();
+                        respuestaJSON.addProperty("remitente","nodo");
+                        respuestaJSON.addProperty("funcion","desreferencia");
+                        respuestaJSON.addProperty("value",barray[i].get("value").getAsString());
+                        respuestaJSON.addProperty("index",barray[i].get("index").getAsInt());
+                        respuestaJSON.addProperty("final",barray[i].get("final").getAsBoolean());
+                        log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion desreferencia: UUID "+
+                                uuid+","+"Index "+barray[i].get("index").getAsInt()+", Fin "+  barray[i].get("final").getAsBoolean()+"\n";
+                        writeData(respuestaJSON.toString());
+                    }
+                }
                 log+= DateFormat.getDateTimeInstance().format(new Date())+
                         "-> Funcion desreferencia: Completado"+"\n";
                 break;

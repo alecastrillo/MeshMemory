@@ -53,7 +53,7 @@ public class Decoder {
         else if(funcion.equals("xMalloc")){
             value=1;
         }
-        else if(funcion.equals("desreferecia")) {
+        else if(funcion.equals("desreferencia")) {
             value=2;
         }
         else if(funcion.equals("asignar")){
@@ -75,7 +75,7 @@ public class Decoder {
         if(funcion.equals("xMalloc")){
             value=0;
         }
-        else if(funcion.equals("desreferecia")) {
+        else if(funcion.equals("desreferencia")) {
             value=1;
         }
         else if(funcion.equals("asignar")){

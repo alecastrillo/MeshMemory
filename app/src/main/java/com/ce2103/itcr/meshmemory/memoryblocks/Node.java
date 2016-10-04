@@ -8,6 +8,7 @@ import java.util.Arrays;
 /**
  * This node class is used for the NodeClient
  * Created by estape11 on 15/09/16.
+ *
  */
 
 public class Node {
@@ -26,11 +27,12 @@ public class Node {
         this.numTel=numTel;
         memList=new DoubleLinkedList();
         this.master=true;
-
-        bytesArray=new JsonObject[totalMem];
-        JsonObject NULL=new JsonObject();
-        NULL.addProperty("NULL",true);
-        Arrays.fill(bytesArray,NULL);
+        bytesArray = new JsonObject[totalMem];
+        for(int i=0;i<bytesArray.length;i++) {
+            JsonObject NULL = new JsonObject();
+            NULL.addProperty("NULL", true);
+            bytesArray[i]=NULL;
+        }
     }
 
     /**
@@ -71,26 +73,32 @@ public class Node {
      * @param uuid (the tag of reference)
      */
     public void allocMem(int type,int bytes, String uuid){// aparta la memoria para usarla despues
-        JsonObject memBlock=new JsonObject();
-        memBlock.addProperty("type",type);
-        memBlock.addProperty("bytes",bytes);
-        memBlock.addProperty("UUID", uuid);
-        memBlock.addProperty("NULL",false);
-        int bytesUsados=0;
-        for(int i=0;i<bytesArray.length;i++){
-            if (bytesArray[i].get("NULL").getAsBoolean()){ //Esto es si e null
-                if(bytesUsados==bytes){
-                    break;
-                }
-                else{
-                    bytesArray[i]=memBlock;
-                    bytesUsados++;
-                }
+        int bytesU=0;
+        JsonObject temp=new JsonObject();
+        temp.addProperty("type", type);
+        temp.addProperty("bytes", bytes);
+        temp.addProperty("UUID", uuid);
+        temp.remove("NULL");
+        temp.addProperty("NULL", false);
+        temp.addProperty("value", "");
+        for (int i=0;i<bytesArray.length;i++){
+            System.out.println(i);
+            if(bytes==bytesU){
+                break;
             }
-            else{
-                continue;
+            else {
+                if(bytesArray[i].get("NULL").getAsBoolean()){
+                    bytesU++;
+                    bytesArray[i].addProperty("type", type);
+                    bytesArray[i].addProperty("bytes", bytes);
+                    bytesArray[i].addProperty("UUID", uuid);
+                    bytesArray[i].remove("NULL");
+                    bytesArray[i].addProperty("NULL", false);
+                    bytesArray[i].addProperty("value", "");
+                }
             }
         }
+        System.out.println(bytesU);
         this.freeMem -=bytes;
         this.usedMem+=bytes;
     }
@@ -112,10 +120,17 @@ public class Node {
         memList.swapData(findIndex(UUID),tempMem);*/
         for(int i=0;i<bytesArray.length;i++){
             if (bytesArray[i].get("UUID").getAsString().equals(UUID)){
-                bytesArray[i].addProperty("value",pvalue);
-                bytesArray[i].addProperty("index",index);
-                bytesArray[i].addProperty("final",fin);
-                break;
+                if (bytesArray[i].get("value").getAsString().equals("")){
+                    bytesArray[i].remove("value");
+                    bytesArray[i].addProperty("value",pvalue);
+                    bytesArray[i].addProperty("index",index);
+                    bytesArray[i].addProperty("final",fin);
+                    System.out.println("Added-> "+bytesArray[i].toString());
+                    break;
+                }
+                else{
+                    continue;
+                }
             }
             else{
                 continue;
@@ -181,11 +196,16 @@ public class Node {
      * @return int of index
      */
     public int getIndex(String UUID){
-        JsonObject temp;
-        temp = (JsonObject) memList.get(findIndex(UUID));
-        int value = temp.get("index").getAsCharacter();
-        //Podemos hacer un Json con el valor, el indice y si es la ultima parte
-        return value;
+        int temp=-1;
+        for(int i=0;i<bytesArray.length;i++){
+            if(bytesArray[i].get("UUID").getAsString().equals(UUID)){
+                temp= bytesArray[i].get("index").getAsInt();
+            }
+            else{
+                continue;
+            }
+        }
+        return temp;
     }
 
     /**
@@ -194,11 +214,16 @@ public class Node {
      * @return boolean
      */
     public boolean getFin(String UUID){
-        JsonObject temp;
-        temp = (JsonObject) memList.get(findIndex(UUID));
-        boolean value = temp.get("final").getAsBoolean();
-        //Podemos hacer un Json con el valor, el indice y si es la ultima parte
-        return value;
+        boolean temp=false;
+        for(int i=0;i<bytesArray.length;i++){
+            if(bytesArray[i].get("UUID").getAsString().equals(UUID)){
+                temp= bytesArray[i].get("final").getAsBoolean();
+            }
+            else{
+                continue;
+            }
+        }
+        return temp;
     }
 
     public void burping(){
@@ -211,4 +236,5 @@ public class Node {
     public int getTotalMem() {return totalMem;}
     public boolean isMaster() {return master;}
     public int getUsedMem() {return usedMem;}
+    public JsonObject[] getBytesArray(){return  bytesArray;}
 }
