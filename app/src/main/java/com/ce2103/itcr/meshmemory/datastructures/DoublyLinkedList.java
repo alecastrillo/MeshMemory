@@ -260,9 +260,7 @@ public class DoublyLinkedList {
             return null;
         }
         if(amountOfNodes()==1){
-            System.out.println("head==tail");
             if(head.ownerUUID(UUID)){
-                System.out.println("head.ownerUUID");
                 printArrayOfNode(head);
                 return head.master;
             }
@@ -303,7 +301,6 @@ public class DoublyLinkedList {
         for(Node current=head; current!=null; current=current.next){
             count++;
         }
-        System.out.println("count "+count);
         return count;
     }
 
@@ -325,7 +322,6 @@ public class DoublyLinkedList {
         if (pBytes<=0){
             return null;
         }
-        System.out.println("Bytes available in the list: "+getAvailableBytes());
         if (getAvailableBytes()<pBytes){
             return null;
         }
@@ -373,20 +369,14 @@ public class DoublyLinkedList {
     }
 
     public Object[] arrayOfNodesWithUUID(String UUID){
-        System.out.print("Array of head: ");
         printArrayOfNode(head);
         int totalBytes = getTotalBytes();
-        System.out.println("Total bytes: "+totalBytes);
         Object[] array = new Object[totalBytes];
         int nodes = 0;
         int currentIndex = 0;
-        System.out.println(head!=null);
         for(Node currentNode = head; currentNode!=null; currentNode=currentNode.next){
             //int x = currentNode.bytesWithUUID(UUID);
-            printArrayOfNode(currentNode);
-            System.out.println("currentNode.ownerUUID(UUID) "+currentNode.ownerUUID(UUID));
             if(currentNode.ownerUUID(UUID)){
-                System.out.println("currentNode.ownerUUID");
                 array[currentIndex]=currentNode;
                 nodes++;
             }else{
@@ -395,7 +385,6 @@ public class DoublyLinkedList {
             currentIndex+=2;
         }
         Object[] arrayWithNodes = new Object[nodes];
-        System.out.println("nodes: " + nodes);
         int nodesDone = 0;
         for(int i=0; i<totalBytes; i++){
             if(array[i]!=null){
