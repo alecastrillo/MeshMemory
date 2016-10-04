@@ -457,6 +457,8 @@ public class DoublyLinkedList {
                     node.prev.next=node;
                 }
                 nodeModified(node);
+                System.out.print("Array of head: ");
+                printArrayOfNode(head);
                 x++;
             }
         }
