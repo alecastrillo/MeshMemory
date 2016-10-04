@@ -369,7 +369,37 @@ public class DoublyLinkedList {
     }
 
     public Object[] arrayOfNodesWithUUID(String UUID){
-        printArrayOfNode(head);
+        int totalBytes = getTotalBytes();
+        Object[] array = new Object[totalBytes*2];
+        int nodes = 0;
+        int currentIndex = 0;
+        for(Node currentNode = head; currentNode!=null; currentNode=currentNode.next){
+            int x = currentNode.bytesWithUUID(UUID);
+            if(currentNode.ownerUUID(UUID)){
+                array[currentIndex]=x;
+                array[currentIndex+1]=currentNode;
+                nodes++;
+            }else{
+                array[currentIndex]=null;
+                array[currentIndex+1]=null;
+            }
+            currentIndex+=2;
+        }
+        Object[] arrayWithNodes = new Object[nodes*2];
+        int nodesDone = 0;
+        for(int i=0; i<totalBytes*2; i+=2){
+            if(array[i]!=null){
+                arrayWithNodes[nodesDone]=array[i];
+                arrayWithNodes[nodesDone+1]=array[i+1];
+                nodesDone+=2;
+            }
+        }
+        return arrayWithNodes;
+
+    }
+
+    /*
+    public Object[] arrayOfNodesWithUUID(String UUID){
         int totalBytes = getTotalBytes();
         Object[] array = new Object[totalBytes];
         int nodes = 0;
@@ -395,7 +425,7 @@ public class DoublyLinkedList {
         return arrayWithNodes;
 
     }
-
+*/
     /**
      * Saves the UUID in the nodes given in the array
      *
@@ -469,11 +499,26 @@ public class DoublyLinkedList {
         return arrayOfNodesWithUUID(UUID);
     }
 
-    void burping(){
 
+
+    public void nodesInternalBurping(){
+        for (Node current=head; current!=null; current=current.next){
+            current.burping(0,0);
+        }
+    }
+
+    public Object[] burping(Node node){
+        if(node.next.equals(null)){
+            return null;
+        }else{
+            if(node.getBytesAvailable()>=node.next.getBytesOccupied()){
+
+            }
+        }
     }
 
     void garbageCollection(){
+
 
     }
 

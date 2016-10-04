@@ -66,6 +66,33 @@ public class Node {
         }
     }
 
+    int firstByteAvailable(){
+        for(int i=0; i<bytes;i++){
+            if(memoryBlock[i].equals("Available")){
+                return i;
+            }
+        }return -1;
+    }
+    void burping(int pByte, int available){
+        if(pByte==bytes){
+            return;
+        }else if(memoryBlock[pByte-1].equals("Available")){
+            available++;
+            pByte++;
+            burping(pByte, available);
+        }else if (available>=1){
+            int index = firstByteAvailable();
+            memoryBlock[index]=memoryBlock[pByte-1];
+            memoryBlock[pByte]="Available";
+            available++;
+            pByte++;
+            burping(pByte, available);
+        }else{
+            pByte++;
+            burping(pByte, available);
+        }
+    }
+
     /**
      * Gets the total amount of bytes associated to the node
      * @return int
