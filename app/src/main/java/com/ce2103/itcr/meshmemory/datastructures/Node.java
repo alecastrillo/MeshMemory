@@ -36,7 +36,7 @@ public class Node {
     int bytesWithUUID(String UUID){
         int Bytes=0;
         for(int i=0; i<bytes; i++) {
-            if(memoryBlock[i]==UUID){
+            if(memoryBlock[i].equals(UUID)){
                 Bytes++;
             }
         }
