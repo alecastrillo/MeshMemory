@@ -453,6 +453,22 @@ public class DoublyLinkedList {
         System.out.println("UUID saved...UUID: "+UUID+" socket: "+node.master.socket.toString());
     }
 
+             //arrayOfNodesWithUUID
+             //Returns array with  bytes, node...
+
+
+    public Object[] xFree(String UUID){
+        int x = amountOfNodes();
+        for(Node current=head; current!=null; current=current.next){
+            if(current.ownerUUID(UUID)){
+                current.deleteUUID(UUID);
+                current.next.prev=current;
+                nodeModified(current);
+            }
+        }
+        return arrayOfNodesWithUUID(UUID);
+    }
+
     void burping(){
 
     }

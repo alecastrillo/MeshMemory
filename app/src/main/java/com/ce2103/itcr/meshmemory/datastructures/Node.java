@@ -57,6 +57,15 @@ public class Node {
         return false;
     }
 
+    void deleteUUID(String UUID){
+        for(int i=0; i<this.bytes; i++){
+            if(memoryBlock[i].equals(UUID)){
+                memoryBlock[i]="Available";
+                bytesAvailable--;
+            }
+        }
+    }
+
     /**
      * Gets the total amount of bytes associated to the node
      * @return int
