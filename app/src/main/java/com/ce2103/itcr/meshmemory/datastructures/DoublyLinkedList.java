@@ -373,6 +373,8 @@ public class DoublyLinkedList {
     }
 
     public Object[] arrayOfNodesWithUUID(String UUID){
+        System.out.print("Array of head: ");
+        printArrayOfNode(head);
         int totalBytes = getTotalBytes();
         System.out.println("Total bytes: "+totalBytes);
         Object[] array = new Object[totalBytes];
