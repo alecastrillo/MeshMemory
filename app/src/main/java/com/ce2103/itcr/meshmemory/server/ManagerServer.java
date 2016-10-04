@@ -108,6 +108,7 @@ public class ManagerServer extends Thread {
                 } catch (Exception io) {
                     log+=DateFormat.getDateTimeInstance().format(new Date())+
                             "-> EXCEPTION: "+io.getMessage()+"\n";
+                    io.printStackTrace();
 
                 }
                   //catch (InterruptedException ie) {log+=DateFormat.getDateTimeInstance().
