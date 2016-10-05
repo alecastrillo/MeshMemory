@@ -376,10 +376,8 @@ public class DoublyLinkedList {
         Object[] array = new Object[totalBytes*2];
         int nodes = 0;
         int currentIndex = 0;
-        printArrayOfNode(head);
         for(Node currentNode = head; currentNode!=null; currentNode=currentNode.next){
             int x = currentNode.bytesWithUUID(UUID);
-            System.out.println("x"+x);
             if(currentNode.ownerUUID(UUID)){
                 array[currentIndex]=x;
                 array[currentIndex+1]=currentNode;
@@ -390,7 +388,6 @@ public class DoublyLinkedList {
             }
             currentIndex+=2;
         }
-        System.out.print("Array:    ");
         for (int i=0; i<totalBytes*2;i++){
 
         }
@@ -404,7 +401,6 @@ public class DoublyLinkedList {
             }
         }
         return arrayWithNodes;
-
     }
 
     /*

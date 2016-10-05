@@ -1,11 +1,13 @@
 package com.ce2103.itcr.meshmemory.server;
 
 import com.ce2103.itcr.meshmemory.datastructures.DoubleLinkedList;
+import com.ce2103.itcr.meshmemory.gui.Datos_nodo;
 import com.ce2103.itcr.meshmemory.gui.Nodo;
 import com.ce2103.itcr.meshmemory.memoryblocks.Node;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -46,23 +48,33 @@ public class NodeClient extends Thread {
 
     /**
      * Initialize the client with the port and IP of the Manager
-     * @param host
-     * @param puerto
+     * @param phost
+     * @param ppuerto
+     * @param bytes
+     * @param number
      */
-    public void startClient(final String host, final int puerto) {
-        this.host=host;
-        this.puerto=puerto;
+    public void startClient(final String phost, final int ppuerto, final int bytes, final int number) {
+        this.host=phost;
+        this.puerto=ppuerto;
+        setNodo(bytes,number);
         this.hiloCliente=new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     if (socket==null) {
-                        socket = new Socket(host, puerto);
                         log+= DateFormat.getDateTimeInstance().format(new Date())+
                                 "-> Conectado al manager"+"\n";
+                        socket = new Socket(host, puerto);
                         System.out.println("Conectado a: " + socket.toString());
                         AgregarSocket(socket);
                         readData(socket);
+                        JsonObject output=new JsonObject();
+                        output.addProperty("remitente","nodo");
+                        output.addProperty("funcion","addNode");
+                        output.addProperty("numero", number);
+                        output.addProperty("bytes",bytes);
+                        output.addProperty("master",true);
+                        writeData(output.toString());
                     }
                 } catch (Exception ue) {
                     log+= DateFormat.getDateTimeInstance().format(new Date())+"-> EXCEPTION: "+
@@ -122,13 +134,16 @@ public class NodeClient extends Thread {
                 try{
                     if(dato!=null){
                         salida = new PrintWriter(socket.getOutputStream(),true);
+                        salida.flush();
                         salida.println(dato);
+                        salida.flush();
                         System.out.println("Enviado: "+dato);
                         log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Enviado: "+dato+"\n";
                     }
                 }catch(Exception ex){
                     log+= DateFormat.getDateTimeInstance().format(new Date())+"-> EXCEPTION: "+
                             ex.getMessage()+"\n";
+                    ex.printStackTrace();
                 }
             }
         });
@@ -174,14 +189,13 @@ public class NodeClient extends Thread {
      * Decode the message received from the manager and makes the funtion
      * @param mensajeCODE
      */
-    public void readServer(JsonObject mensajeCODE){
-        JsonObject respuestaJSON=new JsonObject();
+    public void readServer(JsonObject mensajeCODE) throws InterruptedException {
+        JsonObject respuestaJSON = new JsonObject();
         respuestaJSON.addProperty("remitente","nodo");
         Decoder decodificador=new Decoder(mensajeCODE,"server");
         int funcion=decodificador.Decode();
         switch (funcion){
             case 0:{//xMalloc
-                System.out.println(Arrays.toString(nodo.getBytesArray()));
                 log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion xMalloc: En proceso"+"\n";
                 int bytes=mensajeCODE.get("bytes").getAsInt();
                 int type=mensajeCODE.get("type").getAsInt();
@@ -190,7 +204,6 @@ public class NodeClient extends Thread {
                 log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion xMalloc: UUID "+uuid+", "
                         +"Bytes "+bytes+", Tipo "+type+"\n";
                 log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion xMalloc: Completado"+"\n";
-                System.out.println(Arrays.toString(nodo.getBytesArray()));
                 break;
             }
             case 1:{//desreferencia
@@ -199,20 +212,22 @@ public class NodeClient extends Thread {
                 JsonObject[] barray= nodo.getBytesArray();
                 String uuid=mensajeCODE.get("UUID").getAsString();
                 for (int i=0;i<barray.length;i++){
-                    if(barray[i].get("UUID").getAsString().equals(uuid)){
-                        respuestaJSON=new JsonObject();
-                        respuestaJSON.addProperty("remitente","nodo");
-                        respuestaJSON.addProperty("funcion","desreferencia");
-                        respuestaJSON.addProperty("value",barray[i].get("value").getAsString());
-                        respuestaJSON.addProperty("index",barray[i].get("index").getAsInt());
-                        respuestaJSON.addProperty("final",barray[i].get("final").getAsBoolean());
-                        log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion desreferencia: UUID "+
-                                uuid+","+"Index "+barray[i].get("index").getAsInt()+", Fin "+  barray[i].get("final").getAsBoolean()+"\n";
-                        writeData(respuestaJSON.toString());
+                    if(!barray[i].get("NULL").getAsBoolean()) {
+                        if (barray[i].get("UUID").getAsString().equals(uuid)) {
+                            respuestaJSON = new JsonObject();
+                            respuestaJSON.addProperty("remitente", "nodo");
+                            respuestaJSON.addProperty("funcion", "desreferencia");
+                            respuestaJSON.addProperty("value", barray[i].get("value").getAsString());
+                            respuestaJSON.addProperty("index", barray[i].get("index").getAsInt());
+                            respuestaJSON.addProperty("final", barray[i].get("final").getAsBoolean());
+                            log += DateFormat.getDateTimeInstance().format(new Date()) + "-> Funcion desreferencia: UUID " +
+                                    uuid + "," + "Index " + barray[i].get("index").getAsInt() + ", Fin " +
+                                    barray[i].get("final").getAsBoolean() + "\n";
+                            writeData(respuestaJSON.toString());
+                            sleep(2000);
+                        }
                     }
                 }
-                log+= DateFormat.getDateTimeInstance().format(new Date())+
-                        "-> Funcion desreferencia: Completado"+"\n";
                 break;
             }
             case 2:{//asignar

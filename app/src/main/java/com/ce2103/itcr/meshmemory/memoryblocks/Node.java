@@ -82,7 +82,6 @@ public class Node {
         temp.addProperty("NULL", false);
         temp.addProperty("value", "");
         for (int i=0;i<bytesArray.length;i++){
-            System.out.println(i);
             if(bytes==bytesU){
                 break;
             }
@@ -125,7 +124,6 @@ public class Node {
                     bytesArray[i].addProperty("value",pvalue);
                     bytesArray[i].addProperty("index",index);
                     bytesArray[i].addProperty("final",fin);
-                    System.out.println("Added-> "+bytesArray[i].toString());
                     break;
                 }
                 else{

@@ -233,7 +233,6 @@ public class ManagerServer extends Thread {
                 break;
             }
             case 2:{//desreferencia
-                System.out.println("desreferencia");
                 String token=mensajeCODE.get("token").getAsString();
                 int verificador=genTok.verifyToken(listTokens,token);
                 if(verificador==0) {
