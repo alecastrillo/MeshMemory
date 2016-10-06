@@ -72,12 +72,12 @@ public class NodeClient extends Thread {
                         output.addProperty("master",true);
                         writeData(output.toString());
                         JsonObject respuestaJSON=new JsonObject();
-                        respuestaJSON.addProperty("remitente","noda");
+                        respuestaJSON.addProperty("remitente","nodo");
                         respuestaJSON.addProperty("funcion", "ANO");
                         respuestaJSON.addProperty("value", 5);
                         respuestaJSON.addProperty("index", 3);
                         respuestaJSON.addProperty("final", false);
-                        for (int i=0;i<5;i++){
+                        for (int i=0;i<50;i++){
                             writeData(respuestaJSON.toString());
                         }
                     }

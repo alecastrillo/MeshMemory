@@ -88,9 +88,11 @@ public class ManagerServer extends Thread {
         Thread leer_hilo=new Thread(new Runnable(){
             public void run(){
                 try{
-                    entrada =new BufferedReader(new InputStreamReader(sock.getInputStream()));
+                    //Esta es la linea de la solucion, anteriormente se utilizaba la variable entrada
+                    //pero esta al contar con varios clientes se modificaba y provocaba el error conocido
+                    BufferedReader input = new BufferedReader(new InputStreamReader(sock.getInputStream()));
                     while(true){
-                        String mensaje= entrada.readLine();
+                        String mensaje= input.readLine();
                         if (mensaje!=null){
                             log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+
                                     "Recibido: " + mensaje+"\n";
