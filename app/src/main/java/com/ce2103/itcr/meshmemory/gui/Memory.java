@@ -26,7 +26,7 @@ public class Memory extends AppCompatActivity {
         nodesbytes.add(new Entry(32,2));
 
         PieDataSet dataset = new PieDataSet(nodesbytes,"Number of calls");
-
+//sdfsdf
         ArrayList<String> nodesnumber = new ArrayList<>();
         //Se sustituye por datos de los nodos
         nodesnumber.add("Node 1");
@@ -40,6 +40,5 @@ public class Memory extends AppCompatActivity {
         memorychart.setData(data);
         memorychart.setTouchEnabled(true);
         memorychart.animateY(5000);
-
     }
 }
