@@ -14,7 +14,6 @@ import com.ce2103.itcr.meshmemory.server.NodeClient;
 public class Datos_nodo extends AppCompatActivity {
     public static String ip;
     public static int port;
-    public static NodeClient cliente= new NodeClient();
     public static int number;
     public static int bytes;
 
@@ -102,8 +101,6 @@ public class Datos_nodo extends AppCompatActivity {
                     port=Integer.parseInt(edtxtportmng.getText().toString());
                     bytes=Integer.parseInt(edtxtmem.getText().toString());
                     number=Integer.parseInt(edtnum.getText().toString());
-                    //Se conecta con el servidor
-                    cliente.startClient(ip,port,bytes,number);
                     Intent master= new Intent(v.getContext(),Master.class);
                     startActivityForResult(master,0);
                 }

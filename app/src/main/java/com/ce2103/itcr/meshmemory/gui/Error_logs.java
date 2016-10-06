@@ -18,8 +18,8 @@ public class Error_logs extends AppCompatActivity {
         if(!Manager.servidor.getLog().equals("")){
             logTextView.setText(Manager.servidor.getLog());
         }
-        if(!Datos_nodo.cliente.getLog().equals("")){
-            logTextView.setText(Datos_nodo.cliente.getLog());
+        if(!Master.cliente.getLog().equals("")){
+            logTextView.setText(Master.cliente.getLog());
         }
 
     }

@@ -30,7 +30,6 @@ public class NodeClient extends Thread {
     private int puerto;
     private String host;
     private Thread hiloCliente;
-    private DoubleLinkedList listaSockets;
     private Node nodo;
     private String log=""; //log de los procesos
 
@@ -42,21 +41,19 @@ public class NodeClient extends Thread {
         this.entrada = null;
         this.salida = null;
         this.hiloCliente = null;
-        this.listaSockets = new DoubleLinkedList();
         this.nodo=null;
     }
 
     /**
      * Initialize the client with the port and IP of the Manager
-     * @param phost
-     * @param ppuerto
+     * @param host
+     * @param puerto
      * @param bytes
      * @param number
      */
-    public void startClient(final String phost, final int ppuerto, final int bytes, final int number) {
-        this.host=phost;
-        this.puerto=ppuerto;
-        setNodo(bytes,number);
+    public void startClient(final String host, final int puerto, final int bytes, final int number) {
+        this.host=host;
+        this.puerto=puerto;
         this.hiloCliente=new Thread(new Runnable() {
             @Override
             public void run() {
@@ -66,7 +63,6 @@ public class NodeClient extends Thread {
                                 "-> Conectado al manager"+"\n";
                         socket = new Socket(host, puerto);
                         System.out.println("Conectado a: " + socket.toString());
-                        AgregarSocket(socket);
                         readData(socket);
                         JsonObject output=new JsonObject();
                         output.addProperty("remitente","nodo");
@@ -75,6 +71,15 @@ public class NodeClient extends Thread {
                         output.addProperty("bytes",bytes);
                         output.addProperty("master",true);
                         writeData(output.toString());
+                        JsonObject respuestaJSON=new JsonObject();
+                        respuestaJSON.addProperty("remitente","noda");
+                        respuestaJSON.addProperty("funcion", "ANO");
+                        respuestaJSON.addProperty("value", 5);
+                        respuestaJSON.addProperty("index", 3);
+                        respuestaJSON.addProperty("final", false);
+                        for (int i=0;i<5;i++){
+                            writeData(respuestaJSON.toString());
+                        }
                     }
                 } catch (Exception ue) {
                     log+= DateFormat.getDateTimeInstance().format(new Date())+"-> EXCEPTION: "+
@@ -83,6 +88,7 @@ public class NodeClient extends Thread {
             }
         });
         this.hiloCliente.start();
+        setNodo(bytes,number);
     }
 
     public void setNodo(int bytes, int number){
@@ -129,25 +135,20 @@ public class NodeClient extends Thread {
      * @param dato
      */
     public void writeData(final String dato){
-        Thread escribir_hilo=new Thread(new Runnable(){
-            public void run(){
-                try{
-                    if(dato!=null){
-                        salida = new PrintWriter(socket.getOutputStream(),true);
-                        salida.flush();
-                        salida.println(dato);
-                        salida.flush();
-                        System.out.println("Enviado: "+dato);
-                        log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Enviado: "+dato+"\n";
-                    }
-                }catch(Exception ex){
-                    log+= DateFormat.getDateTimeInstance().format(new Date())+"-> EXCEPTION: "+
-                            ex.getMessage()+"\n";
-                    ex.printStackTrace();
-                }
+        try{
+            if(dato!=null){
+                this.salida = new PrintWriter(socket.getOutputStream(),true);
+                this.salida.flush();
+                this.salida.println(dato);
+                this.salida.flush();
+                System.out.println("Enviado: "+dato);
+                log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Enviado: "+dato+"\n";
             }
-        });
-        escribir_hilo.start();
+        }catch(Exception ex){
+            log+= DateFormat.getDateTimeInstance().format(new Date())+"-> EXCEPTION: "+
+                    ex.getMessage()+"\n";
+            ex.printStackTrace();
+        }
     }
 
     /**
@@ -158,30 +159,6 @@ public class NodeClient extends Thread {
             socket.close();
         } catch (Exception ioe) {
             log+= DateFormat.getDateTimeInstance().format(new Date())+"-> EXCEPTION: "+ioe.getMessage()+"\n";
-        }
-    }
-
-    /**
-     * Adds the new socket connection into the sockets list
-     * @param socket1
-     */
-    private void AgregarSocket(Socket socket1) {
-        boolean result = false;
-        if (this.listaSockets != null) {
-            for (int s = 0; s < this.listaSockets.size(); s++) {
-                if (this.listaSockets.get(s).equals(socket1)) {
-                    result = true;
-                    break;
-                } else {
-                    continue;
-                }
-            }
-            if (result == false) {
-                this.listaSockets.add(socket1);
-            }
-        }
-        else {
-            this.listaSockets.add(socket1);
         }
     }
 
@@ -211,23 +188,31 @@ public class NodeClient extends Thread {
                         +"\n";
                 JsonObject[] barray= nodo.getBytesArray();
                 String uuid=mensajeCODE.get("UUID").getAsString();
+                String valueOut[]=new String[10];
+                int index=100;
+                Arrays.fill(valueOut,"");
                 for (int i=0;i<barray.length;i++){
                     if(!barray[i].get("NULL").getAsBoolean()) {
                         if (barray[i].get("UUID").getAsString().equals(uuid)) {
-                            respuestaJSON = new JsonObject();
-                            respuestaJSON.addProperty("remitente", "nodo");
-                            respuestaJSON.addProperty("funcion", "desreferencia");
-                            respuestaJSON.addProperty("value", barray[i].get("value").getAsString());
-                            respuestaJSON.addProperty("index", barray[i].get("index").getAsInt());
-                            respuestaJSON.addProperty("final", barray[i].get("final").getAsBoolean());
-                            log += DateFormat.getDateTimeInstance().format(new Date()) + "-> Funcion desreferencia: UUID " +
-                                    uuid + "," + "Index " + barray[i].get("index").getAsInt() + ", Fin " +
-                                    barray[i].get("final").getAsBoolean() + "\n";
-                            writeData(respuestaJSON.toString());
-                            sleep(2000);
+                            valueOut[barray[i].get("index").getAsInt()]=barray[i].get("value").getAsString();
+                            if(barray[i].get("index").getAsInt()<=index){
+                                index=barray[i].get("index").getAsInt(); //Para asegurarme de que sea el menor indice
+                            }
                         }
                     }
                 }
+                String value="";
+                for (int i=0;i<valueOut.length;i++){
+                    value+=valueOut[i];
+                }
+                respuestaJSON.addProperty("funcion", "desreferencia");
+                respuestaJSON.addProperty("value", value);
+                respuestaJSON.addProperty("index", index);
+                respuestaJSON.addProperty("final", false);
+                log += DateFormat.getDateTimeInstance().format(new Date()) + "-> Funcion desreferencia: UUID " +
+                        uuid + "," + "Index " + index + ", Fin " + false + "\n";
+
+                writeData(respuestaJSON.toString());
                 break;
             }
             case 2:{//asignar

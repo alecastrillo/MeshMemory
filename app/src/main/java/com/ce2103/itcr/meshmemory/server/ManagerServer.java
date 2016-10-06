@@ -51,14 +51,15 @@ public class ManagerServer extends Thread {
      * Initialize the server by the listener port number
      * @param puerto
      */
-    public void startServer(int puerto) {
+    public void startServer(final int puerto) {
         this.puerto=puerto;
-        try {
-            servidor = new ServerSocket(puerto);
-            System.out.println("Servidor iniciado");
-            log+=DateFormat.getDateTimeInstance().format(new Date())+"-> Servidor iniciado..."+"\n";
-            this.hiloServer = new Thread(new Runnable() {
-                public void run() {
+        this.hiloServer = new Thread(new Runnable() {
+            public void run() {
+                try {
+                    servidor = new ServerSocket(puerto);
+                    System.out.println("Servidor iniciado");
+                    log+=DateFormat.getDateTimeInstance().format(new Date())+"-> Servidor iniciado..."+"\n";
+
                     while (true){
                         try {
                             socket = servidor.accept();
@@ -72,14 +73,13 @@ public class ManagerServer extends Thread {
                                     e.getMessage()+"\n";
                             continue;}
                     }
+                } catch (Exception e) {
+                    log+=DateFormat.getDateTimeInstance().format(new Date())+"-> EXCEPTION: "+e.getMessage()+"\n";
                 }
-            });
-            hiloServer.start();
-        } catch (Exception e) {
-            log+=DateFormat.getDateTimeInstance().format(new Date())+"-> EXCEPTION: "+e.getMessage()+"\n";
-        }
+            }
+        });
+        hiloServer.start();
     }
-
     /**
      * Thread to stay listening the connected clients
      * @param sock
@@ -238,8 +238,8 @@ public class ManagerServer extends Thread {
                 if(verificador==0) {
                     String uuid = mensajeCODE.get("UUID").getAsString();
                     partesValue=0;
-                    value=new String[listNodes.amountOfBytesWithUUID(uuid)];
                     Object[] arregloNodos=listNodes.arrayOfNodesWithUUID(uuid);
+                    value=new String[arregloNodos.length/2];
                     respuestaJSON.addProperty("funcion", "desreferencia");
                     respuestaJSON.addProperty("UUID",uuid);
                     for(int i=0;i<arregloNodos.length;i+=2){
@@ -352,7 +352,7 @@ public class ManagerServer extends Thread {
                     respuestaJSON.addProperty("funcion","desreferencia");
                     String output=Utils.slice_end(valor,valor.length()-20);
                     respuestaJSON.addProperty("value",output);
-                    writeData(socketCliente,mensajeCODE.toString()); //Se lo envio al cliente
+                    writeData(socketCliente,respuestaJSON.toString()); //Se lo envio al cliente
                 }
                 break;
             }
