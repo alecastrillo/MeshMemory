@@ -9,4 +9,9 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.ce2103.itcr.meshmemory.gui.Memory">
 
+    <com.github.mikephil.charting.charts.PieChart
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:id="@+id/piegraph"></com.github.mikephil.charting.charts.PieChart>
+
 </RelativeLayout>
