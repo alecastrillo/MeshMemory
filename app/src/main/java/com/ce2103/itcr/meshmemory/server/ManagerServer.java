@@ -21,7 +21,6 @@ public class ManagerServer extends Thread {
     private ServerSocket servidor;
     private Socket socket;
     private Socket socketCliente;
-    private BufferedReader entrada;
     private PrintWriter salida;
     private int puerto;
     private Thread hiloServer;
@@ -41,7 +40,6 @@ public class ManagerServer extends Thread {
         this.listNodes=new DoublyLinkedList();
         this.listTokens= new DoubleLinkedList();
         this.socket = null;
-        this.entrada = null;
         this.salida = null;
         this.servidor = null;
         this.hiloServer = null;
@@ -241,7 +239,7 @@ public class ManagerServer extends Thread {
                     String uuid = mensajeCODE.get("UUID").getAsString();
                     partesValue=0;
                     Object[] arregloNodos=listNodes.arrayOfNodesWithUUID(uuid);
-                    value=new String[arregloNodos.length/2];
+                    value=new String[listNodes.amountOfBytesWithUUID(uuid)]; // Inicio el arreglo con el numero de bytes
                     respuestaJSON.addProperty("funcion", "desreferencia");
                     respuestaJSON.addProperty("UUID",uuid);
                     for(int i=0;i<arregloNodos.length;i+=2){

@@ -71,15 +71,6 @@ public class NodeClient extends Thread {
                         output.addProperty("bytes",bytes);
                         output.addProperty("master",true);
                         writeData(output.toString());
-                        JsonObject respuestaJSON=new JsonObject();
-                        respuestaJSON.addProperty("remitente","nodo");
-                        respuestaJSON.addProperty("funcion", "ANO");
-                        respuestaJSON.addProperty("value", 5);
-                        respuestaJSON.addProperty("index", 3);
-                        respuestaJSON.addProperty("final", false);
-                        for (int i=0;i<50;i++){
-                            writeData(respuestaJSON.toString());
-                        }
                     }
                 } catch (Exception ue) {
                     log+= DateFormat.getDateTimeInstance().format(new Date())+"-> EXCEPTION: "+
@@ -188,6 +179,8 @@ public class NodeClient extends Thread {
                         +"\n";
                 JsonObject[] barray= nodo.getBytesArray();
                 String uuid=mensajeCODE.get("UUID").getAsString();
+                respuestaJSON.addProperty("funcion","desreferenciar");
+                /**
                 String valueOut[]=new String[10];
                 int index=100;
                 Arrays.fill(valueOut,"");
@@ -211,7 +204,15 @@ public class NodeClient extends Thread {
                 respuestaJSON.addProperty("final", false);
                 log += DateFormat.getDateTimeInstance().format(new Date()) + "-> Funcion desreferencia: UUID " +
                         uuid + "," + "Index " + index + ", Fin " + false + "\n";
+                *///PRUEBA A FUERZA BRUTA
 
+                for (int i=0;i<barray.length;i++) {
+                    if (!barray[i].get("NULL").getAsBoolean()) {
+                        if (barray[i].get("UUID").getAsString().equals(uuid)) {
+
+                        }
+                    }
+                }
                 writeData(respuestaJSON.toString());
                 break;
             }
