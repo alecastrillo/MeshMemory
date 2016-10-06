@@ -19,14 +19,14 @@ public class Memory extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memory);
         PieChart memorychart=(PieChart)findViewById(R.id.piegraph);
+        int a=49;
         //se sustituye por el llamado a datos de nodos
         ArrayList<Entry> nodesbytes = new ArrayList<>();
-        nodesbytes.add(new Entry(49,0));
+        nodesbytes.add(new Entry(a,0));
         nodesbytes.add(new Entry(21,1));
         nodesbytes.add(new Entry(32,2));
 
         PieDataSet dataset = new PieDataSet(nodesbytes,"Number of calls");
-//sdfsdf
         ArrayList<String> nodesnumber = new ArrayList<>();
         //Se sustituye por datos de los nodos
         nodesnumber.add("Node 1");
