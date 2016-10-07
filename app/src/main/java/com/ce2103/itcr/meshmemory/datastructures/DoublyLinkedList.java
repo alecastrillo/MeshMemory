@@ -579,7 +579,7 @@ public class DoublyLinkedList {
         for(Node current=head; current!=null; current=current.next){
             if(current.ownerUUID(UUID)){
                 current.deleteUUID(UUID);
-                current.next.prev=current;
+                //current.next.prev=current;
                 nodeModified(current);
             }
         }

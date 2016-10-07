@@ -229,8 +229,18 @@ public class Node {
         return temp;
     }
 
-    public void burping(){
-
+    public void burpingInterno(){
+        int index=0;
+        JsonObject[] temp=new JsonObject[bytesArray.length];
+        for (JsonObject aBytesArray : bytesArray) {
+            if (!aBytesArray.get("NULL").getAsBoolean()) {
+                temp[index] = aBytesArray;
+                index++;
+            }
+            else{
+                continue;
+            }
+        }
     }
 
     ////////////////////GETTERS/////////////////////

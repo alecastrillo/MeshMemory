@@ -310,14 +310,19 @@ public class ManagerServer extends Thread {
                 break;
             }
             case 4:{//xFree
+                System.out.println("ANO1");
                 String token=mensajeCODE.get("token").getAsString();
                 int verificador=genTok.verifyToken(listTokens,token);
                 if(verificador==0) {
+                    System.out.println("ANO2");
                     String uuid=mensajeCODE.get("UUID").getAsString();
                     Object[] array=listNodes.xFree(uuid);
+                    System.out.println(array.length);
                     if (array!=null){
+                        System.out.println("ANO3");
                         for(int i=0;i<array.length;i++){
                             Socket tempSock = ((Node) array[i]).master.socket;
+                            System.out.println(tempSock);
                             respuestaJSON.addProperty("funcion","xFree");
                             respuestaJSON.addProperty("UUID",uuid);
                             writeData(tempSock,respuestaJSON.toString());
@@ -327,6 +332,7 @@ public class ManagerServer extends Thread {
                 else {
                     genError(respuestaJSON,sock,verificador);
                 }
+                break;
             }
         }
     }
@@ -368,6 +374,9 @@ public class ManagerServer extends Thread {
                     writeData(socketCliente,respuestaJSON.toString()); //Se lo envio al cliente
                 }
                 break;
+            }
+            case 2:{
+
             }
         }
     }

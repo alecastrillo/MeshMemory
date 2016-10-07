@@ -84,6 +84,9 @@ public class Decoder {
         else if(funcion.equals("xFree")){
             value=3;
         }
+        else if(funcion.equals("burping")){
+            value=4;
+        }
         return value;
     }
 
@@ -99,6 +102,9 @@ public class Decoder {
         }
         else if(funcion.equals("desreferencia")){
             value=1;
+        }
+        else if(funcion.equals("burping")){
+            value=2;
         }
         return value;
     }

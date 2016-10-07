@@ -241,6 +241,10 @@ public class NodeClient extends Thread {
                 log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion xFree: Completado"+"\n";
                 break;
             }
+            case 4:{//burping
+                log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion burping: En proceso"+"\n";
+
+            }
         }
     }
     public String getLog(){
@@ -248,7 +252,6 @@ public class NodeClient extends Thread {
     }
 
     public String[] getBytesArray(){
-
         JsonObject[] bytes=nodo.getBytesArray();
         String[] out=new String[bytes.length];
         for(int i=0;i<bytes.length;i++){
