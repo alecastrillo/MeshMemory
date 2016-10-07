@@ -589,10 +589,41 @@ public class DoublyLinkedList {
 
 
     public void nodesInternalBurping(){
+        Node node= head;
         for (Node current=head; current!=null; current=current.next){
             current.burping(0,0);
-        }
+            node = current;
+        }nodeModified(node);
     }
+
+
+    /*public Object[] externalBurping(){
+        for(Node current=head; current!=null; current=current.next){
+            if(current.getBytesAvailable()==0){
+            }else{
+                if(current.next==null){
+                    return null;
+                }else{
+                    Object[] array = new Object[3];
+                    if(current.getBytesAvailable()<=current.next.getBytesOccupied()){
+                        array[0]= current.getBytesAvailable();
+                        array[1]= current;
+                        array[2]= current.next;
+                        for(int i=current.getBytesAvailable(); i==0; i++){
+                            current.memoryBlock[current.getTotalBytes()-i-1]=current.next.memoryBlock[i];
+                        }
+
+                        return array;
+                    }else{
+                        array[0]= current.next.getBytesOccupied();
+                        array[1]= current;
+                        array[2]= current.next;
+                        return  array;
+                    }
+                }
+            }
+        }return null;
+    }*/
 
    /* public Object[] burping(Node node) {
         if (node.next.equals(null)) {
