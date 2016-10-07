@@ -84,6 +84,63 @@ public class DoublyLinkedList {
 
     }
 
+    public Object[] arrayVisualize(){
+        String[] bytesArray = getBytesArray();
+        int x = getTotalBytes();
+        int parts=0;
+        boolean avail = false;
+        if(x==0){
+            return null;
+        }if(bytesArray[0].equals("Available")){
+            avail = true;
+        }
+        for(int i=0; i<x; i++){
+            if(bytesArray[i].equals("Available")){
+                if(!avail){
+                    parts++;
+                    avail =! avail;
+                }
+            }else{
+                if(avail){
+                    parts++;
+                    avail =! avail;
+                }
+            }
+        }
+
+        Object[] finalArray = new Object[2];
+
+        if(bytesArray[0].equals("Available")){
+            avail = true;
+            finalArray[0]=true;
+        }
+        int[] array = new int[parts];
+        int count=0;
+        int currentPart=0;
+        for(int i=0; i<x; i++){
+            if(avail){
+                if(bytesArray[i].equals("Available")){
+                    count++;
+                }else{
+                    avail=!avail;
+                    array[currentPart]=count;
+                    count=1;
+                }
+            }else{
+                if(bytesArray[i].equals("Available")){
+                    avail=!avail;
+                    array[currentPart]=count;
+                    count=1;
+
+                }else{
+                    count++;
+                }
+            }
+        }
+        finalArray[1]=array;
+        return finalArray;
+    }
+
     /**
      * Adds a node as the tail of the list
      * @param newNode
