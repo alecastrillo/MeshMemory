@@ -148,13 +148,18 @@ public class Node {
         memList.remove(findIndex(UUID));*/
 
         bytesArray=new JsonObject[totalMem];
-        JsonObject NULL=new JsonObject();
-        NULL.addProperty("NULL",true);
         int tofree=0;
         for(int i=0;i<bytesArray.length;i++){
-            if(bytesArray[i].get("UUID").getAsString().equals(UUID)){
-                bytesArray[i]=NULL;
-                tofree++;
+            if(!bytesArray[i].get("NULL").getAsBoolean()) {
+                if (bytesArray[i].get("UUID").getAsString().equals(UUID)) {
+                    JsonObject NULL=new JsonObject();
+                    NULL.addProperty("NULL",true);
+                    bytesArray[i]=NULL;
+                    tofree++;
+                }
+                else{
+                    continue;
+                }
             }
             else{
                 continue;
