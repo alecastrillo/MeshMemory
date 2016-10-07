@@ -179,7 +179,7 @@ public class NodeClient extends Thread {
                         +"\n";
                 JsonObject[] barray= nodo.getBytesArray();
                 String uuid=mensajeCODE.get("UUID").getAsString();
-                respuestaJSON.addProperty("funcion","desreferenciar");
+                respuestaJSON.addProperty("funcion","desreferencia");
                 /**
                 String valueOut[]=new String[10];
                 int index=100;
@@ -209,11 +209,15 @@ public class NodeClient extends Thread {
                 for (int i=0;i<barray.length;i++) {
                     if (!barray[i].get("NULL").getAsBoolean()) {
                         if (barray[i].get("UUID").getAsString().equals(uuid)) {
-
+                            respuestaJSON.addProperty("value",barray[i].get("value").getAsString());
+                            respuestaJSON.addProperty("index",barray[i].get("index").getAsInt());
+                            respuestaJSON.addProperty("UUID",uuid);
+                            writeData(respuestaJSON.toString());
                         }
                     }
                 }
-                writeData(respuestaJSON.toString());
+
+                log += DateFormat.getDateTimeInstance().format(new Date()) + "-> Funcion desreferencia: completado";
                 break;
             }
             case 2:{//asignar
