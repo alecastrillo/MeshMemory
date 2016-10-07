@@ -316,8 +316,11 @@ public class ManagerServer extends Thread {
                     String uuid=mensajeCODE.get("UUID").getAsString();
                     Object[] array=listNodes.xFree(uuid);
                     if (array!=null){
-                        for(int i=0;i<array.length;i+=2){
-
+                        for(int i=0;i<array.length;i++){
+                            Socket tempSock = ((Node) array[i]).master.socket;
+                            respuestaJSON.addProperty("funcion","xFree");
+                            respuestaJSON.addProperty("UUID",uuid);
+                            writeData(tempSock,respuestaJSON.toString());
                         }
                     }
                 }

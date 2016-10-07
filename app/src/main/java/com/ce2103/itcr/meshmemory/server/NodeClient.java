@@ -246,4 +246,18 @@ public class NodeClient extends Thread {
     public String getLog(){
         return this.log;
     }
+
+    public String[] getBytesArray(){
+        JsonObject[] bytes=nodo.getBytesArray();
+        String[] out=new String[bytes.length];
+        for(int i=0;i<bytes.length;i++){
+            if(bytes[i].get("NULL").getAsBoolean()){
+                out[i]="Available";
+            }
+            else{
+                out[i]=bytes[i].get("UUID").getAsString();
+            }
+        }
+        return out;
+    }
 }

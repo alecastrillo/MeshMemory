@@ -3,6 +3,9 @@
     package="com.ce2103.itcr.meshmemory">
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <application
         android:allowBackup="true"
@@ -30,8 +33,13 @@
         <activity android:name=".gui.Memory_map" />
         <activity android:name=".gui.Available_mem" />
         <activity android:name=".gui.Sync_Satatus" />
-        <activity android:name=".gui.Error_logs"></activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <activity android:name=".gui.Error_logs"></activity>
+        <receiver android:name=".server.SMSReceiver">
+        <intent-filter>
+            <action android:name=
+            "android.provider.Telephony.SMS_RECEIVED" />
+        </intent-filter>
+    </receiver>
 
     </application>
 
