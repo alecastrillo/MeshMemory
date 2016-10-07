@@ -138,8 +138,8 @@ public class ManagerServer extends Thread {
             public void run(){
                 try{
                     if(dato!=null){
-                        salida = new PrintWriter(socket.getOutputStream(),true);
-                        salida.println(dato);
+                        PrintWriter out = new PrintWriter(socket.getOutputStream(),true);
+                        out.println(dato);
                         System.out.println("Enviado: "+dato);
                         log+=DateFormat.getDateTimeInstance().format(new Date())+"-> "+"Enviado: "+dato+"\n";
                     }
@@ -317,15 +317,12 @@ public class ManagerServer extends Thread {
                     System.out.println("ANO2");
                     String uuid=mensajeCODE.get("UUID").getAsString();
                     Object[] array=listNodes.xFree(uuid);
-                    System.out.println(array.length);
                     if (array!=null){
-                        System.out.println("ANO3");
-                        for(int i=0;i<array.length;i++){
-                            Socket tempSock = ((Node) array[i]).master.socket;
-                            System.out.println(tempSock);
-                            respuestaJSON.addProperty("funcion","xFree");
-                            respuestaJSON.addProperty("UUID",uuid);
-                            writeData(tempSock,respuestaJSON.toString());
+                        for (int i=0;i<array.length;i+=2) {
+                            Socket tempSock = ((Node) array[i+1]).master.socket;
+                            respuestaJSON.addProperty("funcion", "xFree");
+                            respuestaJSON.addProperty("UUID", uuid);
+                            writeData(tempSock, respuestaJSON.toString());
                         }
                     }
                 }

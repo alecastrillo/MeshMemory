@@ -576,6 +576,7 @@ public class DoublyLinkedList {
 
     public Object[] xFree(String UUID){
         int x = amountOfNodes();
+        Object[] array = arrayOfNodesWithUUID(UUID);
         for(Node current=head; current!=null; current=current.next){
             if(current.ownerUUID(UUID)){
                 current.deleteUUID(UUID);
@@ -583,7 +584,7 @@ public class DoublyLinkedList {
                 nodeModified(current);
             }
         }
-        return arrayOfNodesWithUUID(UUID);
+        return array;
     }
 
 
