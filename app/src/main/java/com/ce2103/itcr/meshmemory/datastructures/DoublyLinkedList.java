@@ -87,8 +87,14 @@ public class DoublyLinkedList {
     public Object[] arrayVisualize(){
         String[] bytesArray = getBytesArray();
         int x = getTotalBytes();
-        int parts=0;
+        int parts=1;
         boolean avail = false;
+        System.out.print("Array1: ");
+        for(int i=0; i<bytesArray.length; i++){
+            System.out.print(" "+bytesArray[i]+" ");
+        }
+        System.out.println();
+
         if(x==0){
             return null;
         }if(bytesArray[0].equals("Available")){
@@ -96,23 +102,32 @@ public class DoublyLinkedList {
         }
         for(int i=0; i<x; i++){
             if(bytesArray[i].equals("Available")){
-                if(!avail){
+                System.out.println(i+" avail");
+                if(!avail) {
                     parts++;
-                    avail =! avail;
+                    avail = !avail;
                 }
             }else{
+                System.out.println(i+" not avail");
                 if(avail){
                     parts++;
-                    avail =! avail;
+                    avail = !avail;
                 }
             }
         }
 
+        System.out.println("Parts "+parts);
+
         Object[] finalArray = new Object[2];
 
         if(bytesArray[0].equals("Available")){
+            System.out.println("Array[0] = true " + bytesArray[0]);
             avail = true;
             finalArray[0]=true;
+        }else{
+            System.out.println("Array[0] = false " + bytesArray[0]);
+            avail = false;
+            finalArray[0]=false;
         }
         int[] array = new int[parts];
         int count=0;
@@ -121,19 +136,29 @@ public class DoublyLinkedList {
             if(avail){
                 if(bytesArray[i].equals("Available")){
                     count++;
+                    if(i==x-1){
+                        array[currentPart]=count;
+                        currentPart++;
+                    }
                 }else{
                     avail=!avail;
                     array[currentPart]=count;
                     count=1;
+                    currentPart++;
                 }
             }else{
                 if(bytesArray[i].equals("Available")){
                     avail=!avail;
                     array[currentPart]=count;
                     count=1;
+                    currentPart++;
 
                 }else{
                     count++;
+                    if(i==x-1){
+                        array[currentPart]=count;
+                        currentPart++;
+                    }
                 }
             }
         }
