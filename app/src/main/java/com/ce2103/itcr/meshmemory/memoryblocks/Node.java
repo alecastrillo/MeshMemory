@@ -147,7 +147,7 @@ public class Node {
         int tofree=value.get("size").getAsInt();
         memList.remove(findIndex(UUID));*/
 
-        bytesArray=new JsonObject[totalMem];
+        //bytesArray=new JsonObject[totalMem];
         int tofree=0;
         for(int i=0;i<bytesArray.length;i++){
             if(!bytesArray[i].get("NULL").getAsBoolean()) {
@@ -241,6 +241,18 @@ public class Node {
                 continue;
             }
         }
+        for(int i=0;i<temp.length;i++){
+            if (temp[i]==null){
+                JsonObject NULL = new JsonObject();
+                NULL.addProperty("NULL", true);
+                temp[i]=NULL;
+            }
+            else{
+                continue;
+            }
+        }
+        System.out.println(Arrays.toString(temp));
+        this.bytesArray=temp;
     }
 
     ////////////////////GETTERS/////////////////////

@@ -18,6 +18,22 @@ public class DoublyLinkedList {
         this.tail = null;
     }
 
+    public Node[] getAllNodes(){
+        int nodes = 0;
+        int index=0;
+
+        for(Node currentNode = head; currentNode!=null; currentNode=currentNode.next){
+            nodes++;
+        }
+
+        Node[] temp=new Node[nodes];
+        for(Node currentNode = head; currentNode!=null; currentNode=currentNode.next) {
+            temp[index] = currentNode;
+            index++;
+        }
+        return temp;
+    }
+
     /**
      * Determines if there is a node without a slave in the list
      * @return The node without slave of null if there isn't a node without a slave

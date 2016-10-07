@@ -1,5 +1,7 @@
 package com.ce2103.itcr.meshmemory.server;
 //Imports
+import android.accessibilityservice.AccessibilityService;
+
 import com.ce2103.itcr.meshmemory.datastructures.DoubleLinkedList;
 import com.ce2103.itcr.meshmemory.datastructures.DoublyLinkedList;
 import com.ce2103.itcr.meshmemory.datastructures.Node;
@@ -30,11 +32,6 @@ public class ManagerServer extends Thread {
     private int puerto;
     private Thread hiloServer;
     private DoubleLinkedList listaSockets;
-
-    public DoublyLinkedList getListNodes() {
-        return listNodes;
-    }
-
     private DoublyLinkedList listNodes;
     private DoubleLinkedList listTokens;
     private String log=""; //log de los procesos
@@ -53,6 +50,10 @@ public class ManagerServer extends Thread {
         this.salida = null;
         this.servidor = null;
         this.hiloServer = null;
+    }
+
+    public DoublyLinkedList getListNodes() {
+        return listNodes;
     }
 
     /**
@@ -203,6 +204,7 @@ public class ManagerServer extends Thread {
         int funcion=decodicador.Decode();
         switch (funcion){
             case 0:{//Token
+                log+=DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion: Token \n";
                 this.socketCliente=sock;
                 String token=genTok.genToken();
                 listTokens.add(token);
@@ -212,6 +214,7 @@ public class ManagerServer extends Thread {
                 break;
             }
             case 1:{//xMalloc
+                log+=DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion: xMalloc \n";
                 String token=mensajeCODE.get("token").getAsString();
                 int verificador=genTok.verifyToken(listTokens,token);
                 if(verificador==0){
@@ -243,6 +246,7 @@ public class ManagerServer extends Thread {
                 break;
             }
             case 2:{//desreferencia
+                log+=DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion: Desreferencia \n";
                 String token=mensajeCODE.get("token").getAsString();
                 int verificador=genTok.verifyToken(listTokens,token);
                 if(verificador==0) {
@@ -263,6 +267,7 @@ public class ManagerServer extends Thread {
                 break;
             }
             case 3:{//asignar
+                log+=DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion: Asignar \n";
                 String token=mensajeCODE.get("token").getAsString();
                 int verificador=genTok.verifyToken(listTokens,token);
                 if(verificador==0) {
@@ -310,11 +315,10 @@ public class ManagerServer extends Thread {
                 break;
             }
             case 4:{//xFree
-                System.out.println("ANO1");
+                log+=DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion: xFree \n";
                 String token=mensajeCODE.get("token").getAsString();
                 int verificador=genTok.verifyToken(listTokens,token);
                 if(verificador==0) {
-                    System.out.println("ANO2");
                     String uuid=mensajeCODE.get("UUID").getAsString();
                     Object[] array=listNodes.xFree(uuid);
                     if (array!=null){
@@ -391,5 +395,17 @@ public class ManagerServer extends Thread {
         respuestaJSON.addProperty("funcion","error");
         respuestaJSON.addProperty("error",error);
         writeData(sock,respuestaJSON.toString());
+    }
+
+    public void burpingInterno(){
+        log+=DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion: Burping \n";
+        JsonObject soliBurp = new JsonObject();
+        soliBurp.addProperty("remitente","server");
+        soliBurp.addProperty("funcion","burping");
+        Node[] array=listNodes.getAllNodes();
+        for(int i=0;i<array.length;i++){
+            writeData(array[i].master.getSocket(),soliBurp.toString());
+        }
+        listNodes.nodesInternalBurping();
     }
 }

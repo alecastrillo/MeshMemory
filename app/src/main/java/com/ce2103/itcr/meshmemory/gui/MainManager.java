@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.ce2103.itcr.meshmemory.*;
 import com.ce2103.itcr.meshmemory.server.Utils;
+import com.google.gson.JsonObject;
 
 public class MainManager extends AppCompatActivity {
 
@@ -23,8 +24,9 @@ public class MainManager extends AppCompatActivity {
         btnbrp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent burping= new Intent(v.getContext(),Burping.class);
-                startActivityForResult(burping,0);
+                //Intent burping= new Intent(v.getContext(),Burping.class);
+                //startActivityForResult(burping,0);
+                Manager.servidor.burpingInterno();
             }
         });
 

@@ -243,6 +243,8 @@ public class NodeClient extends Thread {
             }
             case 4:{//burping
                 log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion burping: En proceso"+"\n";
+                nodo.burpingInterno();
+                log+= DateFormat.getDateTimeInstance().format(new Date())+"-> Funcion burping: Completado"+"\n";
 
             }
         }
@@ -253,6 +255,7 @@ public class NodeClient extends Thread {
 
     public String[] getBytesArray(){
         JsonObject[] bytes=nodo.getBytesArray();
+
         String[] out=new String[bytes.length];
         for(int i=0;i<bytes.length;i++){
             if(bytes[i].get("NULL").getAsBoolean()){
