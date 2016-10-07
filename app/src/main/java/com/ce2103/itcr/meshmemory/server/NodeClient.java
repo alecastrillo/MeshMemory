@@ -267,4 +267,8 @@ public class NodeClient extends Thread {
         }
         return out;
     }
+
+    public int getAvailableBytes(){
+        return nodo.getFreeMem();
+    }
 }
