@@ -17,6 +17,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+
 /**
  * This class was the Manager of the server, manage the memory
  * Created by estape11 on 09/09/16.
