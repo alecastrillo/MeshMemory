@@ -204,7 +204,8 @@ public class NodeClient extends Thread {
                 respuestaJSON.addProperty("final", false);
                 log += DateFormat.getDateTimeInstance().format(new Date()) + "-> Funcion desreferencia: UUID " +
                         uuid + "," + "Index " + index + ", Fin " + false + "\n";
-                *///PRUEBA A FUERZA BRUTA
+                */
+                //PRUEBA A FUERZA BRUTA
 
                 for (int i=0;i<barray.length;i++) {
                     if (!barray[i].get("NULL").getAsBoolean()) {
