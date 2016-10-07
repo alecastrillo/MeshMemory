@@ -24,22 +24,33 @@ public class Memory extends AppCompatActivity {
         Object[] array = list.arrayVisualize();
         ArrayList<String> nodesnumber = new ArrayList<>();
         ArrayList<Entry> nodesbytes = new ArrayList<>();
-        PieDataSet dataset = new PieDataSet(nodesbytes,"Number of calls");
         Manager.servidor.getListNodes();
         //se sustituye por el llamado a datos de nodos
+        System.out.println("BOOL "+array[0]+"   lenght "+array.length+" leee2 "+((int[])array[1])[0]);
         boolean available = (boolean)array[0];
 
+        System.out.print("Array: ");
+        for(int i=0; i<((int[])array[1]).length; i++){
+            System.out.print(" "+((int[])array[1])[i]+" ");
+        }
+        System.out.println();
+
         for(int i=0; i< ((int[])array[1]).length; i++){
-            nodesbytes.add(new Entry(((int[])array[1])[i],i));
+            System.out.println(((int[])array[1])[i]);
             if(available){
+                System.out.println(" i "+i);
+                nodesbytes.add(new Entry(((int[])array[1])[i],i));
                 nodesnumber.add("Available");
                 available = !available;
             }else{
+                System.out.println(" i "+i);
+                nodesbytes.add(new Entry(((int[])array[1])[i],i));
                 nodesnumber.add("Occupied");
                 available =!available;
             }
         }
 
+        PieDataSet dataset = new PieDataSet(nodesbytes,"Number of bytes");
         PieData data = new PieData(nodesnumber, dataset);
         dataset.setColors(ColorTemplate.VORDIPLOM_COLORS);
         memorychart.setDescription("Memory Map");
