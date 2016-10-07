@@ -248,6 +248,7 @@ public class NodeClient extends Thread {
     }
 
     public String[] getBytesArray(){
+
         JsonObject[] bytes=nodo.getBytesArray();
         String[] out=new String[bytes.length];
         for(int i=0;i<bytes.length;i++){
@@ -260,4 +261,5 @@ public class NodeClient extends Thread {
         }
         return out;
     }
+
 }
