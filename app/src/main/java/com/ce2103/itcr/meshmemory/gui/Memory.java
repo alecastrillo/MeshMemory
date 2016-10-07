@@ -16,6 +16,7 @@ public class Memory extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memory);
+
         PieChart memorychart=(PieChart)findViewById(R.id.piegraph);
         DoublyLinkedList list = Manager.servidor.getListNodes();
         Object[] array = list.arrayVisualize();
