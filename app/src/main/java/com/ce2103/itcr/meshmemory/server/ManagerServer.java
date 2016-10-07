@@ -6,10 +6,14 @@ import com.ce2103.itcr.meshmemory.datastructures.Node;
 import com.ce2103.itcr.meshmemory.datastructures.NodeMem;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import java.io.*;
-import java.net.*;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.text.DateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
@@ -25,6 +29,11 @@ public class ManagerServer extends Thread {
     private int puerto;
     private Thread hiloServer;
     private DoubleLinkedList listaSockets;
+
+    public DoublyLinkedList getListNodes() {
+        return listNodes;
+    }
+
     private DoublyLinkedList listNodes;
     private DoubleLinkedList listTokens;
     private String log=""; //log de los procesos

@@ -4,35 +4,41 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.ce2103.itcr.meshmemory.R;
+import com.ce2103.itcr.meshmemory.datastructures.DoublyLinkedList;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
-
 import java.util.ArrayList;
 
 public class Memory extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memory);
         PieChart memorychart=(PieChart)findViewById(R.id.piegraph);
-        int a=49;
-        //se sustituye por el llamado a datos de nodos
-        ArrayList<Entry> nodesbytes = new ArrayList<>();
-        nodesbytes.add(new Entry(a,0));
-        nodesbytes.add(new Entry(21,1));
-        nodesbytes.add(new Entry(32,2));
-
-        PieDataSet dataset = new PieDataSet(nodesbytes,"Number of calls");
+        DoublyLinkedList list = Manager.servidor.getListNodes();
+        Object[] array = list.arrayVisualize();
         ArrayList<String> nodesnumber = new ArrayList<>();
-        //Se sustituye por datos de los nodos
-        nodesnumber.add("Node 1");
-        nodesnumber.add("Node 2");
-        nodesnumber.add("Node 3");
+        ArrayList<Entry> nodesbytes = new ArrayList<>();
+        PieDataSet dataset = new PieDataSet(nodesbytes,"Number of calls");
+        Manager.servidor.getListNodes();
+        //se sustituye por el llamado a datos de nodos
+        boolean available = (boolean)array[0];
 
+        for(int i=0; i< ((int[])array[1]).length; i++){
+            nodesbytes.add(new Entry(((int[])array[1])[i],i));
+            if(available){
+                nodesnumber.add("Available");
+                available = !available;
+            }else{
+                nodesnumber.add("Occupied");
+                available =!available;
+            }
+        }
 
         PieData data = new PieData(nodesnumber, dataset);
         dataset.setColors(ColorTemplate.VORDIPLOM_COLORS);
