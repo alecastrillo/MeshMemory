@@ -74,7 +74,7 @@ public class Node {
         }return -1;
     }
 
-    void burping(int pByte, int available){
+    /*void burping(int pByte, int available){
         if(pByte==bytes){
             return;
         }else if(memoryBlock[pByte-1].equals("Available")){
@@ -92,6 +92,36 @@ public class Node {
             pByte++;
             burping(pByte, available);
         }
+    }*/
+
+    boolean availableBefore(int pByte){
+        for(int i=0; i<pByte-1; i++){
+            if(memoryBlock[i].equals("Available"));
+            return true;
+        }
+        return false;
+    }
+
+    void burping(int currentByte, boolean availableBefore){
+        if(currentByte==bytes){
+            return;
+        }
+        if(memoryBlock[currentByte].equals("Available")){
+            currentByte++;
+        }else if(availableBefore){
+            for(int i=0; i<currentByte; i++){
+                if(memoryBlock[i].equals("Available")){
+                    memoryBlock[i]=memoryBlock[currentByte];
+                    memoryBlock[currentByte]="Available";
+                    currentByte++;
+                    break;
+                }
+            }
+
+        }
+        availableBefore = availableBefore(currentByte);
+        burping(currentByte, availableBefore);
+
     }
 
     /**

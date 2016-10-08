@@ -608,7 +608,7 @@ public class DoublyLinkedList {
     public void nodesInternalBurping(){
         Node node= head;
         for (Node current=head; current!=null; current=current.next){
-            current.burping(0,0);
+            current.burping(0,false);
             node = current;
         }nodeModified(node);
     }
